@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+	
+</head>
+
+<body>
+
+
+<div layout:fragment="content">
+
+
+
+		<p id="p1">회원정보</p>
+
+
+<table >
+
+    <tr>
+      <th scope="row">이메일</th>
+      <td th:text="${member.Email}"></td>
+    </tr>
+    
+        <tr>
+      <th scope="row">이름</th>
+      <td th:text="${member.MemName}"></td>
+    </tr>
+    
+        <tr>
+      <th scope="row">핸드폰번호</th>
+      <td th:text="${member.MemPhone}"></td>
+    </tr>
+    
+        <tr>
+      <th scope="row">주소</th>
+      <td th:text="${member.Zipcode}"></td>
+      <td th:text="${member.StreetAdr}"></td>
+      <td th:text="${member.DetailAdr}"></td>
+    </tr>
+    
+
+</table>
+		<a href =/members/modify/{idx}><button>회원정보 수정하기</button></a>
+
+<!-- 
+		<h4>이메일</h4>
+		<h4 th:text="${member.Email}"></h4>
+		<h4>이름</h4>
+		<h4 th:text="${member.MemName}"></h4>
+		<h4>핸드폰번호</h4>
+		<h4 th:text="${member.MemPhone}"></h4>
+		<h4>주소</h4>
+		<h4 th:text="${member.Zipcode}"></h4>
+		<h4 th:text="${member.StreetAdr}"></h4>
+		<h4 th:text="${member.DetailAdr}"></h4>
+ -->			
+
+			
+</html>
