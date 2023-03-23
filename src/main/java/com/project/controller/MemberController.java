@@ -1,10 +1,7 @@
 package com.project.controller;
-import java.security.Principal;
 
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
+import java.security.Principal;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,14 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.server.ResponseStatusException;
-
-
 import com.project.dto.MemberDto;
 import com.project.dto.MemberFormDto;
 import com.project.entity.Member;
 import com.project.service.MemberService;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -109,42 +102,8 @@ public String memberModify( @Valid MemberFormDto memberFormDto, BindingResult bi
 	return String.format("redirect:/members/detail/%s", idx);
 }
 
-}
-    //로그인 
-//    @GetMapping(value = "/login")
-//    public String login(){
-//        return "login";
-//    }
-//
-//    
-//    @GetMapping(value = "/login/error")
-//    public String loginError(Model model){
-//        model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
-//        return "login";
-//    }
-    
-//    @PostMapping("/join")
-//    public String newMember(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
-//       
-//    	System.out.println("컨트롤러 호출됨 ");
-//    	System.out.println(memberFormDto.getName());
-//    	
-//    	if(bindingResult.hasErrors()){
-//            return "join";
-//        }
-//    	
-//       try {
-//    	 
-//    	  this.memberService.save(memberFormDto);
-//    	  
-//       }catch(Exception e) {
-//    	   model.addAttribute("save_errors","아이디 혹은 이메일 중복");
-//    	   return "join";
-//       }
-//
-//        return "redirect:/";
-//    }
+
  
 
-   
+}
 

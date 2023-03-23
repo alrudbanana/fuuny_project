@@ -1,11 +1,20 @@
 package com.project.service;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.aot.hint.MemberCategory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -15,7 +24,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.project.DataNotFoundException;
 
 import com.project.Role;
@@ -31,7 +41,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional
 public class MemberService implements UserDetailsService {
-	
 	private final PasswordEncoder passwordEncoder;
 	private final MemberRepository memberRepository;
 	
@@ -44,6 +53,7 @@ public class MemberService implements UserDetailsService {
 		member.setZipcode(memberFromDto.getZipcode());		
 		member.setStreetAdr(memberFromDto.getStreetAdr());
 		member.setDetailAdr(memberFromDto.getDetailAdr());
+		member.setRole(Role.USER);
 		this.memberRepository.save(member);
 		
 	}
@@ -74,7 +84,7 @@ public class MemberService implements UserDetailsService {
 		 this.memberRepository.save(member);
 		 }
 	 
-	
+	//로그인
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     	System.out.println(email); //콘솔에 정보를 출력함 : 개발 완료 시는 제거함 
 		
@@ -99,5 +109,7 @@ public class MemberService implements UserDetailsService {
 
 		return new User(member.getEmail(),member.getMemPass(),authorities);
     }  
+    
+  
 
 }
