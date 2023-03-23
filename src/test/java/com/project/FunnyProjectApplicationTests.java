@@ -1,12 +1,17 @@
 package com.project;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.project.entity.Answer;
 import com.project.entity.Question;
+import com.project.repository.AnswerRepository;
 import com.project.repository.QuestionRepository;
 
 @SpringBootTest
@@ -14,6 +19,9 @@ class FunnyProjectApplicationTests {
 	
 	@Autowired
 	private QuestionRepository questionRepository;
+	
+	@Autowired
+	private AnswerRepository answerRepository;
 	
 	@Test
 	void testJpa() {
@@ -28,6 +36,17 @@ class FunnyProjectApplicationTests {
 		q2.setContent("Test2 내용입니다.");
 		q2.setRegTime(LocalDateTime.now());
 		this.questionRepository.save(q2);	// 첫번째 질문 저장
+		
+		Optional<Question> oq = this.questionRepository.findById((long) 1);
+		assertTrue(oq.isPresent());
+		Question q = oq.get();
+		
+		Answer a = new Answer();
+		a.setContent("네 자동으로 생성됩니다.");
+		a.setQuestion(q);
+		a.setRegTime(LocalDateTime.now());
+		this.answerRepository.save(a);
+		
 	}
 
 	@Test
