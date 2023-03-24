@@ -72,6 +72,7 @@ public class AdminController {
 		return "redirect:/admin/notice";
 	}
 	
+	//공지
 	//공지 수정으로 이동
 	@GetMapping(value = "/notice/modify/{id}")
 	public String noticeModify(Model model, @PathVariable("id") Integer id) {
