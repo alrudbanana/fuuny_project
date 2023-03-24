@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>상품상세</title>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+}
+
+header {
+	background-color: antiquewhite;
+	height: 200px;
+	text-align: center;
+}
+
+.main {
+	height: 800px;
+	border: 1px solid red;
+	text-align: center;
+}
+
+#btn_category {
+	margin: 20px 0;
+}
+
+#main_image {
+	border: 1px solid;
+	width: 500px;
+	height: 300px;
+	margin: 0 auto;
+}
+
+#product input {
+	display: flex;
+	margin: 20px auto;
+}
+
+<!--
+푸터-->footer {
+	
+}
+
+#foot {
+	height: 200px;
+	background-color: rgb(246, 225, 247);
+	text-align: center;
+}
+</style>
+</head>
+<body>
+	<div class="rap">
+
+		<!--헤더시작-->
+		<header> 헤더입니다. </header>
+		<!--헤더 끝-->
+
+		<!--메인시작-->
+		<section>
+			<div class="main">
+				<table>
+					<thead>
+						<tr>
+							<th>제목</th>
+							<th>작성일시</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="question : ${questionList}">
+
+							<td>[[${question.title}]]</td>
+							<td>[[${question.regTime}]]</td>
+						</tr>
+					</tbody>
+				</table>
+
+
+
+
+
+
+
+			</div>
+
+
+
+		</section>
+		<!--메인 끝-->
+
+
+
+		<!--푸터시작-->
+		<footer>
+			<div id="foot">푸터</div>
+		</footer>
+		<!--푸터 끝-->
+	</div>
+
+</body>
+</html>
