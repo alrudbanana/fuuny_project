@@ -1,19 +1,34 @@
 package com.project;
 
+import java.security.Principal;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.project.entity.Member;
+import com.project.service.MemberService;
+
+import lombok.RequiredArgsConstructor;
+
 @Controller
+@RequiredArgsConstructor
 public class IndexController {
-	//홈
-////	
-//		@RequestMapping(value = "/")
-//		public String index() {
-//			
-//			return "main";
-//		}
-//
-////	
+	
+	private final MemberService memberService;
+	
+	
+	@RequestMapping(value = "/")
+	public String index() {
+		
+		
+			return "index";
+	}
+	
+	
+	
+
+	
 		@RequestMapping(value = "/members/login")
 		public String login() {
 			return "login";

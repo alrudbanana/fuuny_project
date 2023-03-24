@@ -16,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
 import com.project.DataNotFoundException;
 
 import com.project.Role;
@@ -50,8 +49,6 @@ public class MemberService implements UserDetailsService {
 	}
 	
 	public Member getMember(Long idx) {
-		
-
 		Optional<Member> op = this.memberRepository.findById(idx) ;
 		if ( op.isPresent()) {		// op에 값이 존재하는 경우 
 			return op.get();	// Question 객체를 리턴
@@ -86,6 +83,11 @@ public class MemberService implements UserDetailsService {
 	 }
 	 
 	 
+	 public void delete(Member member) {
+		 this.memberRepository.delete(member);
+		 }
+	 
+	 
 	
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     	System.out.println(email); //콘솔에 정보를 출력함 : 개발 완료 시는 제거함 
@@ -111,5 +113,9 @@ public class MemberService implements UserDetailsService {
 
 		return new User(member.getEmail(),member.getMemPass(),authorities);
     }  
+    public Member getMember1(String email) {
+    	Optional<Member> member = this.memberRepository.findByEmail(email);
+    	return member.get();
+    }
 
 }

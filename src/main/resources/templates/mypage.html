@@ -1,10 +1,28 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
+<html xmlns:th="http://www.thymeleaf.org"
+ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
 <head>
 
 	
 </head>
+
+<header>
+      
+      </li>
+      <li><a href="">홈</a></li>
+      <li><a href="">공지사항</a></li>
+      <li><a href="">문의사항</a></li>
+      <li><a href="">프로젝트올리기</a></li>
+    </ul>
+    <ul class="navbar_login">
+      <li><a href="/members/login">로그인</a></li>
+      <li><a href="">회원가입</a></li>
+    </ul>
+
+ 
+ </div>
+</header>
 
 <body>
 
@@ -42,7 +60,9 @@
     
 
 </table>
-		<a href =/members/modify/{idx}><button>회원정보 수정하기</button></a>
+		<a th:href="@{/members/modify}"><button>회원정보 수정하기</button></a>
+		<a th:href="@{/members/delete}"><button>회원탈퇴하기</button></a>
+		
 
 <!--  
 <div class="card-body">

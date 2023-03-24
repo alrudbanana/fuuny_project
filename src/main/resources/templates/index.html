@@ -1,13 +1,35 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-
-      >
+      layout:decorate="~{layouts/layout1}">
+      
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+
+
 <body>
+
+<header>
+      
+      </li>
+      <li><a href="">홈</a></li>
+      <li><a href="">공지사항</a></li>
+      <li><a href="">문의사항</a></li>
+      <li><a href="">프로젝트올리기</a></li>
+    </ul>
+    <ul class="navbar_login">
+      <li sec:authorize="isAnonymous()"><a href="/members/login">로그인</a></li>
+      <li sec:authorize="isAuthenticated()"><a href = "/members/logout">로그아웃</a></li>
+      <li sec:authorize="isAuthenticated()" ><a th:href="@{/members/detail}">마이페이지</a></li>
+      
+      <li><a href="/members/new">회원가입</a></li>
+    </ul>
+
+ 
+ </div>
+</header>
 	<h2>index</h2>
 </body>
 </html>

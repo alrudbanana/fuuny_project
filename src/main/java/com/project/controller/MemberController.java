@@ -5,6 +5,7 @@ import java.security.Principal;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -66,14 +67,14 @@ public class MemberController {
     }
 
 
-	@GetMapping(value = "/detail/{idx}")
-	public String detail(Model model, @PathVariable("idx") Long idx) {
+	@GetMapping("/detail")
+	public String detail(Model model, Principal principal) {
 
 		// 서비스 클래스의 메소드 호출 : 상세페이지 보여달라
-		Member b = this.memberService.getMember(idx);
-
-		// Model 객체에 담아서 클라이언트에게 전송
-		model.addAttribute("member", b);
+		String email = principal.getName();
+		
+		Member member = this.memberService.getMember1(email);
+		model.addAttribute("member",member);
 
 		return "mypage"; // template : question_detail.html
 
@@ -83,11 +84,14 @@ public class MemberController {
 	
 	
 
-@PreAuthorize("isAuthenticated()")
-@GetMapping(value = "/modify/{idx}")
-public String memberModify(MemberDto memberDto, @PathVariable("idx") Long idx, Principal principal) {
+	
+@GetMapping(value = "/modify")
+public String memberModify(MemberDto memberDto, Principal principal) {
 
-	Member member = this.memberService.getMember(idx);
+	String email = principal.getName();
+	
+	Member member = this.memberService.getMember1(email);
+	
 	
 	memberDto.setEmail(member.getEmail());
 	memberDto.setMemPass(member.getMemPass());
@@ -103,21 +107,30 @@ public String memberModify(MemberDto memberDto, @PathVariable("idx") Long idx, P
 
 
 @PreAuthorize("isAuthenticated()")
-@PostMapping(value = "/modify/{idx}")
-public String memberModify( @Valid MemberDto memberDto, BindingResult bindingResult, MemberFormDto memberFormDto, Member member, Principal principal, @PathVariable("idx") Long idx) {
+@PostMapping(value = "/modify")
+public String memberModify( @Valid MemberDto memberDto, BindingResult bindingResult, MemberFormDto memberFormDto, Member member, Principal principal) {
 
 	if(bindingResult.hasErrors()) {
 		return "mypagemodify";
 	}
 	
 	this.memberService.modify(member, memberDto.getEmail(), memberDto.getMemPass(), memberDto.getMemName(), memberDto.getMemPhone(), memberDto.getZipcode(), memberDto.getStreetAdr(), memberDto.getDetailAdr());
-	return String.format("redirect:/members/detail/%s", idx);
+	return "redirect:/mypage";
 }
 
-@GetMapping("checkPwd")
-public String checkPwdView() {
-	return "/check-pwd";
+
+@PreAuthorize("isAuthenticated()")
+@GetMapping("/delete")
+public String Delete(Principal principal) {
+	
+	String email = principal.getName();
+	
+	Member member = this.memberService.getMember1(email);
+
+this.memberService.delete(member);
+return "redirect:/";
 }
+
 
 
 
