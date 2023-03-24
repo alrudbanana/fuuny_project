@@ -5,15 +5,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class IndexController {
-	//홈
-////	
-//		@RequestMapping(value = "/")
-//		public String index() {
-//			
-//			return "main";
-//		}
-//
-////	
+//홈
+//	
+		@RequestMapping(value = "/")
+		public String index() {
+			
+			return "main";
+		}
+
+//	
 		@RequestMapping(value = "/members/login")
 		public String login() {
 			return "login";
