@@ -1,5 +1,6 @@
 package com.project.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +35,14 @@ public class QuestionService {
 			
 			throw new DataNotFoundException("question not found");
 		}
+	}
+	
+	public void create(String title, String content) {
+		Question q = new Question();
+		q.setTitle(title);
+		q.setContent(content);
+		q.setRegTime(LocalDateTime.now());
+		this.questionRepository.save(q);
 	}
 
 }
