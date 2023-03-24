@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Service;
 import com.project.DataNotFoundException;
 
 import com.project.Role;
-
+import com.project.dto.MemberDto;
 import com.project.dto.MemberFormDto;
 import com.project.entity.Member;
 import com.project.repository.MemberRepository;
@@ -50,7 +51,7 @@ public class MemberService implements UserDetailsService {
 	
 	public Member getMember(Long idx) {
 		
-		//select * from question where id = ? 
+
 		Optional<Member> op = this.memberRepository.findById(idx) ;
 		if ( op.isPresent()) {		// op에 값이 존재하는 경우 
 			return op.get();	// Question 객체를 리턴
@@ -73,6 +74,17 @@ public class MemberService implements UserDetailsService {
 		 member.setDetailAdr(detailAdr);
 		 this.memberRepository.save(member);
 		 }
+	 
+	 public void modifyPw(Member member ) throws Exception {
+		 
+		 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+	
+		 String securePw = encoder.encode(member.getMemPass());
+		 member.setMemPass(securePw);
+		 
+		 this.memberRepository.save(member);
+	 }
+	 
 	 
 	
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
