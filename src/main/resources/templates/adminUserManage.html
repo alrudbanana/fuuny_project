@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/adminLayout}">
+
+
+<div layout:fragment="content">
+
+<h2>헤더자리</h2>
+
+
+<h1>관리자 사용자 관리 페이지</h1> 
+
+    <div>
+        <table id="mainTable">
+            <tr>
+                <td>하루 펀딩 금액 : </td>
+                <td>000000000</td>
+                <td rowspan='2'><a th:href="@{/}">사이트 메인</a></td>
+                <td rowspan='2'><a th:href="@{/admin/main}">관리자 메인</a></td>
+                <td rowspan='2'><a th:href="@{/admin/funding}">펀딩 관리</a></td>
+                <td rowspan='2'><a th:href="@{/admin/userManage}">사용자 관리</a></td>
+                <td rowspan='2'><a th:href="@{/admin/notice}">공지글 관리</a></td>
+            </tr>
+            <tr>
+                <td>오늘 가입한 수 : </td>
+                <td>000000000</td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <h2>사용자 보기 창</h2>
+    </div>
+
+<h2>푸터자리</h2>
+
+</div>
+</html>

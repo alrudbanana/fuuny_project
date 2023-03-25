@@ -32,6 +32,7 @@ public class Member extends BaseTimeEntity {
     
     @NotEmpty 
     private String memPass; //비밀번호
+    
     @NotEmpty 
     private String memName; //이름
     @NotEmpty 

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<form th:action="@{/admin/notice/write}" method="post">
+		<table>
+			<tr>
+				<td>제목</td>
+				<td><input type="text" name="title" id="title"></td>
+			</tr>
+			
+			<tr>
+				<td>내용</td>
+				<td><textarea name="content" id="content" rows="10"></textarea></td>
+			</tr>
+			<tr>
+				<td>이미지</td>
+				<td><input type="file" name="file"></td>
+			</tr>
+		</table>
+         
+        <input type="submit" value="저장하기" >
+    </form>
+
+</body>
+</html>

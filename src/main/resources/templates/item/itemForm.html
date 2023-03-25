@@ -1,12 +1,122 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
 
-<form role="form" ></form>
 
-</body>
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .input-group {
+            margin-bottom : 15px
+        }
+        .img-div {
+            margin-bottom : 10px
+        }
+        .fieldError {
+            color: #bd2130;
+        }
+    </style>
+</th:block>
+
+
+<div layout:fragment="content"> 
+
+<form role="form" method="post" enctype="multipart/form-data" th:object="${itemFormDto}">
+	<p class="h2">
+		상품 등록
+	</p>
+	
+	<input type="hidden" th:field="*{idx}">
+	
+	<div class="form-group">
+		<select th:field="*{itemStatus}" class="custom-select">
+			<option value="SELL"> 진행 중 </option>
+			<option value="SOLD_OUT"> 종료 </option>
+		</select>
+	</div>
+	
+	<div class="input-group">
+		<div class="input-group-prepend">
+           <span class="input-group-text">프로젝트 제목</span>
+        </div>
+        <input type="text" th:field="*{itemName}" class="form-control" placeholder="프로젝트 제목을 입력해주세요">
+	</div>
+	<p th:if="${#fields.hasErrors('itemName')}" th:errors="*{itemName}" class="fieldError">Incorrect data</p>
+
+    <!-- 카테고리 -->
+    <div class="input-group">
+		<div class="input-group-prepend">
+           <span class="input-group-text">카테고리</span>
+        </div>
+        <select th:field="*{itemCategory}" class="custom-select">
+			<option value="" selected> 카테고리를 선택해주세요 </option> <!-- 기본 값 -->
+            <option value="cate1"> 디자인 문구 </option>
+            <option value="cate2"> 푸드 </option>
+            <option value="cate3"> 영화 · 비디오 </option>
+            <option value="cate4"> 캐릭터 · 굿즈 </option>
+		</select>
+	</div>
+    <!-- 
+	<p th:if="${#fields.hasErrors('itemCategory')}" th:errors="*{itemCategory}" class="fieldError">Incorrect data</p>
+     -->
+    
+
+    <div class="input-group">
+		<div class="input-group-prepend">
+           <span class="input-group-text">프로젝트 상세설명</span>
+        </div>
+        <input type="text" th:field="*{itemDetail}" class="form-control" placeholder="프로젝트 상세내용을 입력해주세요">
+	</div>
+	<p th:if="${#fields.hasErrors('itemDetail')}" th:errors="*{itemDetail}" class="fieldError">Incorrect data</p>
+
+
+    <div class="input-group">
+		<div class="input-group-prepend">
+           <span class="input-group-text">목표 금액</span>
+        </div>
+        <input type="text" th:field="*{itemTargetPrice}" class="form-control" placeholder="목표 금액을 입력해주세요">
+	</div>
+	<p th:if="${#fields.hasErrors('itemTargetPrice')}" th:errors="*{itemTargetPrice}" class="fieldError">Incorrect data</p>
+
+
+    <div class="input-group">
+		<div class="input-group-prepend">
+           <span class="input-group-text">상품 금액</span>
+        </div>
+        <input type="text" th:field="*{itemPrice}" class="form-control" placeholder="판매 금액을 입력해주세요">
+	</div>
+	<p th:if="${#fields.hasErrors('itemPrice')}" th:errors="*{itemPrice}" class="fieldError">Incorrect data</p>
+
+
+    <div class="input-group">
+		<div class="input-group-prepend">
+           <span class="input-group-text"> 상품 재고 </span>
+        </div>
+        <input type="text" th:field="*{itemStockNumber}" class="form-control" placeholder="상품 재고를 입력해주세요">
+	</div>
+	<p th:if="${#fields.hasErrors('itemStockNumber')}" th:errors="*{itemStockNumber}" class="fieldError">Incorrect data</p>
+    
+
+    <!-- 프로젝트 일정 달력으로
+    <div class="input-group">
+		<div class="input-group-prepend">
+           <span class="input-group-text">프로젝트 일정</span>
+        </div>
+        <input type="text" th:field="*{itemDetail}" class="form-control" placeholder="프로젝트 상세내용을 입력해주세요">
+	</div>
+	<p th:if="${#fields.hasErrors('itemDetail')}" th:errors="*{itemDetail}" class="fieldError">Incorrect data</p>
+
+     -->
+
+     <div th:if="${#strings.isEmpty(itemFormDto.idx)}" style="text-align: center">
+        <button th:formaction="@{/saler/item/new}" type="submit" class="btn btn-primary">저장</button>
+    </div>
+    <!-- 토큰 -->
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+</form>
+
+</div>
+
+
 </html>
