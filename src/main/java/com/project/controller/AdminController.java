@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.dto.NoticeFormDto;
+import com.project.entity.Member;
 import com.project.entity.Notice;
+import com.project.repository.AdminRepository;
+import com.project.repository.MemberRepository;
 import com.project.service.AdminService;
 
 import jakarta.validation.Valid;
@@ -26,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class AdminController {
 	
 	private final AdminService adminService;
+	private final MemberRepository memberRepository;
 	
 	@GetMapping(value = "/main")
 	public String adminMain() {
@@ -37,8 +41,11 @@ public class AdminController {
 		return "adminfunding";
 	}
 	
+	//2023.03.25 유저관리 - 페이징 처리
 	@GetMapping(value = "/userManage")
-	public String adminUserManage() {
+	public String adminUserManage(Model model,  @RequestParam(value="page", defaultValue="0") int page) {
+		Page<Member> paging = this.adminService.getUserList(page);
+		model.addAttribute("paging", paging);
 		return "adminUserManage";
 	}
 	

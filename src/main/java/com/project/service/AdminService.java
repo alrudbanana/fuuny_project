@@ -12,8 +12,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.project.DataNotFoundException;
+import com.project.entity.Member;
 import com.project.entity.Notice;
 import com.project.repository.AdminRepository;
+import com.project.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,11 +24,22 @@ import lombok.RequiredArgsConstructor;
 public class AdminService {
 	
 private final AdminRepository adminRepository;
+private final MemberRepository memberRepository;
 	
 	//공지 리스트 불러오기
 	public List<Notice> getList(){
 		return this.adminRepository.findAll();
 	}
+	
+	//2023.03.25 유저 리스트 불러오기 - 페이징 역순 처리
+	public Page<Member> getUserList(int page){
+		List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("idx"));
+        Pageable pageable = PageRequest.of(page, 3, Sort.by(sorts));
+		return this.memberRepository.findAll(pageable);
+	}
+	
+	
 	
 	//공지 하나 갖고 오기
 	public Notice getNotice(Integer id) {

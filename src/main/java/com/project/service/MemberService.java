@@ -35,6 +35,7 @@ public class MemberService implements UserDetailsService {
 	private final PasswordEncoder passwordEncoder;
 	private final MemberRepository memberRepository;
 	
+	//유저생성시 권한, 생성날짜 추가생성
 	public void saveMember(MemberFormDto memberFromDto) {
 		Member member = new Member();
 		member.setEmail(memberFromDto.getEmail());
@@ -44,6 +45,8 @@ public class MemberService implements UserDetailsService {
 		member.setZipcode(memberFromDto.getZipcode());		
 		member.setStreetAdr(memberFromDto.getStreetAdr());
 		member.setDetailAdr(memberFromDto.getDetailAdr());
+		member.setRole(Role.USER);
+		member.setRegTime(LocalDateTime.now());
 		this.memberRepository.save(member);
 		
 	}
