@@ -296,6 +296,12 @@
 						<p th:if="${#fields.hasErrors('memPhone')}" th:errors="*{memPhone}" class="fieldError">Incorrect data</p>
 					</tr>
 				</table>
+				<p id="p2">일반 사용자 / 판매자</p>
+				<select th:field="*{role}">
+					<option th:value="USER">일반사용자</option>
+					<option th:value="SELLER">판매자</option>
+				</select>
+				
 				
 				<div class="mb-3">
             <!-- 주소 -->

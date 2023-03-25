@@ -2,6 +2,8 @@ package com.project.dto;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.project.Role;
+
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +31,8 @@ public class MemberFormDto {
 	private String zipcode;
     private String streetAdr;
     private String detailAdr;
+    
+    private Role role;
     
    
     

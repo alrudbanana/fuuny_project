@@ -1,5 +1,6 @@
 package com.project.controller;
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +38,7 @@ public class MemberController {
         model.addAttribute("memberFormDto", new MemberFormDto());
         return "memberForm";
     }
+    
     
     @PostMapping(value="/new")
     public String memberForm(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
