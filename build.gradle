@@ -35,7 +35,9 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	
 	implementation 'com.mysql:mysql-connector-j'
-	
+	//jackson
+	implementation "com.fasterxml.jackson.core:jackson-core:2.9.9"
+	implementation "com.fasterxml.jackson.core:jackson-annotations:2.9.9"
 	
 }
 

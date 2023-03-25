@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.project.dto.MemberDto;
 import com.project.dto.MemberFormDto;
 import com.project.entity.Member;
+import com.project.model.KakaoProfile;
 import com.project.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +51,7 @@ public class MemberController {
 			model.addAttribute("memberFormDto", "아이디 혹은 이메일 중복.");
 			return "memberForm";
 		}
-    return "redirect:/";
+    return "redirect:index";
    
     }
 
@@ -103,7 +104,7 @@ public String memberModify( @Valid MemberFormDto memberFormDto, BindingResult bi
 }
 
 
- 
+
 
 }
 

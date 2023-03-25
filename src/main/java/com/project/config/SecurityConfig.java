@@ -27,45 +27,49 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests().requestMatchers(
-                new AntPathRequestMatcher("/**")).permitAll()
-        .and()
-        .csrf().ignoringRequestMatchers(
-                new AntPathRequestMatcher("/h2-console/**"))
-        
-        .and()
-        .headers()
-        .addHeaderWriter(new XFrameOptionsHeaderWriter(
-                XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
-        //로그인 
-    	.and()
-		.formLogin()
-		.loginPage("/members/login")
-		.defaultSuccessUrl("/")
-		
-		//로그아웃
-        .and()
-		.logout()
-		.logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
-		.logoutSuccessUrl("/")
-		.invalidateHttpSession(true);
-        
-        
-        return http.build();
-    }
+	 @Bean
+	    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	        http.authorizeHttpRequests().requestMatchers(
+	                new AntPathRequestMatcher("/**")).permitAll()
+	        .and()
+	        .csrf().ignoringRequestMatchers(
+	                new AntPathRequestMatcher("/h2-console/**"))
+	        
+	        .and()
+	        .headers()
+	        .addHeaderWriter(new XFrameOptionsHeaderWriter(
+	                XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
+	        //로그인 
+	    	.and()
+			.formLogin()
+			.loginPage("/members/login")
+			.defaultSuccessUrl("/")
+			
+			//로그아웃
+	        .and()
+			.logout()
+			.logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
+			.logoutSuccessUrl("/")
+			.invalidateHttpSession(true)
+			
+	        //oauth2로그인
+	        .and()
+			.oauth2Login()
+			.loginPage("/oauth/kakao")
+			.defaultSuccessUrl("/");
+	        return http.build();
+	    }
 
-    
-	 @Bean
-	    public PasswordEncoder passwordEncoder() {
-	        return new BCryptPasswordEncoder();
-	}
-	 
-	 @Bean
-		AuthenticationManager authenticateionManager(AuthenticationConfiguration authenticationConfiguration) 
-		throws Exception{
-			return authenticationConfiguration.getAuthenticationManager();
+	    
+		 @Bean
+		    public PasswordEncoder passwordEncoder() {
+		        return new BCryptPasswordEncoder();
 		}
-	
-}
+		 
+		 @Bean
+			AuthenticationManager authenticateionManager(AuthenticationConfiguration authenticationConfiguration) 
+			throws Exception{
+				return authenticationConfiguration.getAuthenticationManager();
+			}
+		
+	}
