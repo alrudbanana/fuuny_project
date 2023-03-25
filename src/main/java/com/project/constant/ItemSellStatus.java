@@ -1,5 +1,5 @@
 package com.project.constant;
 
-public enum ItemStatus {
+public enum ItemSellStatus {
 	SELL, SOLD_OUT
 }
