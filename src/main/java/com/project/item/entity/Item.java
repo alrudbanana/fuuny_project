@@ -61,9 +61,13 @@ public class Item extends BaseEntity{
 	//상품 수정 메소드 
 	public void updateItem(ItemFormDto itemFormDto){
         this.itemNm = itemFormDto.getItemNm();
+        this.itemCategory = itemFormDto.getItemCategory();
         this.price = itemFormDto.getPrice();
+        this.price2 = itemFormDto.getPrice2();
         this.stockNumber = itemFormDto.getStockNumber();
         this.itemDetail = itemFormDto.getItemDetail();
         this.itemsellstatus = itemFormDto.getItemSellStatus();
+        this.startDate = itemFormDto.getStartDate();
+        this.endDate = itemFormDto.getEndDate();
     }
 }

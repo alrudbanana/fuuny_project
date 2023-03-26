@@ -34,7 +34,7 @@ private final ItemService itemService;
 	@GetMapping(value = "/saler/item/new")
     public String itemForm(Model model){
         model.addAttribute("itemFormDto", new ItemFormDto());
-        return "item/ItemForm";
+        return "item/itemForm";
 	}
 	
 	//상품 등록 처리 
@@ -61,7 +61,7 @@ private final ItemService itemService;
 	        return "redirect:/";
 	    }
 	 
-	//상세보기 메소드
+	//상품 수정 -> 정보 출력
 	  @GetMapping(value = "/saler/item/{itemId}")
 	    public String itemDtl(@PathVariable("itemId") Long itemId, Model model){
 
@@ -71,17 +71,17 @@ private final ItemService itemService;
 	        } catch(EntityNotFoundException e){
 	            model.addAttribute("errorMessage", "존재하지 않는 상품 입니다.");
 	            model.addAttribute("itemFormDto", new ItemFormDto());
-	            return "item/itemForm";
+	            return "item/ItemForm";
 	        }
 
-	        return "item/itemForm";
+	        return "item/ItemForm";
 	    }
 	 //상품 수정 메소드 
 	 @PostMapping(value = "/saler/item/{itemId}")
 	    public String itemUpdate(@Valid ItemFormDto itemFormDto, BindingResult bindingResult,
 	                             @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList, Model model){
 	        if(bindingResult.hasErrors()){
-	            return "item/itemForm";
+	            return "item/ItemForm";
 	        }
 
 	        if(itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null){
@@ -96,9 +96,9 @@ private final ItemService itemService;
 	            return "item/itemForm";
 	        }
 
-	        return "redirect:/";
+	        return "redirect:/saler/items";
 	    }
-	 
+	 /*
 	//메인아이템 불러오기
      @GetMapping(value = "item/itemlist")
      public String main(ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page, Model model) {
@@ -111,10 +111,10 @@ private final ItemService itemService;
          return "item/mainitmelist";
      }
 
-
+*/
 	 
 	 //상품 관리 화면 이동 및 조회한 상품 데이터 화면에 전달 로직 
-	 @GetMapping(value = {"/saler/item", "/saler/item/{page}"})
+	 @GetMapping(value = {"/saler/items", "/saler/items/{page}"})
 	    public String itemManage(ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page, Model model){
 
 	        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5); //한 페이지에 보여지는 상품의 수 (0, n) <- 0, 페이지 갯수가 없을수 있어서 / 갯수 조절시 n값 변경  
@@ -126,4 +126,5 @@ private final ItemService itemService;
 
 	        return "item/itemlist";
 	    }
+	    
 }

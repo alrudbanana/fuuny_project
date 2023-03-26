@@ -15,6 +15,7 @@ import com.project.item.dto.QMainItemDto;
 import com.project.item.entity.Item;
 import com.project.item.entity.QItem;
 import com.project.item.entity.QItemImg;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -49,10 +50,10 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
 	            dateTime = dateTime.minusMonths(6);
 	        }
 
-	        return QItem.item.regTime.after(dateTime);
+	        return QItem.item.regTime.after(dateTime); //등록날짜 기준 
 	      
 	    }
-
+	    //검색어
 	    private BooleanExpression searchByLike(String searchBy, String searchQuery){
 
 	        if(StringUtils.equals("itemNm", searchBy)){
@@ -67,21 +68,24 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
 	    
 	    //상품데이터 조회
 	    @Override
-	    public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) { 
-	        List<Item> content = queryFactory
-	                .selectFrom(QItem.item) //상품데이터를 조회하기 위해 넣어줌 
+	    public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+	        @SuppressWarnings("deprecation")
+			QueryResults<Item> results = queryFactory
+	                .selectFrom(QItem.item)
 	                .where(regDtsAfter(itemSearchDto.getSearchDateType()),
 	                        searchSellStatusEq(itemSearchDto.getSearchSellStatus()),
 	                        searchByLike(itemSearchDto.getSearchBy(),
 	                                itemSearchDto.getSearchQuery()))
 	                .orderBy(QItem.item.id.desc())
-	                .offset(pageable.getOffset()) //인덱스 번호 저장
-	                .limit(pageable.getPageSize()) //한번에 가지고 올 최대 개수 정함 
-	                .fetch(); //조회대상 리스트 반환
+	                .offset(pageable.getOffset())
+	                .limit(pageable.getPageSize())
+	                .fetchResults();
 
-	        long total = content.size();
-	        return new PageImpl<>(content, pageable, total);//page구현체로 반환
+	        List<Item> content = results.getResults();
+	        long total = results.getTotal();
+	        return new PageImpl<>(content, pageable, total);
 	    }
+	    
 	  //아이템 Main
 	    private BooleanExpression itemNmLike(String searchQuery) {
 	        return StringUtils.isEmpty(searchQuery) ? null : QItem.item.itemNm.like("%" + searchQuery + "%");

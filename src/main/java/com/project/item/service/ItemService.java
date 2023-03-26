@@ -52,7 +52,7 @@ public class ItemService {
         return item.getId();
     }
 	
-	//수정 메소드
+	//수정 데이터 읽어오기
 	@Transactional(readOnly = true)
     public ItemFormDto getItemDtl(Long itemId){
         List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId);
@@ -69,7 +69,7 @@ public class ItemService {
         return itemFormDto;
     }
 	
-    //상품 수정
+    //상품 이미지 수정
 	public Long updateItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception{
     
         Item item = itemRepository.findById(itemFormDto.getId())

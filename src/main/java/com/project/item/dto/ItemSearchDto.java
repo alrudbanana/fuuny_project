@@ -13,9 +13,6 @@ public class ItemSearchDto {
 
     private ItemSellStatus searchSellStatus;
     
-    //카테고리 추가 
-    private String searchCategory;
-    
     //조회 시 어떤 유형으로 조회할지 선택 -> 상품명 / 카테고리명
     private String searchBy;
 

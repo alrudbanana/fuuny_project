@@ -24,6 +24,10 @@ public class MemberController {
 	
     private final MemberService memberService;
 
+    @GetMapping(value = "/login")
+	public String login() {
+		return "login";
+	}
     //회원가입 뷰 페이지 출력
     @GetMapping(value = "/new")
     public String memberForm(Model model){
