@@ -1,5 +1,6 @@
 package com.project.item.dto;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,20 +22,28 @@ public class ItemFormDto {
 
     @NotBlank(message = "상품명은 필수 입력 값입니다.")
     private String itemNm;
+    
+    @NotNull(message = "카테고리는 필수 선택 값입니다.")
+    private String itemCategory;
 
     @NotNull(message = "가격은 필수 입력 값입니다.")
     private Integer price;
     
     @NotNull(message = "가격은 필수 입력 값입니다.")
     private Integer price2; //목표가격
+
     @NotBlank(message = "상품 상세는 필수 입력 값입니다.")
     private String itemDetail;
 
     @NotNull(message = "재고는 필수 입력 값입니다.")
     private Integer stockNumber;
     
-    @NotNull(message = "재고는 필수 입력 값입니다.")
-    private String itemCategory;
+    @NotNull(message = "프로젝트 시작일은 필수 선택 값입니다.")
+	private LocalDate startDate; //프로젝트 시작 날짜
+	
+    @NotNull(message = "프로젝트 마감일은 필수 선택 값입니다.")
+	private LocalDate endDate; //프로젝트 마감 날짜
+	
 
     private ItemSellStatus itemSellStatus;
     //상퓸 저장 후 상품 이미지 정보를 수정하는 리스트 

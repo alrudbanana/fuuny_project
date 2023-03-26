@@ -1,6 +1,6 @@
 package com.project.item.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.project.constant.ItemSellStatus;
 import com.project.entity.BaseEntity;
@@ -31,6 +31,9 @@ public class Item extends BaseEntity{
 	@Column(nullable = false, length = 50)
 	private String itemNm; //아이템 이름 
 	
+	@Column(nullable = false)
+	private String itemCategory; //아이템 카테고리
+	
 	@Enumerated(EnumType.STRING)
 	private ItemSellStatus itemsellstatus; //아이템 판매현황(진행중/종료)
 	
@@ -44,13 +47,14 @@ public class Item extends BaseEntity{
 	@Column(name="itemTargetPrice", nullable = false)
 	private int price2;//가격  - 목표금액
 	
+	@Column(nullable = false)
 	private int stockNumber; //재고 
 	
-
-	private LocalDateTime itemStartDate; //프로젝트 시작 날짜
+	@Column(nullable = false)
+	private LocalDate startDate; //프로젝트 시작 날짜
 	
-	
-	private LocalDateTime itemEndDate; //프로젝트 마감 날짜
+	@Column(nullable = false)
+	private LocalDate endDate; //프로젝트 마감 날짜
 	
  
 	
