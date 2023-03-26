@@ -32,7 +32,7 @@ public class ItemImg extends BaseEntity{
     private String repimgYn; //대표 이미지 여부
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id", referencedColumnName = "id")
+    @JoinColumn(name = "item_id")
     private Item item;
     
     //수정 

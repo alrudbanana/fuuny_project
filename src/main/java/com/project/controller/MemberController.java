@@ -51,7 +51,7 @@ public class MemberController {
 			model.addAttribute("memberFormDto", "아이디 혹은 이메일 중복.");
 			return "memberForm";
 		}
-    return "redirect:index";
+    return "redirect:/";
    
     }
 
