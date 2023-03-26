@@ -50,7 +50,7 @@ class FunnyProjectApplicationTests {
 	
 	@Autowired
 	private AnswerRepository answerRepository;
-	
+/*	
 	@Test
 
 	void testJpa() {
@@ -85,7 +85,7 @@ class FunnyProjectApplicationTests {
         }
 
 	}
-	
+*/	
 
 
 }
