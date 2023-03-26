@@ -67,6 +67,9 @@ sourceSets {
 	main.java.srcDirs += [ querydslDir ]
 }
 
+compileJava {
+    options.compilerArgs << '-Aquerydsl.generatedAnnotationClass=javax.annotation.Generated'
+}
 tasks.withType(JavaCompile) {
 	options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
 }

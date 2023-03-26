@@ -1,7 +1,11 @@
 package com.project.item.controller;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.item.dto.ItemFormDto;
+import com.project.item.dto.ItemSearchDto;
+import com.project.item.dto.MainItemDto;
+import com.project.item.entity.Item;
 import com.project.item.service.ItemService;
-
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -91,5 +97,33 @@ private final ItemService itemService;
 	        }
 
 	        return "redirect:/";
+	    }
+	 
+	//메인아이템 불러오기
+     @GetMapping(value = "item/itemlist")
+     public String main(ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page, Model model) {
+         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 8);
+         Page<MainItemDto> items = itemService.getMainItemPage(itemSearchDto, pageable);
+         model.addAttribute("items", items);
+         model.addAttribute("itemSearchDto", itemSearchDto);
+         model.addAttribute("maxPage", 5);
+
+         return "item/mainitmelist";
+     }
+
+
+	 
+	 //상품 관리 화면 이동 및 조회한 상품 데이터 화면에 전달 로직 
+	 @GetMapping(value = {"/saler/item", "/saler/item/{page}"})
+	    public String itemManage(ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page, Model model){
+
+	        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5); //한 페이지에 보여지는 상품의 수 (0, n) <- 0, 페이지 갯수가 없을수 있어서 / 갯수 조절시 n값 변경  
+	        Page<Item> items = itemService.getAdminItemPage(itemSearchDto, pageable);
+
+	        model.addAttribute("items", items); //조회한 상품 데이터 및 페이징 정보 뷰에 전달 
+	        model.addAttribute("itemSearchDto", itemSearchDto); //페이지 전환시 기존 검색조건 유지한체 이동 가능 
+	        model.addAttribute("maxPage", 5); //페이지 번호의 최대 갯수 5 개의 이동할 페이지번호만 보여줌 0~4 
+
+	        return "item/itemlist";
 	    }
 }

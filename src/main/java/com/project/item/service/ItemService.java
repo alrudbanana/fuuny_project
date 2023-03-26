@@ -3,17 +3,20 @@ package com.project.item.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.item.dto.ItemFormDto;
 import com.project.item.dto.ItemImgDto;
+import com.project.item.dto.ItemSearchDto;
+import com.project.item.dto.MainItemDto;
 import com.project.item.entity.Item;
 import com.project.item.entity.ItemImg;
 import com.project.item.repository.ItemImgRepository;
 import com.project.item.repository.ItemRepository;
-
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -66,8 +69,9 @@ public class ItemService {
         return itemFormDto;
     }
 	
+    //상품 수정
 	public Long updateItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception{
-        //상품 수정
+    
         Item item = itemRepository.findById(itemFormDto.getId())
                 .orElseThrow(EntityNotFoundException::new);
         item.updateItem(itemFormDto);
@@ -81,4 +85,16 @@ public class ItemService {
 
         return item.getId();
     }
+	
+	//상품데이터 조회 메소드 추가 (*데이터의 수정이 일어나지 않으므로 읽기전용)
+	@Transactional(readOnly = true)
+    public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable){
+        return itemRepository.getAdminItemPage(itemSearchDto, pageable);
+    }
+	
+	 //메인아이템 조회 메소드 
+	 @Transactional(readOnly = true)
+	    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+	        return itemRepository.getMainItemPage(itemSearchDto, pageable);
+	    }
 }

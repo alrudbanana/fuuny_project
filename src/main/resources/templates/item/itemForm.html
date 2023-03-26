@@ -170,9 +170,9 @@ $(function () {
 	        <input type="date" th:field="*{startDate}" placeholder="프로젝트 오픈 날짜" />
 	        <input type="date" th:field="*{endDate}" placeholder="프로젝트 마감 날짜" />
 		</div> 
-		<!-- 
-		<p th:if="${#fields.hasErrors('itemDetail')}" th:errors="*{itemDetail}" class="fieldError">Incorrect data</p>
-		 -->
+		
+		<p th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}" class="fieldError">Incorrect data</p>
+		 <p th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}" class="fieldError">Incorrect data</p>
 	
 	
 		<div th:if="${#lists.isEmpty(itemFormDto.itemImgDtoList)}">
