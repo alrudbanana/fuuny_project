@@ -8,4 +8,7 @@ import com.project.entity.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 		Optional<Member> findByEmail(String email);
+		Optional<Member> findByMemName(String memname);
+
+	
 }

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import com.project.entity.Answer;
+import com.project.entity.Member;
 import com.project.entity.Question;
 import com.project.repository.AnswerRepository;
 
@@ -23,6 +24,17 @@ public class AnswerService {
 		answer.setRegTime(LocalDateTime.now());
 		answer.setQuestion(question);
 		this.answerRepository.save(answer);
+	}
+	
+	public Answer create(Question question, String content, Member author ) {
+		
+		Answer answer = new Answer();
+		answer.setContent(content);
+		answer.setRegTime(LocalDateTime.now());
+		answer.setQuestion(question);
+		answer.setAuthor(author);
+		this.answerRepository.save(answer);
+		return answer;
 	}
 
 }

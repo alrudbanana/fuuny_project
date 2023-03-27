@@ -44,7 +44,9 @@ public class MemberService implements UserDetailsService {
 		member.setZipcode(memberFromDto.getZipcode());		
 		member.setStreetAdr(memberFromDto.getStreetAdr());
 		member.setDetailAdr(memberFromDto.getDetailAdr());
+		member.setRole(Role.USER);
 		this.memberRepository.save(member);
+		
 		
 	}
 	
@@ -74,7 +76,7 @@ public class MemberService implements UserDetailsService {
 		 this.memberRepository.save(member);
 		 }
 	 
-	
+	//로그인
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     	System.out.println(email); //콘솔에 정보를 출력함 : 개발 완료 시는 제거함 
 		
@@ -99,5 +101,15 @@ public class MemberService implements UserDetailsService {
 
 		return new User(member.getEmail(),member.getMemPass(),authorities);
     }  
+    
+  //사용자 조회 
+    public Member getUser(String memName) {
+    	 Optional<Member> member = this.memberRepository.findByMemName(memName);
+    	 if (member.isPresent()) {
+    	 return member.get();
+    	 } else {
+    	 throw new DataNotFoundException("siteuser not found");
+    	 }
+    }
 
 }
