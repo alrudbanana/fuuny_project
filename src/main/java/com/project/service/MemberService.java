@@ -94,8 +94,13 @@ public class MemberService implements UserDetailsService {
 		
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		
-		if("admin".equals(email)) {
+		System.out.println(member.getRole());
+		
+		//2023.03.27 관리자 로그인시 관리자 버튼 생성
+		if("ADMIN".equals(member.getRole().toString())) {
 			authorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
+			System.out.println("Admin Role 호출됨");
+			System.out.println(Role.ADMIN.getValue());
 		}else {
 			authorities.add(new SimpleGrantedAuthority(Role.USER.getValue()));
 		}

@@ -112,7 +112,6 @@ public String memberModify( @Valid MemberFormDto memberFormDto, BindingResult bi
 	return String.format("redirect:/members/detail/%s", idx);
 }
 
-}
     //로그인 
 //    @GetMapping(value = "/login")
 //    public String login(){
@@ -125,7 +124,7 @@ public String memberModify( @Valid MemberFormDto memberFormDto, BindingResult bi
 //        model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
 //        return "login";
 //    }
-    
+//    
 //    @PostMapping("/join")
 //    public String newMember(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
 //       
@@ -147,7 +146,7 @@ public String memberModify( @Valid MemberFormDto memberFormDto, BindingResult bi
 //
 //        return "redirect:/";
 //    }
- 
+}
 
    
 

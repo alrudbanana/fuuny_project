@@ -6,19 +6,24 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.project.dto.ItemDto;
+import com.project.dto.ItemFormDto;
 import com.project.entity.Answer;
+import com.project.entity.Item;
 import com.project.entity.Question;
 import com.project.repository.AnswerRepository;
-
+import com.project.repository.ItemRepository;
 import com.project.entity.Notice;
 import com.project.entity.Question;
 import com.project.repository.AdminRepository;
 
 import com.project.repository.QuestionRepository;
 import com.project.service.AdminService;
+import com.project.service.ItemService;
 
 @SpringBootTest
 class FunnyProjectApplicationTests {
@@ -49,17 +54,37 @@ class FunnyProjectApplicationTests {
 	private AdminService adminService;
 	
 	@Autowired
-	private AnswerRepository answerRepository;
+	private ItemService itemService;
 	
-	@Test
-	void testAdmin() {
-		for (int i = 1; i <= 300; i++) {
-            String title = String.format("테스트 데이터입니다:[%03d]", i);
-            String content = "내용무";
-            this.adminService.writeNotice(title, content);
-        }
-
-	}
+	@Autowired
+	private ItemRepository itemRepository;
+	
+	@Autowired
+	private Item itemDto;
+	
+	
+	
+//	@Test
+//	void testAdmin() {
+//		for (int i = 1; i <= 50; i++) {
+//            String itemName = String.format("아이템 이름:[%03d]", i);
+//            String itemCategory = "---";
+//            String itemDetail = String.format("상세설명:[%03d]", i);
+//            int itemTargetPrice = i*1000;
+//            int itemPrice = i*50;
+//            int itemStockNumber = i*2;
+//
+//            itemDto.setIdx((long) i);
+//            itemDto.setItemName(itemName);
+//            itemDto.setItemCategory(itemCategory);
+//            itemDto.setItemDetail(itemDetail);
+//            itemDto.setItemTargetPrice(itemTargetPrice);
+//            itemDto.setItemPrice(itemPrice);
+//            itemDto.setItemStockNumber(itemStockNumber);
+//            this.itemRepository.save(itemDto);
+//        }
+//
+//	}
 	
 
 

@@ -13,4 +13,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 		
 		//2023.03.25 유저관리 페이징 처리
 		Page<Member> findAll(Pageable pageable);
+		
+		
 }

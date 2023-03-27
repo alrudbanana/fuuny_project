@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.project.DataNotFoundException;
+import com.project.Role;
 import com.project.entity.Member;
 import com.project.entity.Notice;
 import com.project.repository.AdminRepository;
@@ -82,5 +83,25 @@ private final MemberRepository memberRepository;
 		Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
 		return this.adminRepository.findAll(pageable);
 	}
+	
+	//멤버 하나 갖고 오기
+		public Member getMember(Integer id) {
+			Optional<Member> member = this.memberRepository.findById((long)id);
+			
+			if(member.isPresent()) {
+				return member.get();
+			}else {
+				throw new DataNotFoundException("공지 사항을 찾을 수 없습니다");
+			}
+		}
+		
+		//2023.03.27 유저 권한 수정 완료
+		public void modifyMemberRole(Long idx, Role role) {
+			
+			Member member = this.memberRepository.findById(idx).get();
+			member.setRole(role);
+			this.memberRepository.save(member);
+		}
+
 
 }

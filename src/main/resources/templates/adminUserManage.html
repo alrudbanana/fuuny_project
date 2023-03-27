@@ -1,91 +1,149 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/adminLayout}">
-
-
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/adminLayout}">
+	
+<head>
+	<meta charset="UTF-8">
+	<title>관리자 유저 관리</title>
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js">
+	</script>
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+	
+</head>
+<body>
 <div layout:fragment="content">
 
-<h2>헤더자리</h2>
+	<h2>헤더자리</h2>
 
 
-<h1>관리자 사용자 관리 페이지</h1> 
+	<h1>관리자 사용자 관리 페이지</h1>
 
-    <div>
-        <table id="mainTable">
-            <tr>
-                <td>하루 펀딩 금액 : </td>
-                <td>000000000</td>
-                <td rowspan='2'><a th:href="@{/}">사이트 메인</a></td>
-                <td rowspan='2'><a th:href="@{/admin/main}">관리자 메인</a></td>
-                <td rowspan='2'><a th:href="@{/admin/funding}">펀딩 관리</a></td>
-                <td rowspan='2'><a th:href="@{/admin/userManage}">사용자 관리</a></td>
-                <td rowspan='2'><a th:href="@{/admin/notice}">공지글 관리</a></td>
-            </tr>
-            <tr>
-                <td>오늘 가입한 수 : </td>
-                <td>000000000</td>
-            </tr>
-        </table>
-    </div>
+	<div>
+		<table id="mainTable">
+			<tr>
+				<td>하루 펀딩 금액 :</td>
+				<td>000000000</td>
+				<td rowspan='2'><a th:href="@{/}">사이트 메인</a></td>
+				<td rowspan='2'><a th:href="@{/admin/main}">관리자 메인</a></td>
+				<td rowspan='2'><a th:href="@{/admin/funding}">펀딩 관리</a></td>
+				<td rowspan='2'><a th:href="@{/admin/userManage}">사용자 관리</a></td>
+				<td rowspan='2'><a th:href="@{/admin/notice}">공지글 관리</a></td>
+			</tr>
+			<tr>
+				<td>오늘 가입한 수 :</td>
+				<td>000000000</td>
+			</tr>
+		</table>
+	</div>
 
-    <div>
-        <h2>사용자 보기 창</h2>
-        <table>
+	<div>
+		<h2>사용자 보기 창</h2>
+		
+			<table>
 
-        <tr>
-        	<td>idx</td>
-            <th>이메일</th>
-            <td>생성날짜</td>
-            <th>이름</th>
-            <th>권한</th>
-            <th>권한변경</th>
-        </tr>
+				<tr>
+					<td>idx</td>
+					<th>이메일</th>
+					<td>생성날짜</td>
+					<th>이름</th>
+					<th>권한</th>
+					<th>권한변경</th>
+				</tr>
 
-        <tr th:each="member : ${paging}">
-        	<td th:text="${member.idx}"></td>
-            <td th:text="${member.email}"></td>
-            <td th:text="${member.regTime}"></td>
-            <td th:text="${member.memName}"></td>
-            <td th:text="${member.role}"></td>
-            <td>
-            	<select name="location">
-  					<option value="user">user</option>
-  					<option value="seller">seller</option>
-  					<option value="admin">admin</option>
-  				</select>
-            </td>
-            <td>버튼 자리</td>
-        </tr>
+				<tr th:each="member : ${paging}">
+					<td th:text="${member.idx}" th:value="${member.idx}"></td>
+					<td th:text="${member.email}"></td>
+					<td th:text="${member.regTime}"></td>
+					<td th:text="${member.memName}"></td>
+					<td th:text="${member.role}"></td>
+					<td><select  th:id="${member.idx}" name="selectbox" >
+							<option  th:value="${member.role}" th:text="${member.role}"></option>
+							<option  value="USER">일반사용자</option>
+							<option  value="SELLER">판매자</option>
+							<option  value="ADMIN">관리자</option>
+					</select></td>
+					<td><button
+						type="button"
+						th:myIdx="${member.idx}"		
+						onclick="modifyRole(this.getAttribute('myIdx'))">권한 수정</button></td>
+				</tr>
 
-</table>
+			</table>
 
- <!-- 페이징처리 시작 -->
-    <div th:if="${!paging.isEmpty()}">
-        <ul class="pagination justify-content-center">
-            <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
-                <a class="page-link"
-                    th:href="@{|?page=${paging.number-1}|}">
-                    <span>이전</span>
-                </a>
-            </li>
-            <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
-            	th:if="${page >= paging.number-3 and page <= paging.number+3}"
-                th:classappend="${page == paging.number} ? 'active'" 
-                class="page-item">
-                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
-            </li>
-            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
-                <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
-                    <span>다음</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-    <!-- 페이징처리 끝 -->
-    </div>
+		
 
-<h2>푸터자리</h2>
+		<!-- 페이징처리 시작 -->
+		<div th:if="${!paging.isEmpty()}">
+			<ul class="pagination justify-content-center">
+				<li class="page-item"
+					th:classappend="${!paging.hasPrevious} ? 'disabled'"><a
+					class="page-link" th:href="@{|?page=${paging.number-1}|}"> <span>이전</span>
+				</a></li>
+				<li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+					th:if="${page >= paging.number-3 and page <= paging.number+3}"
+					th:classappend="${page == paging.number} ? 'active'"
+					class="page-item"><a th:text="${page}" class="page-link"
+					th:href="@{|?page=${page}|}"></a></li>
+				<li class="page-item"
+					th:classappend="${!paging.hasNext} ? 'disabled'"><a
+					class="page-link" th:href="@{|?page=${paging.number+1}|}"> <span>다음</span>
+				</a></li>
+			</ul>
+		</div>
+		<!-- 페이징처리 끝 -->
+	</div>
+
+	<h2>푸터자리</h2>
 
 </div>
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+	
+	//2023.03.27 유저 권한 수정 완료
+	function modifyRole(idx){
+		//console.log("함수 호출 성공 ")
+		const val1 = idx; 
+		const val2 = "role";
+		//alert(val1);
+		
+		
+		var num  = document.getElementById(idx);
+		var value = (num.options[num.selectedIndex].value.toString());
+		alert("value = "+value);
+		
+		//alert(document.getElementById(idx).value());
+		const params = {"param1": val1,
+						"param2": value	}
+		
+		//var select = document.getElementById(idx).value();
+						
+		var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+
+	
+		
+		$.ajax ({
+			type:"post",
+			url:"http://localhost:9404/admin/member/modify",
+            beforeSend : function(xhr){
+                xhr.setRequestHeader(header, token);
+            },
+			
+			data:params,
+	
+			success:function(res){
+				console.log("성공", res)	;	
+				location.href="/admin/userManage";
+			},
+
+			error:function(){
+				console.log("실패 ")
+			}					
+		})		
+	}
+
+</script>
 </html>
