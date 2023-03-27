@@ -60,8 +60,9 @@
     
 
 </table>
-		<a th:href="@{/members/modify}"><button>회원정보 수정하기</button></a>
-		<a th:href="@{/members/delete}"><button>회원탈퇴하기</button></a>
+		<a th:href="@{|/members/modify/${member.idx}|}"><button>회원정보 수정하기</button></a>
+		<a href="javascript:void(0);" class="delete" th:data-uri="@{|/members/delete/${member.idx}|}" ><button>회원탈퇴하기</button></a>
+		<a th:href="@{/members/modify/pwd}"><button>비밀번호 변경하기</button></a>
 		
 
 <!--  
@@ -103,6 +104,15 @@
 		<h4 th:text="${member.DetailAdr}"></h4>
  -->			
 
-
+<script >
+	const delete_elements = document.getElementsByClassName("delete");
+	Array.from(delete_elements).forEach(function(element) {
+		element.addEventListener('click', function() {
+			if (confirm("정말로 탈퇴하시겠습니까?")) {
+				location.href = this.dataset.uri;
+			};
+		});
+	});
+</script>
 
 </html>

@@ -101,6 +101,7 @@ public class MemberService implements UserDetailsService {
 			
 		}
 		
+		
 		Member member = _Member.get();
 		
 		List<GrantedAuthority> authorities = new ArrayList<>();
@@ -111,11 +112,16 @@ public class MemberService implements UserDetailsService {
 			authorities.add(new SimpleGrantedAuthority(Role.USER.getValue()));
 		}
 
-		return new User(member.getEmail(),member.getMemPass(),authorities);
+		return new User(member.getEmail(),member.getMemPass(), authorities);
     }  
+    
+    
+    
     public Member getMember1(String email) {
     	Optional<Member> member = this.memberRepository.findByEmail(email);
     	return member.get();
     }
 
+
+    
 }

@@ -29,10 +29,10 @@ public class IndexController {
 	
 
 	
-		@RequestMapping(value = "/members/login")
-		public String login() {
-			return "login";
-		}
+//		@RequestMapping(value = "/members/login")
+//		public String login() {
+//			return "login";
+//		}
 		
 		//회원가입 
 //		@RequestMapping(value = "/join")

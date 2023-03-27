@@ -1,6 +1,6 @@
 package com.project.controller;
 import java.security.Principal;
-
+import java.util.Optional;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -70,68 +70,134 @@ public class MemberController {
 	@GetMapping("/detail")
 	public String detail(Model model, Principal principal) {
 
-		// 서비스 클래스의 메소드 호출 : 상세페이지 보여달라
 		String email = principal.getName();
 		
 		Member member = this.memberService.getMember1(email);
 		model.addAttribute("member",member);
 
-		return "mypage"; // template : question_detail.html
+		return "mypage"; 
 
 	}
 	
 	
-	
-	
 
 	
-@GetMapping(value = "/modify")
-public String memberModify(MemberDto memberDto, Principal principal) {
-
-	String email = principal.getName();
 	
-	Member member = this.memberService.getMember1(email);
+//	@GetMapping(value = "/detail/{idx}")
+//	public String detail(Model model, @PathVariable("idx") Long idx) {
+//
+//		// 서비스 클래스의 메소드 호출 : 상세페이지 보여달라
+//		Member b = this.memberService.getMember(idx);
+//
+//		// Model 객체에 담아서 클라이언트에게 전송
+//		model.addAttribute("member", b);
+//
+//		return "mypage"; 
+//
+//	}
+//	
 	
 	
-	memberDto.setEmail(member.getEmail());
-	memberDto.setMemPass(member.getMemPass());
-	memberDto.setMemName(member.getMemName());
-	memberDto.setMemPhone(member.getMemPhone());
-	memberDto.setZipcode(member.getZipcode());
-	memberDto.setStreetAdr(member.getStreetAdr());
-	memberDto.setDetailAdr(member.getDetailAdr());
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping(value = "/modify/{idx}")
+	public String memberModify(MemberDto memberDto, @PathVariable("idx") Long idx, Principal principal) {
 
-	return "mypagemodify";
-	}
+		Member member = this.memberService.getMember(idx);
+		
+		memberDto.setEmail(member.getEmail());
+		memberDto.setMemPass(member.getMemPass());
+		memberDto.setMemName(member.getMemName());
+		memberDto.setMemPhone(member.getMemPhone());
+		memberDto.setZipcode(member.getZipcode());
+		memberDto.setStreetAdr(member.getStreetAdr());
+		memberDto.setDetailAdr(member.getDetailAdr());
 
-
-
-@PreAuthorize("isAuthenticated()")
-@PostMapping(value = "/modify")
-public String memberModify( @Valid MemberDto memberDto, BindingResult bindingResult, MemberFormDto memberFormDto, Member member, Principal principal) {
-
-	if(bindingResult.hasErrors()) {
 		return "mypagemodify";
+		}
+
+
+
+	@PreAuthorize("isAuthenticated()")
+	@PostMapping(value = "/modify/{idx}")
+	public String memberModify( @Valid MemberDto memberDto, BindingResult bindingResult, MemberFormDto memberFormDto, Member member, Principal principal, @PathVariable("idx") Long idx) {
+
+		if(bindingResult.hasErrors()) {
+			return "mypagemodify";
+		}
+		
+		this.memberService.modify(member, memberDto.getEmail(), memberDto.getMemPass(), memberDto.getMemName(), memberDto.getMemPhone(), memberDto.getZipcode(), memberDto.getStreetAdr(), memberDto.getDetailAdr());
+		return String.format("redirect:/members/detail/%s", idx);
 	}
 	
-	this.memberService.modify(member, memberDto.getEmail(), memberDto.getMemPass(), memberDto.getMemName(), memberDto.getMemPhone(), memberDto.getZipcode(), memberDto.getStreetAdr(), memberDto.getDetailAdr());
-	return "redirect:/mypage";
-}
+	
+	
 
+	@PreAuthorize("isAuthenticated()")
+	@PostMapping(value = "/modify/pwd")
+	public String memberModifypwd( @Valid @RequestBody MemberDto memberDto, BindingResult bindingResult,  Principal principal) {
+
+		if(bindingResult.hasErrors()) {
+			return "pwdmodify";
+		}
+		
+		return "pwdmodify";
+	}
+	
+
+	
+//@GetMapping(value = "/modify")
+//public String memberModify(MemberDto memberDto, Principal principal) {
+//
+//	String email = principal.getName();
+//	
+//	Member member = this.memberService.getMember1(email);
+//	
+//	
+//	memberDto.setEmail(member.getEmail());
+//	memberDto.setMemPass(member.getMemPass());
+//	memberDto.setMemName(member.getMemName());
+//	memberDto.setMemPhone(member.getMemPhone());
+//	memberDto.setZipcode(member.getZipcode());
+//	memberDto.setStreetAdr(member.getStreetAdr());
+//	memberDto.setDetailAdr(member.getDetailAdr());
+//
+//	return "mypagemodify";
+//	}
+//
+//
+//
+//@PreAuthorize("isAuthenticated()")
+//@PostMapping(value = "/modify")
+//public String memberModify( @Valid MemberDto memberDto, BindingResult bindingResult, MemberFormDto memberFormDto, Member member, Principal principal) {
+//
+//	if(bindingResult.hasErrors()) {
+//		return "mypagemodify";
+//	}
+//	
+//	this.memberService.modify(member, memberDto.getEmail(), memberDto.getMemPass(), memberDto.getMemName(), memberDto.getMemPhone(), memberDto.getZipcode(), memberDto.getStreetAdr(), memberDto.getDetailAdr());
+//	return "redirect:/mypage";
+//}
+
+
+//@PreAuthorize("isAuthenticated()")
+//@GetMapping("/delete")
+//public String Delete(Principal principal) {
+//	
+//	String email = principal.getName();
+//	
+//	Member member = this.memberService.getMember1(email);
+//
+//this.memberService.delete(member);
+//return "redirect:/";
+//}
 
 @PreAuthorize("isAuthenticated()")
-@GetMapping("/delete")
-public String Delete(Principal principal) {
-	
-	String email = principal.getName();
-	
-	Member member = this.memberService.getMember1(email);
-
-this.memberService.delete(member);
-return "redirect:/";
-}
-
-
+@GetMapping("/delete/{idx}")
+public String questionDelete(Principal principal, @PathVariable("idx") Long idx) {
+	Member member = this.memberService.getMember(idx);
+  this.memberService.delete(member);
+  return "redirect:/";
+  }
 
 
 //
@@ -176,6 +242,7 @@ return "redirect:/";
         return "login";
     }
 
+  
     
     @GetMapping(value = "/login/error")
     public String loginError(Model model){
