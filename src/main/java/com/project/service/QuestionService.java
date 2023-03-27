@@ -47,6 +47,7 @@ public class QuestionService {
 		Question q = new Question();
 		q.setTitle(title);
 		q.setContent(content);
+		q.setMember(member);
 		q.setRegTime(LocalDateTime.now());
 		this.questionRepository.save(q);
 	}
@@ -56,5 +57,19 @@ public class QuestionService {
 		 sorts.add(Sort.Order.desc("regTime"));
 		 Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
 		 return this.questionRepository.findAll(pageable);
-		 }
+	 }
+	
+	//수정
+	public void modify(Question question, String title, String content) {
+		
+		question.setTitle(title);
+		question.setContent(content);
+		question.setUpdateTime(LocalDateTime.now());
+		this.questionRepository.save(question);
+	}
+	
+	// 삭제
+	public void delete(Question question) {
+		this.questionRepository.delete(question);
+	}
 }

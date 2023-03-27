@@ -26,13 +26,13 @@ public class AnswerService {
 		this.answerRepository.save(answer);
 	}
 	
-	public Answer create(Question question, String content, Member author ) {
+	public Answer create(Question question, String content, Member member ) {
 		
 		Answer answer = new Answer();
 		answer.setContent(content);
 		answer.setRegTime(LocalDateTime.now());
 		answer.setQuestion(question);
-		answer.setAuthor(author);
+		answer.setMember(member);
 		this.answerRepository.save(answer);
 		return answer;
 	}

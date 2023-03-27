@@ -25,6 +25,7 @@ import com.project.entity.Member;
 import com.project.repository.MemberRepository;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -103,12 +104,16 @@ public class MemberService implements UserDetailsService {
     }  
     
   //사용자 조회 
-    public Member getUser(String memName) {
-    	 Optional<Member> member = this.memberRepository.findByMemName(memName);
+    public Member getMember(String memName) {
+    	
+    	  	
+    	 Optional<Member> member = this.memberRepository.findByEmail(memName);
     	 if (member.isPresent()) {
-    	 return member.get();
+    		
+    		 return member.get();
     	 } else {
-    	 throw new DataNotFoundException("siteuser not found");
+    		
+    		 throw new DataNotFoundException("siteuser not found ");
     	 }
     }
 

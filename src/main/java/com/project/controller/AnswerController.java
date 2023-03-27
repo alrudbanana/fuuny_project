@@ -41,7 +41,7 @@ public class AnswerController {
 		
 		Question question = this.questionService.getQustion(id);
 		
-		Member member = this.memberService.getUser(principal.getName());
+		Member member = this.memberService.getMember(principal.getName());
 		
 		if(bindingResult.hasErrors()) {
 			model.addAttribute("question", question);
