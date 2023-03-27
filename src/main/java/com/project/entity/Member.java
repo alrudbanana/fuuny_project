@@ -29,8 +29,7 @@ public class Member extends BaseTimeEntity {
     @Email
     @Column(name = "memEmail", unique = true)
     private String email; //이메일
-    
-    @NotEmpty 
+     
     private String memPass; //비밀번호
     @NotEmpty 
     private String memName; //이름
@@ -45,6 +44,7 @@ public class Member extends BaseTimeEntity {
     private String zipcode;
     @NotEmpty
     private String streetAdr;
+
     private String detailAdr;
     
 }

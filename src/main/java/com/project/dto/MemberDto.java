@@ -1,5 +1,7 @@
 package com.project.dto;
 
+import org.hibernate.validator.constraints.Length;
+
 import com.project.Role;
 
 import jakarta.validation.constraints.NotEmpty;
@@ -16,16 +18,10 @@ public class MemberDto {
 	    @NotEmpty(message = "이메일은 필수 입력 값입니다.")
 	    private String email; //이메일
 	    
-	    @NotEmpty(message = "비밀번호를 입력해주세요")
+	    @NotEmpty(message = "비밀번호는 필수 입력 값입니다.")
+	    @Length(min = 4, max = 16, message = "비밀번호는 4자 이상, 16자 이하로 입력해주세요.")
 	    private String memPass; //비밀번호
-	    
-	    @NotEmpty(message = "비밀번호를 입력해주세요")
-	    private String memPass1; //새로운 비밀번호1
-	    
-	    @NotEmpty(message = "비밀번호를 입력해주세요")
-	    private String memPass2; //새로운 비밀번호2
-	    
-
+	   
 	    @NotEmpty(message = "이름은 필수 입력 값입니다.")
 	    private String memName; //이름
 

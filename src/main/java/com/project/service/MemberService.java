@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Service;
 
 import com.project.DataNotFoundException;
@@ -61,7 +62,15 @@ public class MemberService implements UserDetailsService {
 	
 	}
 	
-	 public void modify(Member member , String email , String memPass, String memName, String memPhone, String zipcode, String streeAdr, String detailAdr) {
+	 public void modify( Member member , MemberDto memberDto , String email , String memName, String memPhone, String zipcode, String streeAdr, String detailAdr) {
+		 
+		 Optional<Member> modifymember = memberRepository.findByEmail(email);
+		 String pass = modifymember.get().getMemPass();
+		 if(!passwordEncoder.matches(memberDto.getMemPass(), pass)){
+			 throw new DataNotFoundException("비밀번호가 일치하지 않습니다.");
+		
+		 }else {
+		 
 		 member.setEmail(email);
 		 member.setMemPass(this.passwordEncoder.encode(member.getMemPass()));
 		 member.setMemName(memName);
@@ -71,6 +80,9 @@ public class MemberService implements UserDetailsService {
 		 member.setDetailAdr(detailAdr);
 		 this.memberRepository.save(member);
 		 }
+	 }
+	 
+	 
 	 
 	 public void modifyPw(Member member ) throws Exception {
 		 

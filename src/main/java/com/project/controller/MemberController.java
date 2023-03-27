@@ -2,12 +2,12 @@ package com.project.controller;
 import java.security.Principal;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -35,6 +36,7 @@ public class MemberController {
 	
     private final MemberService memberService;
 
+    
     //회원가입 뷰 페이지 출력
     @GetMapping(value = "/new")
     public String memberForm(Model model){
@@ -83,19 +85,19 @@ public class MemberController {
 
 	
 	
-//	@GetMapping(value = "/detail/{idx}")
-//	public String detail(Model model, @PathVariable("idx") Long idx) {
-//
-//		// 서비스 클래스의 메소드 호출 : 상세페이지 보여달라
-//		Member b = this.memberService.getMember(idx);
-//
-//		// Model 객체에 담아서 클라이언트에게 전송
-//		model.addAttribute("member", b);
-//
-//		return "mypage"; 
-//
-//	}
-//	
+	@GetMapping(value = "/detail/{idx}")
+	public String detail(Model model, @PathVariable("idx") Long idx) {
+
+		// 서비스 클래스의 메소드 호출 : 상세페이지 보여달라
+		Member b = this.memberService.getMember(idx);
+
+		// Model 객체에 담아서 클라이언트에게 전송
+		model.addAttribute("member", b);
+
+		return "mypage"; 
+
+	}
+	
 	
 	
 	@PreAuthorize("isAuthenticated()")
@@ -105,7 +107,6 @@ public class MemberController {
 		Member member = this.memberService.getMember(idx);
 		
 		memberDto.setEmail(member.getEmail());
-		memberDto.setMemPass(member.getMemPass());
 		memberDto.setMemName(member.getMemName());
 		memberDto.setMemPhone(member.getMemPhone());
 		memberDto.setZipcode(member.getZipcode());
@@ -119,29 +120,33 @@ public class MemberController {
 
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping(value = "/modify/{idx}")
-	public String memberModify( @Valid MemberDto memberDto, BindingResult bindingResult, MemberFormDto memberFormDto, Member member, Principal principal, @PathVariable("idx") Long idx) {
+	public String memberModify( @Valid MemberDto memberDto, BindingResult bindingResult, Principal principal, Member member ,  @PathVariable("idx") Long idx ) {
 
+		
 		if(bindingResult.hasErrors()) {
 			return "mypagemodify";
 		}
 		
-		this.memberService.modify(member, memberDto.getEmail(), memberDto.getMemPass(), memberDto.getMemName(), memberDto.getMemPhone(), memberDto.getZipcode(), memberDto.getStreetAdr(), memberDto.getDetailAdr());
+		
+		this.memberService.modify(member, memberDto, memberDto.getEmail(), memberDto.getMemName(), memberDto.getMemPhone(), memberDto.getZipcode(), memberDto.getStreetAdr(), memberDto.getDetailAdr());
 		return String.format("redirect:/members/detail/%s", idx);
 	}
 	
 	
 	
 
-	@PreAuthorize("isAuthenticated()")
-	@PostMapping(value = "/modify/pwd")
-	public String memberModifypwd( @Valid @RequestBody MemberDto memberDto, BindingResult bindingResult,  Principal principal) {
-
-		if(bindingResult.hasErrors()) {
-			return "pwdmodify";
-		}
-		
-		return "pwdmodify";
-	}
+//	@PreAuthorize("isAuthenticated()")
+//	@PostMapping(value = "/modify/pwd")
+//	public String memberModifypwd( @Valid @RequestBody MemberDto memberDto, BindingResult bindingResult,  Principal principal) {
+//
+//		if(bindingResult.hasErrors()) {
+//			return "pwdmodify";
+//			
+//		}
+//		
+//		return "pwdmodify";
+//		
+//	}
 	
 
 	
