@@ -2,6 +2,7 @@ package com.project.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -20,14 +21,31 @@ public class ItemController {
 	//펀딩 등록 뷰 페이지 출력
 	@GetMapping(value = "/saler/item/new")
 	public String itemForm(Model model) {
-		//model.addAttribute("itemFormDto", new ItemFormDto());
+		model.addAttribute("itemFormDto", new ItemFormDto());
 		
 		return "item/itemForm";
 	}
 	
-//	@PostMapping(value = "/saler/item/new")
-//	public String itemNew(@Valid ItemFormDto itemFormDto)
-//	
+	//이미지 아직 없음
+	@PostMapping(value = "/saler/item/new")
+	public String itemNew(@Valid ItemFormDto itemFormDto, BindingResult bindingResultu,
+			Model model) {
+		
+		if(bindingResultu.hasErrors()) {
+			return "item/itemForm";
+		}
+		
+		try {
+			itemService.createNewItem(itemFormDto);
+		}catch(Exception e) {
+			model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
+			return "item/itemForm";
+		}
+		
+		return "redirect:/";
+	}
+	
+
 	
 	
 	
