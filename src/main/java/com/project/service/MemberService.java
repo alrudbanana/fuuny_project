@@ -96,13 +96,19 @@ public class MemberService implements UserDetailsService {
 		
 		System.out.println(member.getRole());
 		
-		//2023.03.27 관리자 로그인시 관리자 버튼 생성
+		//2023.03.27 관리자 로그인시 관리자 버튼 생성 / 기반 마련
 		if("ADMIN".equals(member.getRole().toString())) {
 			authorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
 			System.out.println("Admin Role 호출됨");
 			System.out.println(Role.ADMIN.getValue());
-		}else {
+		}else if("SELLER".equals(member.getRole().toString())){
+			authorities.add(new SimpleGrantedAuthority(Role.SELLER.getValue()));
+			System.out.println("SELLER Role 호출됨");
+			System.out.println(Role.ADMIN.getValue());
+		}else if("USER".equals(member.getRole().toString())){
 			authorities.add(new SimpleGrantedAuthority(Role.USER.getValue()));
+			System.out.println("USER Role 호출됨");
+			System.out.println(Role.ADMIN.getValue());
 		}
 
 		return new User(member.getEmail(),member.getMemPass(),authorities);
