@@ -151,5 +151,13 @@ public class AdminController {
 		roleMemberCode.add(new RoleMemberCode("ADMIN", "관리자"));
 		return roleMemberCode;
 	}
+	
+	//관리자에서 계정 삭제
+	@GetMapping(value = "/member/delete/{id}")
+	public String memberDelete(@PathVariable("id") Integer id) {
+		Member member = this.adminService.getMember(id);
+		this.adminService.deleteMember(member);
+		return "redirect:/admin/userManage";
+	}
 
 }

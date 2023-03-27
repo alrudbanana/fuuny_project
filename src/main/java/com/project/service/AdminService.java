@@ -102,6 +102,11 @@ private final MemberRepository memberRepository;
 			member.setRole(role);
 			this.memberRepository.save(member);
 		}
+		
+		//멤버삭제
+		public void deleteMember(Member member) {
+			this.memberRepository.delete(member);
+		}
 
 
 }
