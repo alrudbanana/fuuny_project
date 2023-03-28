@@ -114,20 +114,6 @@ public class AdminController {
 		return "redirect:/admin/notice";
 	}
 
-	// 멤버 권한 수정
-//	@PostMapping(value = "/member/modify/{idx}")
-//	public String memberModify(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Principal principal,
-//			@PathVariable("idx") Integer id) {
-//
-//		System.out.println("member/modify 로 들어옴");
-//		if (bindingResult.hasErrors()) {
-//			return "adminUserManage";
-//		}
-//		Member member = this.adminService.getMember(id);
-//		this.adminService.modifyMemberRole(member, memberFormDto.getRole());
-//
-//		return String.format("redirect:/admin/userManage", id);
-//	}
 
 	//2023.03.27 유저 권한 수정 완료
 	@PostMapping("/member/modify")
