@@ -90,11 +90,8 @@
 	<script type="text/javascript" th:inline="javascript">
 		//2023.03.27 유저 권한 수정 완료
 		function modifyRole(idx) {
-			//console.log("함수 호출 성공 ")
 			const val1 = idx;
-			const val2 = "role";
-			//alert(val1);
-
+			
 			var num = document.getElementById(idx);
 			var value = (num.options[num.selectedIndex].value.toString());
 			alert(value + "로 수정합니다");

@@ -10,11 +10,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.project.DataNotFoundException;
 import com.project.Role;
+import com.project.constant.ItemSellStatus;
 import com.project.entity.Member;
 import com.project.entity.Notice;
+import com.project.item.entity.Item;
+import com.project.item.repository.ItemRepository;
 import com.project.repository.AdminRepository;
 import com.project.repository.MemberRepository;
 
@@ -26,6 +30,7 @@ public class AdminService {
 	
 private final AdminRepository adminRepository;
 private final MemberRepository memberRepository;
+private final ItemRepository itemRepository;
 	
 	//공지 리스트 불러오기
 	public List<Notice> getList(){
@@ -106,6 +111,35 @@ private final MemberRepository memberRepository;
 		//멤버삭제
 		public void deleteMember(Member member) {
 			this.memberRepository.delete(member);
+		}
+		
+		//아이템 불러오기
+		public Page<Item> getItemList(int page){
+			Pageable pageable = PageRequest.of(page, 12);
+			return this.itemRepository.findAll(pageable);
+		}
+		
+		//아이템 상세 불러오기
+		public Item getItemDetail(Long id) {
+			Optional<Item> item = this.itemRepository.findById(id);
+			if (item.isPresent()) {
+	            return item.get();
+	        } else {
+	            throw new DataNotFoundException("question not found");
+	        }
+		}
+		
+		@Transactional
+		public List<Item> getItemCondition(List<ItemSellStatus> cond){
+//			List<String> aa = new ArrayList<String>();
+//			aa = cond;
+			
+//			for(String aa : cond) {
+//				System.out.println(aa);
+//			}
+			
+			List<Item> itemConditionList = this.itemRepository.findByItemsellstatusIn(cond);
+			return itemConditionList;
 		}
 
 

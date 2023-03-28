@@ -14,16 +14,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.project.Role;
+import com.project.constant.ItemSellStatus;
 import com.project.constant.RoleMemberCode;
-import com.project.dto.MemberFormDto;
 import com.project.dto.NoticeFormDto;
 import com.project.entity.Member;
 import com.project.entity.Notice;
-import com.project.repository.AdminRepository;
-import com.project.repository.MemberRepository;
+import com.project.item.entity.Item;
 import com.project.service.AdminService;
 
 import jakarta.validation.Valid;
@@ -35,15 +33,40 @@ import lombok.RequiredArgsConstructor;
 public class AdminController {
 
 	private final AdminService adminService;
+	
 
 	@GetMapping(value = "/main")
-	public String adminMain() {
-		return "adminMain";
+	public String adminMain(Model model, @RequestParam(value="page", defaultValue="0") int page) {
+		Page<Item> paging = this.adminService.getItemList(page);
+		model.addAttribute("paging", paging);
+		return "admin/adminMain";
 	}
 
 	@GetMapping(value = "/funding")
-	public String adminFunding() {
-		return "adminfunding";
+	public String adminFunding(Model model) {
+		List<ItemSellStatus> aa = new ArrayList();
+		aa.add(ItemSellStatus.SELL);
+		aa.add(ItemSellStatus.SOLD_OUT);
+		
+		System.out.println("메소드 호출전 ");
+		List<Item> itemCondition = this.adminService.getItemCondition(aa);
+		
+		System.out.println("값 잘받아와서 리턴됨 ");
+		
+		
+		model.addAttribute("itemCondition", itemCondition);
+		return "admin/adminfunding";
+	}
+	
+	
+	@GetMapping(value = "/funding/approve")
+	public String adminFundingApprove() {
+		return "admin/adminFundingApprove";
+	}
+	
+	@GetMapping(value = "/funding/end")
+	public String adminFundingEnd() {
+		return "admin/adminFundingEnd";
 	}
 
 	// 2023.03.25 유저관리 - 페이징 처리
@@ -51,7 +74,7 @@ public class AdminController {
 	public String adminUserManage(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
 		Page<Member> paging = this.adminService.getUserList(page);
 		model.addAttribute("paging", paging);
-		return "adminUserManage";
+		return "admin/adminUserManage";
 	}
 
 	// 공지 관리로 이동
@@ -59,7 +82,7 @@ public class AdminController {
 	public String adminNotice(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
 		Page<Notice> paging = this.adminService.getList(page);
 		model.addAttribute("paging", paging);
-		return "adminNotice";
+		return "admin/adminNotice";
 	}
 
 	// 공지 디테일로 이동
@@ -67,13 +90,13 @@ public class AdminController {
 	public String noticeDetail(Model model, @PathVariable("id") Integer id) {
 		Notice notice = this.adminService.getNotice(id);
 		model.addAttribute("notice", notice);
-		return "adminNoticeDetail";
+		return "admin/adminNoticeDetail";
 	}
 
 	// 공지 생성으로 이동
 	@GetMapping(value = "/notice/write")
 	public String noticeWrite() {
-		return "adminNoticeWriteForm";
+		return "admin/adminNoticeWriteForm";
 	}
 
 	// 공지생성
@@ -89,7 +112,7 @@ public class AdminController {
 	public String noticeModify(Model model, @PathVariable("id") Integer id) {
 		Notice notice = this.adminService.getNotice(id);
 		model.addAttribute("notice", notice);
-		return "adminNoticeModify";
+		return "admin/adminNoticeModify";
 	}
 
 	// 공지 수정
@@ -98,7 +121,7 @@ public class AdminController {
 			@PathVariable("id") Integer id) {
 
 		if (bindingResult.hasErrors()) {
-			return "adminNoticeModify";
+			return "admin/adminNoticeModify";
 		}
 		Notice notice = this.adminService.getNotice(id);
 		this.adminService.modifyNotice(notice, noticeFormDto.getTitle(), noticeFormDto.getContent());
@@ -144,6 +167,13 @@ public class AdminController {
 		Member member = this.adminService.getMember(id);
 		this.adminService.deleteMember(member);
 		return "redirect:/admin/userManage";
+	}
+	
+	@GetMapping(value = "/item/detail/{id}")
+	public String detail(Model model, @PathVariable("id") Long id) {
+		Item item = this.adminService.getItemDetail(id);
+		model.addAttribute("item", item);
+		return "admin/adminItemDetail";
 	}
 
 }
