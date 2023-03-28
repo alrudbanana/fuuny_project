@@ -12,7 +12,8 @@ import com.project.entity.Item;
 
 public interface ItemRepository extends JpaRepository<Item, Long>{
 
-	//List<Item> findByItemNm(String itemNm);
+	List<Item> findByIdx(Long idx);
+//	List<Item> findByItemName(String itemName);
 	
 	//List<Item> findByPriceLessThan(Integer Price);
 	
