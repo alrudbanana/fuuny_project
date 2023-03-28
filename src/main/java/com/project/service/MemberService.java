@@ -108,6 +108,6 @@ public class MemberService implements UserDetailsService {
 		return new User(member.getEmail(),member.getMemPass(),authorities);
     }  
     
-  
+
 
 }
