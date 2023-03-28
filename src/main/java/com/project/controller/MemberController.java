@@ -2,10 +2,7 @@ package com.project.controller;
 import java.security.Principal;
 import java.util.List;
 
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,14 +11,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.server.ResponseStatusException;
-
-
 import com.project.dto.MemberDto;
 import com.project.dto.MemberFormDto;
 import com.project.entity.Member;
+import com.project.model.KakaoProfile;
 import com.project.service.MemberService;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -32,6 +26,10 @@ public class MemberController {
 	
     private final MemberService memberService;
 
+    @GetMapping(value = "/login")
+	public String login() {
+		return "login";
+	}
     //회원가입 뷰 페이지 출력
     @GetMapping(value = "/new")
     public String memberForm(Model model){
@@ -149,4 +147,5 @@ public String memberModify( @Valid MemberFormDto memberFormDto, BindingResult bi
 }
 
    
+
 

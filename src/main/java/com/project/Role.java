@@ -11,7 +11,7 @@ public enum Role {
 	Role(String value){
 		this.value=value;
 	}
-	
+	private String code;
 	private String key;
 	private String value;
 }
