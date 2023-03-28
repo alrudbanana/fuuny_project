@@ -2,6 +2,7 @@ package com.project.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.project.dto.ItemDto;
 import com.project.dto.ItemFormDto;
 import com.project.entity.Item;
 import com.project.repository.ItemRepository;
@@ -22,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ItemController {
 	
+	@Autowired
 	private final ItemService itemService;
 	private final ItemRepository itemRepository;
 	
@@ -68,18 +71,36 @@ public class ItemController {
 	
 	public String itemDtl(Model model, @PathVariable("idx") Long idx) {
 	
+		//idx로 itemDto 생성
 		
-		List<Item> itemList = this.itemService.getList();
-		model.addAttribute("itemList", itemList);
-		return "item/itemDtl";
+		System.out.println("메소드 호출전 idx : " + idx);
+		
+		ItemDto itemDto = itemService.getItemByIdx(idx);
+		
+		System.out.println("메소드 호출후 idx : " + idx);
+		
+		
+		System.out.println(itemDto.getItemName());
+		System.out.println(itemDto.getItemPrice());
+		System.out.println(itemDto.getItemStockNumber());
+		System.out.println(itemDto.getItemDetail());
+		
+		
+		
+		
+		//model에 itemDto 추가
+		model.addAttribute("itemDto", itemDto);
+		
+		//itemDtl.html 파일 변환
+		return "/item/itemDtl";
 	}
 	
-	//임시 헤더//
-//	@GetMapping(value = "/header")
-//	public String header() {
-//		return "header";
-//	}
+
 	
+	
+	
+	
+
 
 	
 	
