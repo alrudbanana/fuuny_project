@@ -119,4 +119,12 @@ public class QuestionController {
 			 return "redirect:/question/list";
 			 }
 
+	
+	@GetMapping("/item/kakaopay")
+	public String kakao() {
+		return "kakaopay";
+	}
+	
+	
+	
 }
