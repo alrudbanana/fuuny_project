@@ -57,52 +57,57 @@ header {
 </style>
 </head>
 <body>
+
 	<div class="rap">
+		<form role="form" method="post" enctype="multipart/form-data"
+			th:object="${questionFormDto}">
+			<!--헤더시작-->
+			<header> 헤더입니다. </header>
+			<!--헤더 끝-->
 
-		<!--헤더시작-->
-		<header> 헤더입니다. </header>
-		<!--헤더 끝-->
-
-		<!--메인시작-->
-		<section>
-			<div class="main">
-				<div layout:fragment="content" class="container">
-					<h5 class="my-3 border-bottom pb-2">질문등록</h5>
-					<form th:action="@{/question/create}" th:object=${questionForm} method="post">
-						<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
-							<div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
-						</div>
-
-
-						<div class="mb-3">
-							<label for="subject" class="form-label">제목</label>
-							 
-							<input type="text" th:field="*{title}" class="form-control">
-						</div>
+			<!--메인시작-->
+			<section>
+				<div class="main">
+					<div layout:fragment="content" class="container">
+						<h5 class="my-3 border-bottom pb-2">질문등록</h5>
+						<form th:object=${questionForm} method="post">
 						
-						<div class="mb-3">
-							<label for="content" class="form-label">내용</label>
-							<textarea th:field="*{content}" class="form-control"
-								rows="10"></textarea>
-						</div>
-						<input type="submit" value="저장하기" class="btn btn-primary my-2">
-					</form>
+							<input type="hidden" th:name="${_csrf.parameterName}"
+								th:value="${_csrf.token}" />
+
+							<div class="alert alert-danger" role="alert"
+								th:if="${#fields.hasAnyErrors()}">
+								<div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+							</div>
+
+
+							<div class="mb-3">
+								<label for="subject" class="form-label">제목</label> <input
+									type="text" th:field="*{title}" class="form-control">
+							</div>
+
+							<div class="mb-3">
+								<label for="content" class="form-label">내용</label>
+								<textarea th:field="*{content}" class="form-control" rows="10"></textarea>
+							</div>
+							<input type="submit" value="저장하기" class="btn btn-primary my-2">
+						</form>
+					</div>
+
 				</div>
 
-			</div>
+
+
+			</section>
+			<!--메인 끝-->
 
 
 
-		</section>
-		<!--메인 끝-->
-
-
-
-		<!--푸터시작-->
-		<footer>
-			<div id="foot">푸터</div>
-		</footer>
-		<!--푸터 끝-->
+			<!--푸터시작-->
+			<footer>
+				<div id="foot">푸터</div>
+			</footer>
+			<!--푸터 끝-->
 	</div>
 
 </body>

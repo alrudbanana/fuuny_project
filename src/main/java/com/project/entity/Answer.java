@@ -32,7 +32,7 @@ public class Answer extends BaseEntity {
 	   private Question question;
 	   
 	   @ManyToOne
-	   private Member author;
+	   private Member member;
 	   
 	  
 	   

@@ -44,12 +44,13 @@ class FunnyProjectApplicationTests {
 //	@Test
 //	void contextLoads() {
 //	}
-	
+/*	
 	@Autowired
 	private AdminService adminService;
 	
 	@Autowired
 	private AnswerRepository answerRepository;
+<<<<<<< HEAD
 /*	
 	@Test
 
@@ -86,6 +87,12 @@ class FunnyProjectApplicationTests {
 
 	}
 */	
+
+
+	
+
+	
+	
 
 
 }
