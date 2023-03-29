@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class IndexController {
+
 	
 	private final MemberService memberService;
 	
@@ -29,6 +30,17 @@ public class IndexController {
 	
 
 	
+
+	//홈
+/*
+		@RequestMapping(value = "/")
+		public String index() {
+			
+			return "main";
+		}
+*/
+
+
 		@RequestMapping(value = "/members/login")
 		public String login() {
 			return "login";

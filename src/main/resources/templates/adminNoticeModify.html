@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form th:action="@{|/admin/notice/modify/${notice.id}|}" method="post">
+	<input  type="text" name="title" id="title" th:value="${notice.title}" />
+	<textarea name="content" id="content" rows="10" th:text="${notice.content}" ></textarea>
+	<input type="submit" value="수정"/>
+</form>
+
+
+</body>
+</html>

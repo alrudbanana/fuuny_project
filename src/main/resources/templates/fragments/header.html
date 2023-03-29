@@ -3,11 +3,56 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 
+
 <div th:fragment="header">
 
 
 
  
  </div>
+
+
+<div th:fragment="header">
+
+  <nav class="navbar">
+    <div class="navbar_logo">
+         <a href="/">Funny</a>
+    </div>
+    <ul class="navbar_menu">
+      <div class="dropdown">
+        <li><a href="" class="dropbtn">카테고리</a>
+          <ul class="sub_menu dropdown-content">
+            <li>문구</li>
+            <li>푸드</li>
+            <li>출판</li>
+            <li>영화</li>
+            <li>여행</li>
+            <li>웹툰</li>
+            <li>의류</li>
+            <li>예술</li>
+            <li>사진</li>
+            <li>음악</li>
+            <li>공연</li>          
+
+          </ul>
+        </li>
+     </div>
+  
+      <li><a href="">공지사항</a></li>
+      <li><a href="">문의사항</a></li>  
+    </ul>
+    <ul class="navbar_login">
+      <li><a href="">로그인</a></li>
+      <li><a href="">회원가입</a></li>
+    </ul>
+
+    <a href="#" class="navbar_toogleBtn">
+      <img src="img/hamburger.png">
+    </a>
+	</nav>
+
+	<script src="/js/header.js"></script>
+</div>
+
 
 </html>

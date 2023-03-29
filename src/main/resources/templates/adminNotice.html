@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>adminNotice</title>
+<style>
+        #mainTable{
+            border: 1px solid #000000;
+        }
+
+</style>
+</head>
+<body>
+
+<h2>헤더자리</h2>
+
+<h1>관리자 공지글 관리 페이지</h1> 
+
+    <div>
+        <table id="mainTable">
+            <tr>
+                <td>하루 펀딩 금액 : </td>
+                <td>000000000</td>
+                <td rowspan='2'><a th:href="@{/}">사이트 메인</a></td>
+                <td rowspan='2'><a th:href="@{/admin/main}">관리자 메인</a></td>
+                <td rowspan='2'><a th:href="@{/admin/funding}">펀딩 관리</a></td>
+                <td rowspan='2'><a th:href="@{/admin/userManage}">사용자 관리</a></td>
+                <td rowspan='2'><a th:href="@{/admin/notice}">공지글 관리</a></td>
+            </tr>
+            <tr>
+                <td>오늘 가입한 수 : </td>
+                <td>000000000</td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+		<br>
+		<hr>
+		<a href="/admin/notice/write">공지등록</a>
+		<hr>
+		<table>
+			
+			<tr>
+				<th style="width:200px;">제목</th>  <th style="width:200px;">등록날짜</th>
+			</tr>
+			
+			<tr th:each="notice : ${paging}">
+            	<td><a th:href="@{|/admin/notice/detail/${notice.id}|}" th:text="${notice.title}"></a></td>
+            	<td th:text="${notice.regTime}"></td>
+        	</tr>			
+		</table>
+		
+		<!-- 페이징처리 시작 -->
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                <a th:href="@{|?page=${paging.number-1}|}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                th:classappend="${page == paging.number} ? 'active'" 
+                th:if="${page >= paging.number-3 and page <= paging.number+3}">
+                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+            </li>
+            <li th:classappend="${!paging.hasNext} ? 'disabled'">
+                <a  th:href="@{|?page=${paging.number+1}|}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- 페이징처리 끝 -->
+		
+    </div>
+
+<h2>푸터자리</h2>
+
+</body>
+</html>

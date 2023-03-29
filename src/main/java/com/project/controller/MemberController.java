@@ -1,4 +1,5 @@
 package com.project.controller;
+
 import java.security.Principal;
 import java.util.Optional;
 
@@ -6,6 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+
+
+
+import java.security.Principal;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import org.springframework.stereotype.Controller;
@@ -16,16 +22,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
+
+
 import com.project.dto.MemberDto;
 import com.project.dto.MemberFormDto;
 import com.project.entity.Member;
+import com.project.model.KakaoProfile;
 import com.project.service.MemberService;
 
+
 import jakarta.servlet.http.HttpSession;
+
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -64,7 +77,7 @@ public class MemberController {
 			model.addAttribute("memberFormDto", "아이디 혹은 이메일 중복.");
 			return "memberForm";
 		}
-    return "redirect:/";
+    return "redirect:index";
    
     }
 
@@ -205,6 +218,7 @@ public String questionDelete(Principal principal, @PathVariable("idx") Long idx)
   }
 
 
+
 //
 //@GetMapping("pw-change")
 //public ModelAndView pwChange() {
@@ -242,12 +256,20 @@ public String questionDelete(Principal principal, @PathVariable("idx") Long idx)
 
 
 //로그인 
+
+
+
+    //로그인 
+
     @GetMapping(value = "/login")
     public String login(){
         return "login";
     }
 
+
   
+
+
     
     @GetMapping(value = "/login/error")
     public String loginError(Model model){
@@ -275,8 +297,20 @@ public String questionDelete(Principal principal, @PathVariable("idx") Long idx)
        }
 
         return "redirect:/";
+
    }
  
 }
+
+    }
+ 
+    }
+
    
+
+
+
+
+}
+
 
