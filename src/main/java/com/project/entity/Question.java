@@ -35,6 +35,8 @@ public class Question extends BaseEntity {
 	   @Column(columnDefinition = "TEXT")
 	   private String content;
 	   
+	   private String boardCategory;
+	   
 	   @ManyToOne
 	   private Member member;
 	   

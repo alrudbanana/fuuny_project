@@ -71,7 +71,7 @@ public class QuestionController {
 		}
 
 		Member member = this.memberService.getMember(principal.getName());
-		this.questionService.create(questionForm.getTitle(), questionForm.getContent(), member);
+		this.questionService.create(questionForm.getTitle(), questionForm.getContent(), member , questionForm.getBoardCategory());
 
 		return "redirect:/question/list";
 	}

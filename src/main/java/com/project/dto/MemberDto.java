@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter 
 @Setter
 public class MemberDto {
-
+		
 	    private Long idx; 
 	    
 	    @NotEmpty(message = "이메일은 필수 입력 값입니다.")

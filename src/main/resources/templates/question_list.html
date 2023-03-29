@@ -93,13 +93,16 @@ header {
 							<td
 								th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
 
-							<td class="text-start"><a
+							<td class="text-start">
+							<span th:text="${question.boardCategory}"></span>&nbsp&nbsp<a
 								th:href="@{|/question/detail/${question.id}|}"
-								th:text="${question.title}"></a> <span
+								 th:text="${question.title}"></a> 
+								
+								<span
 								class="text-danger small ms-2"
 								th:if="${#lists.size(question.answerList) > 0}"
 								th:text="${#lists.size(question.answerList)}"> </span></td>
-							<!-- author - >member로수정함 -->
+							
 							<td><span th:if="${question.member != null}"
 								th:text="${question.member.memName}"></span></td>
 							<td
