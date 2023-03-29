@@ -10,10 +10,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.project.DataNotFoundException;
+import com.project.Role;
+import com.project.constant.ItemSellStatus;
+import com.project.entity.Member;
 import com.project.entity.Notice;
+import com.project.item.entity.Item;
+import com.project.item.repository.ItemRepository;
 import com.project.repository.AdminRepository;
+import com.project.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,11 +29,23 @@ import lombok.RequiredArgsConstructor;
 public class AdminService {
 	
 private final AdminRepository adminRepository;
+private final MemberRepository memberRepository;
+private final ItemRepository itemRepository;
 	
 	//공지 리스트 불러오기
 	public List<Notice> getList(){
 		return this.adminRepository.findAll();
 	}
+	
+	//2023.03.25 유저 리스트 불러오기 - 페이징 역순 처리
+	public Page<Member> getUserList(int page){
+		List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("idx"));
+        Pageable pageable = PageRequest.of(page, 3, Sort.by(sorts));
+		return this.memberRepository.findAll(pageable);
+	}
+	
+	
 	
 	//공지 하나 갖고 오기
 	public Notice getNotice(Integer id) {
@@ -69,5 +88,59 @@ private final AdminRepository adminRepository;
 		Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
 		return this.adminRepository.findAll(pageable);
 	}
+	
+	//멤버 하나 갖고 오기
+		public Member getMember(Integer id) {
+			Optional<Member> member = this.memberRepository.findById((long)id);
+			
+			if(member.isPresent()) {
+				return member.get();
+			}else {
+				throw new DataNotFoundException("공지 사항을 찾을 수 없습니다");
+			}
+		}
+		
+		//2023.03.27 유저 권한 수정 완료
+		public void modifyMemberRole(Long idx, Role role) {
+			
+			Member member = this.memberRepository.findById(idx).get();
+			member.setRole(role);
+			this.memberRepository.save(member);
+		}
+		
+		//멤버삭제
+		public void deleteMember(Member member) {
+			this.memberRepository.delete(member);
+		}
+		
+		//아이템 불러오기
+		public Page<Item> getItemList(int page){
+			Pageable pageable = PageRequest.of(page, 12);
+			return this.itemRepository.findAll(pageable);
+		}
+		
+		//아이템 상세 불러오기
+		public Item getItemDetail(Long id) {
+			Optional<Item> item = this.itemRepository.findById(id);
+			if (item.isPresent()) {
+	            return item.get();
+	        } else {
+	            throw new DataNotFoundException("question not found");
+	        }
+		}
+		
+		@Transactional
+		public List<Item> getItemCondition(List<ItemSellStatus> cond){
+//			List<String> aa = new ArrayList<String>();
+//			aa = cond;
+			
+//			for(String aa : cond) {
+//				System.out.println(aa);
+//			}
+			
+			List<Item> itemConditionList = this.itemRepository.findByItemsellstatusIn(cond);
+			return itemConditionList;
+		}
+
 
 }

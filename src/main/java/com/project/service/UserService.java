@@ -28,7 +28,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 public class UserService {
-	
+		//카카오 로그인 서비스
 	 	@Autowired
 	    UserRepository userRepository; //(1)
 	    
@@ -99,7 +99,7 @@ public class UserService {
 	    }
 	    
 	    
-	    //(1-1)
+	    //(1-1)동의항목 가져오기 
 	    public KakaoProfile findProfile(String token) {
 	        
 	        System.out.println("");
@@ -163,6 +163,7 @@ public class UserService {
 	            e.printStackTrace();
 	        }
 	    }
+	    
 	    
 	    
 	    

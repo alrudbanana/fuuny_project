@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>공지 수정하기</title>
+<link href="/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<form th:action="@{|/admin/notice/modify/${notice.id}|}" method="post">
+	
+	
+	<br> <br>
+		<div class="container text-center">
+			<h1>공지 작성 하기</h1>
+			<br>
+			<div class="input-group mb-3">
+				<span class="input-group-text" id="basic-addon1">제목</span> <input
+					type="text" class="form-control" placeholder="Username"
+					aria-label="Username" aria-describedby="basic-addon1" name="title"
+					id="title" th:value="${notice.title}">
+			</div>
+
+			<div class="input-group">
+				<span class="input-group-text">내용</span>
+				<textarea class="form-control" aria-label="With textarea"
+					name="content" id="content" rows="10" th:text="${notice.content}"></textarea>
+			</div>
+			<br> <input class="btn btn-dark" type="submit" value="수정하기">
+			<button class="btn btn-dark" onclick="history.back()">뒤로가기</button>
+		</div>
+</form>
+
+
+</body>
+</html>

@@ -1,12 +1,16 @@
 package com.project.controller;
-
 import java.security.Principal;
+
+import java.util.List;
+
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
@@ -18,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,13 +54,21 @@ public class MemberController {
 	
     private final MemberService memberService;
 
+
+    @GetMapping(value = "/login")
+	public String login() {
+		return "login";
+	}
+
     
+
     //회원가입 뷰 페이지 출력
     @GetMapping(value = "/new")
     public String memberForm(Model model){
         model.addAttribute("memberFormDto", new MemberFormDto());
         return "memberForm";
     }
+    
     
     @PostMapping(value="/new")
     public String memberForm(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
@@ -77,7 +90,7 @@ public class MemberController {
 			model.addAttribute("memberFormDto", "아이디 혹은 이메일 중복.");
 			return "memberForm";
 		}
-    return "redirect:index";
+    return "redirect:/";
    
     }
 
@@ -261,10 +274,6 @@ public String questionDelete(Principal principal, @PathVariable("idx") Long idx)
 
     //로그인 
 
-    @GetMapping(value = "/login")
-    public String login(){
-        return "login";
-    }
 
 
   
@@ -298,19 +307,51 @@ public String questionDelete(Principal principal, @PathVariable("idx") Long idx)
 
         return "redirect:/";
 
-   }
+
  
 }
 
-    }
+
+    //로그인 
+//    @GetMapping(value = "/login")
+//    public String login(){
+//        return "login";
+//    }
+//
+//    
+//    @GetMapping(value = "/login/error")
+//    public String loginError(Model model){
+//        model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
+//        return "login";
+//    }
+//    
+//    @PostMapping("/join")
+//    public String newMember(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
+//       
+//    	System.out.println("컨트롤러 호출됨 ");
+//    	System.out.println(memberFormDto.getName());
+//    	
+//    	if(bindingResult.hasErrors()){
+//            return "join";
+//        }
+//    	
+//       try {
+//    	 
+//    	  this.memberService.save(memberFormDto);
+//    	  
+//       }catch(Exception e) {
+//    	   model.addAttribute("save_errors","아이디 혹은 이메일 중복");
+//    	   return "join";
+//       }
+//
+//        return "redirect:/";
+//    }
+
+
+ 
+    
  
     }
 
-   
-
-
-
-
-}
-
+  
 
