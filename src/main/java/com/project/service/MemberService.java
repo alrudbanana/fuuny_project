@@ -21,15 +21,20 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Service;
+
+
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+
 import com.project.DataNotFoundException;
 
 import com.project.Role;
-
+import com.project.dto.MemberDto;
 import com.project.dto.MemberFormDto;
 import com.project.entity.Member;
 import com.project.repository.MemberRepository;
@@ -61,8 +66,6 @@ public class MemberService implements UserDetailsService {
 	}
 	
 	public Member getMember(Long idx) {
-		
-		//select * from question where id = ? 
 		Optional<Member> op = this.memberRepository.findById(idx) ;
 		if ( op.isPresent()) {		// op에 값이 존재하는 경우 
 			return op.get();	// Question 객체를 리턴
@@ -75,7 +78,15 @@ public class MemberService implements UserDetailsService {
 	
 	}
 	
-	 public void modify(Member member , String email , String memPass, String memName, String memPhone, String zipcode, String streeAdr, String detailAdr) {
+	 public void modify( Member member , MemberDto memberDto , String email , String memName, String memPhone, String zipcode, String streeAdr, String detailAdr) {
+		 
+		 Optional<Member> modifymember = memberRepository.findByEmail(email);
+		 String pass = modifymember.get().getMemPass();
+		 if(!passwordEncoder.matches(memberDto.getMemPass(), pass)){
+			 throw new DataNotFoundException("비밀번호가 일치하지 않습니다.");
+		
+		 }else {
+		 
 		 member.setEmail(email);
 		 member.setMemPass(this.passwordEncoder.encode(member.getMemPass()));
 		 member.setMemName(memName);
@@ -85,6 +96,25 @@ public class MemberService implements UserDetailsService {
 		 member.setDetailAdr(detailAdr);
 		 this.memberRepository.save(member);
 		 }
+	 }
+	 
+	 
+	 
+	 public void modifyPw(Member member ) throws Exception {
+		 
+		 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+	
+		 String securePw = encoder.encode(member.getMemPass());
+		 member.setMemPass(securePw);
+		 
+		 this.memberRepository.save(member);
+	 }
+	 
+	 
+	 public void delete(Member member) {
+		 this.memberRepository.delete(member);
+		 }
+	 
 	 
 	//로그인
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -99,6 +129,7 @@ public class MemberService implements UserDetailsService {
 			
 		}
 		
+		
 		Member member = _Member.get();
 		
 		List<GrantedAuthority> authorities = new ArrayList<>();
@@ -109,9 +140,18 @@ public class MemberService implements UserDetailsService {
 			authorities.add(new SimpleGrantedAuthority(Role.USER.getValue()));
 		}
 
-		return new User(member.getEmail(),member.getMemPass(),authorities);
+		return new User(member.getEmail(),member.getMemPass(), authorities);
     }  
     
+
+    
+    
+    public Member getMember1(String email) {
+    	Optional<Member> member = this.memberRepository.findByEmail(email);
+    	return member.get();
+    }
+
+
 
   //사용자 조회 
     public Member getMember(String memName) {
@@ -130,4 +170,6 @@ public class MemberService implements UserDetailsService {
   
 
 
+
+    
 }

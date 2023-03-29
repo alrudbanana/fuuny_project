@@ -59,6 +59,8 @@ a {
   width: 40px;
   }
 
+
+
   /* 드롭다운 */
   .dropbtn {
    
@@ -103,6 +105,7 @@ a {
 
 
 
+
 @media screen and (max-width: 768px) {
     .navbar {
       flex-direction: column;
@@ -118,9 +121,14 @@ a {
     }
 
     .navbar_menu li {
+
+      width:100%;
+      text-align: center;
+
       /* width:100%; */
       text-align: left;
   
+
     }
 
     .navbar_login {
@@ -137,8 +145,11 @@ a {
     .navbar_login.active{
       display:flex;
     }
+
+
     .dropdown-content {
       min-width: 200px;
     
     }
+
 }
