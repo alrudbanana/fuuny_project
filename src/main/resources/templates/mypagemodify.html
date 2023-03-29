@@ -243,6 +243,10 @@
         .fieldError {
             color: #bd2130;
         }
+        
+        .red {
+              color: #bd2130;
+        }
     </style>
 </th:block>
 
@@ -255,10 +259,22 @@
 		
 		<div id="login"></div>
 		<div id="container" class="login">
-			<p id="p1">회원가입</p>
+			<p id="p1">회원정보수정</p>
 			<!-- 회원가입 폼-->
-			<form role="form"  th:object="${memberFormDto}"  method="post">
+			<form role="form"  th:object="${memberDto}"  method="post">
 			        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+				
+				<p id="p2">비밀번호 </p>
+				<p id="p2" class="red">회원정보를 수정하기 위해서 기존의 비밀번호를 입력해주세요!</p>
+				
+				<table id="pw">
+					<tr>
+						<td><input type="password" th:field="*{memPass}" ></td>
+						<p th:if="${#fields.hasErrors('memPass')}" th:errors="*{memPass}" class="fieldError">Incorrect data</p>
+					</tr>
+				</table>
+				
+				
 				<p id="p2">이메일</p>
 				<table id="id">
 					<tr>
@@ -268,13 +284,7 @@
 
 				</table>
 				
-				<p id="p2">비밀번호</p>
-				
-				<table id="pw">
-					<tr>
-						<td><input type="password" th:field="*{memPass}" ></td>
-					</tr>
-				</table>
+
 				<p id="p2">이름</p>
 				<table id="name">
 					<tr>

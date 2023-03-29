@@ -1,4 +1,15 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메인</title>
+=======
 <html lang="ko"
 	xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -6,11 +17,13 @@
 >
 
 <th:block layout:fragment="css">
+>>>>>>> origin/develop
     <style>
         *{
             
             margin: 0;
             padding: 0;
+            font-family: 'NanumSquareNeo-Variable';
             
         }
        
@@ -49,6 +62,7 @@
        .row{
         /* border: 1px solid blue; */
         height: 900px;
+
        }
        .col-lg-3 {
         /* border: 1px solid orange; */
@@ -75,7 +89,13 @@
       }
       .main_name {
         font-weight: bold;
-        /* border: 1px solid black; */
+        color:black;
+        
+       
+      }
+       .main_name:hover {
+     
+        color:gray;
         
        
       }
@@ -94,6 +114,14 @@
             background-color: rgb(246, 225, 247);
             text-align: center;
         }
+        @font-face {
+	font-family: 'NanumSquareNeo-Variable';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2')
+		format('woff2');
+	font-weight: normal;
+	font-style: normal;
+}
 
     </style>
 </th:block>
@@ -105,12 +133,29 @@
     <div class="rap">
 
         <!--헤더시작-->
+<<<<<<< HEAD
+        <header>
+            
+            헤더입니다.
+            <ul>
+        		<li sec:authorize="hasAnyAuthority('ADMIN')">
+                    <a href="/admin/main">관리자 페이지</a>
+        		</li>
+            </ul>
+			
+        </header>
+=======
     <header><div data-include="header.html"></div></header>
+>>>>>>> origin/develop
         <!--헤더 끝-->
+        
 
         <!--메인시작-->
         <section>
             <div class="main">
+            <!--2023.03.26 관리자로 로그인시 보이도록 변경 - 로그인 테스트 해봐야함 -->
+             
+            
                 
                 <img id="banner" src="./img/banner.png">
                 <h3>인기 프로젝트</h3>
@@ -147,9 +192,7 @@
 
         <!--푸터시작-->
         <footer>
-            <div id="foot">
-            푸터
-        </div>
+    
         </footer>
         <!--푸터 끝-->
     </div>

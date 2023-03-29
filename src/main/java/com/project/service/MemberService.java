@@ -1,25 +1,35 @@
 package com.project.service;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.aot.hint.MemberCategory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Service;
-
 
 import com.project.DataNotFoundException;
 
 import com.project.Role;
-
+import com.project.dto.MemberDto;
 import com.project.dto.MemberFormDto;
 import com.project.entity.Member;
 import com.project.repository.MemberRepository;
@@ -32,10 +42,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional
 public class MemberService implements UserDetailsService {
-	
 	private final PasswordEncoder passwordEncoder;
 	private final MemberRepository memberRepository;
 	
+	//2023.03.25 유저생성시 권한, 생성날짜 추가생성
 	public void saveMember(MemberFormDto memberFromDto) {
 		Member member = new Member();
 		member.setEmail(memberFromDto.getEmail());
@@ -45,15 +55,16 @@ public class MemberService implements UserDetailsService {
 		member.setZipcode(memberFromDto.getZipcode());		
 		member.setStreetAdr(memberFromDto.getStreetAdr());
 		member.setDetailAdr(memberFromDto.getDetailAdr());
-		member.setRole(Role.USER);
+
+		member.setRole(memberFromDto.getRole());
+		member.setRegTime(LocalDateTime.now());
+
 		this.memberRepository.save(member);
 		
 		
 	}
 	
 	public Member getMember(Long idx) {
-		
-		//select * from question where id = ? 
 		Optional<Member> op = this.memberRepository.findById(idx) ;
 		if ( op.isPresent()) {		// op에 값이 존재하는 경우 
 			return op.get();	// Question 객체를 리턴
@@ -66,7 +77,15 @@ public class MemberService implements UserDetailsService {
 	
 	}
 	
-	 public void modify(Member member , String email , String memPass, String memName, String memPhone, String zipcode, String streeAdr, String detailAdr) {
+	 public void modify( Member member , MemberDto memberDto , String email , String memName, String memPhone, String zipcode, String streeAdr, String detailAdr) {
+		 
+		 Optional<Member> modifymember = memberRepository.findByEmail(email);
+		 String pass = modifymember.get().getMemPass();
+		 if(!passwordEncoder.matches(memberDto.getMemPass(), pass)){
+			 throw new DataNotFoundException("비밀번호가 일치하지 않습니다.");
+		
+		 }else {
+		 
 		 member.setEmail(email);
 		 member.setMemPass(this.passwordEncoder.encode(member.getMemPass()));
 		 member.setMemName(memName);
@@ -76,6 +95,25 @@ public class MemberService implements UserDetailsService {
 		 member.setDetailAdr(detailAdr);
 		 this.memberRepository.save(member);
 		 }
+	 }
+	 
+	 
+	 
+	 public void modifyPw(Member member ) throws Exception {
+		 
+		 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+	
+		 String securePw = encoder.encode(member.getMemPass());
+		 member.setMemPass(securePw);
+		 
+		 this.memberRepository.save(member);
+	 }
+	 
+	 
+	 public void delete(Member member) {
+		 this.memberRepository.delete(member);
+		 }
+	 
 	 
 	//로그인
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -90,19 +128,42 @@ public class MemberService implements UserDetailsService {
 			
 		}
 		
+		
 		Member member = _Member.get();
 		
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		
-		if("admin".equals(email)) {
+		System.out.println(member.getRole());
+		
+		//2023.03.27 관리자 로그인시 관리자 버튼 생성 / 기반 마련
+		if("ADMIN".equals(member.getRole().toString())) {
 			authorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
-		}else {
+			System.out.println("Admin Role 호출됨");
+			System.out.println(Role.ADMIN.getValue());
+		}else if("SELLER".equals(member.getRole().toString())){
+			authorities.add(new SimpleGrantedAuthority(Role.SELLER.getValue()));
+			System.out.println("SELLER Role 호출됨");
+			System.out.println(Role.ADMIN.getValue());
+		}else if("USER".equals(member.getRole().toString())){
 			authorities.add(new SimpleGrantedAuthority(Role.USER.getValue()));
+			System.out.println("USER Role 호출됨");
+			System.out.println(Role.ADMIN.getValue());
 		}
 
-		return new User(member.getEmail(),member.getMemPass(),authorities);
+		return new User(member.getEmail(),member.getMemPass(), authorities);
     }  
     
+
+
+    
+    
+    public Member getMember1(String email) {
+    	Optional<Member> member = this.memberRepository.findByEmail(email);
+    	return member.get();
+    }
+
+
+
   //사용자 조회 
     public Member getMember(String memName) {
     	
@@ -117,4 +178,10 @@ public class MemberService implements UserDetailsService {
     	 }
     }
 
+  
+
+
+
+
+    
 }

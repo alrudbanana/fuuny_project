@@ -35,6 +35,8 @@ public class ItemDto {
 	
 	
 	private LocalDateTime itemEndDate; //프로젝트 마감 날짜
+	
+	private LocalDateTime daysLeft;	//마감날짜 - 오늘날짜 = 현재남은일수 구하기
 
 
 
