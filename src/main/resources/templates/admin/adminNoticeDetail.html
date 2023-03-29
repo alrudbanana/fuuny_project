@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/adminLayout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<div layout:fragment="content">
+	<div  class="container text-center">
+	<br>
+	<h1 th:text="${notice.title}"></h1>
+	<br>
+	<div th:text="${notice.content}"></div>
+	<br>
+	<a class="btn btn-dark" th:href="@{|/admin/notice/modify/${notice.id}|}" th:text="수정"></a>
+	<a class="delete btn btn-danger" href="javascript:void(0);" 
+		th:data-uri="@{|/admin/notice/delete/${notice.id}|}" th:text="삭제"></a>
+	<hr>
+	<a class="btn btn-dark" th:href="@{/admin/notice}">공지글 관리로 돌아가기</a>
+	</div>
+	<script>
+	const delete_elements = document.getElementsByClassName("delete");
+	Array.from(delete_elements).forEach(function(element) {
+	    element.addEventListener('click', function() {
+	        if(confirm("정말로 삭제하시겠습니까?")) {
+	            location.href = this.dataset.uri;
+	        };
+	    });
+	});
+    </script>
+</div>
+
+
+</html>

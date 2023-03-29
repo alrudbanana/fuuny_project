@@ -9,4 +9,6 @@ import com.project.item.entity.ItemImg;
 
 public interface ItemImgRepository extends JpaRepository<ItemImg, Long> {
 	List<ItemImg> findByItemIdOrderByIdAsc(Long itemId);
+	
+	
 }

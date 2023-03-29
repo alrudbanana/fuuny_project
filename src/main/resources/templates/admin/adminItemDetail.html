@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/adminLayout}">
+<head>
+<meta charset="UTF-8">
+<title>관리자 펀딩 상세</title>
+</head>
+<div layout:fragment="content">
+
+	<h1 th:if="${item.itemsellstatus.toString().equals('WAIT')}">대기중 프로젝트 입니다</h1>
+	<h1 th:if="${item.itemsellstatus.toString().equals('CONFIRM')}">승인된 프로젝트 입니다</h1>
+	<h1 th:if="${item.itemsellstatus.toString().equals('SELL')}">판매중인 프로젝트 입니다</h1>
+	<h1 th:if="${item.itemsellstatus.toString().equals('SOLD_OUT')}">매진된 프로젝트 입니다</h1>
+	<h1 th:if="${item.itemsellstatus.toString().equals('REFUSE')}">거절된 프로젝트 입니다</h1>
+	<h1 th:if="${item.itemsellstatus.toString().equals('CLOSE')}">마감된 프로젝트 입니다</h1>
+
+	
+	<h1 th:text="${item.itemNm}"></h1>
+	<div th:text="${item.itemCategory}"></div>
+	<div th:text="${item.itemDetail}"></div>
+	<div th:text="${item.price}"></div>
+	<div th:text="${item.price2}"></div>
+	<div th:text="${item.itemsellstatus}"></div>
+	
+	 <a th:if="${item.itemsellstatus.toString().equals('WAIT')} or ${item.itemsellstatus.toString().equals('REFUSE')}">승인</a>
+	 <a th:if="${item.itemsellstatus.toString().equals('WAIT')} or ${item.itemsellstatus.toString().equals('REFUSE')}">거절</a>
+	 
+	 <a th:if="${item.itemsellstatus.toString().equals('CONFIRM')} or ${item.itemsellstatus.toString().equals('SELL')} or ${item.itemsellstatus.toString().equals('SOLD_OUT')}">삭제</a>
+	 <a th:if="${item.itemsellstatus.toString().equals('CONFIRM')} or ${item.itemsellstatus.toString().equals('SELL')} or ${item.itemsellstatus.toString().equals('SOLD_OUT')}">거절</a>
+	 
+
+
+</div>
+</html>

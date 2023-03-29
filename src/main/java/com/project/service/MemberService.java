@@ -26,11 +26,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Service;
 
-
-
-
-
-
 import com.project.DataNotFoundException;
 
 import com.project.Role;
@@ -50,6 +45,7 @@ public class MemberService implements UserDetailsService {
 	private final PasswordEncoder passwordEncoder;
 	private final MemberRepository memberRepository;
 	
+	//2023.03.25 유저생성시 권한, 생성날짜 추가생성
 	public void saveMember(MemberFormDto memberFromDto) {
 		Member member = new Member();
 		member.setEmail(memberFromDto.getEmail());
@@ -59,7 +55,10 @@ public class MemberService implements UserDetailsService {
 		member.setZipcode(memberFromDto.getZipcode());		
 		member.setStreetAdr(memberFromDto.getStreetAdr());
 		member.setDetailAdr(memberFromDto.getDetailAdr());
-		member.setRole(Role.USER);
+
+		member.setRole(memberFromDto.getRole());
+		member.setRegTime(LocalDateTime.now());
+
 		this.memberRepository.save(member);
 		
 		
@@ -134,10 +133,21 @@ public class MemberService implements UserDetailsService {
 		
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		
-		if("admin".equals(email)) {
+		System.out.println(member.getRole());
+		
+		//2023.03.27 관리자 로그인시 관리자 버튼 생성 / 기반 마련
+		if("ADMIN".equals(member.getRole().toString())) {
 			authorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
-		}else {
+			System.out.println("Admin Role 호출됨");
+			System.out.println(Role.ADMIN.getValue());
+		}else if("SELLER".equals(member.getRole().toString())){
+			authorities.add(new SimpleGrantedAuthority(Role.SELLER.getValue()));
+			System.out.println("SELLER Role 호출됨");
+			System.out.println(Role.ADMIN.getValue());
+		}else if("USER".equals(member.getRole().toString())){
 			authorities.add(new SimpleGrantedAuthority(Role.USER.getValue()));
+			System.out.println("USER Role 호출됨");
+			System.out.println(Role.ADMIN.getValue());
 		}
 
 		return new User(member.getEmail(),member.getMemPass(), authorities);
