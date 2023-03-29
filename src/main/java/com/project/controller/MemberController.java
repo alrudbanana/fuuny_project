@@ -1,10 +1,7 @@
 package com.project.controller;
-import java.security.Principal;
 
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
+import java.security.Principal;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,14 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.server.ResponseStatusException;
-
-
 import com.project.dto.MemberDto;
 import com.project.dto.MemberFormDto;
 import com.project.entity.Member;
+import com.project.model.KakaoProfile;
 import com.project.service.MemberService;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -57,7 +51,7 @@ public class MemberController {
 			model.addAttribute("memberFormDto", "아이디 혹은 이메일 중복.");
 			return "memberForm";
 		}
-    return "redirect:/";
+    return "redirect:index";
    
     }
 
@@ -110,6 +104,7 @@ public String memberModify( @Valid MemberFormDto memberFormDto, BindingResult bi
 }
 
 
+
     //로그인 
     @GetMapping(value = "/login")
     public String login(){
@@ -147,4 +142,10 @@ public String memberModify( @Valid MemberFormDto memberFormDto, BindingResult bi
  
     }
    
+
+
+
+
+}
+
 
