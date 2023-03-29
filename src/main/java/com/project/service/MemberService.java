@@ -154,6 +154,7 @@ public class MemberService implements UserDetailsService {
     }  
     
 
+
     
     
     public Member getMember1(String email) {
@@ -178,6 +179,7 @@ public class MemberService implements UserDetailsService {
     }
 
   
+
 
 
 

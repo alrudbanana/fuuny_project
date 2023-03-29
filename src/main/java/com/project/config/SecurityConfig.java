@@ -37,6 +37,7 @@ public class SecurityConfig {
 	                new AntPathRequestMatcher("/h2-console/**"))
 	        
 	        .and()
+	        .csrf().disable()
 	        .headers()
 	        .addHeaderWriter(new XFrameOptionsHeaderWriter(
 	                XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))

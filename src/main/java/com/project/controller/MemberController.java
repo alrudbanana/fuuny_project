@@ -29,8 +29,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.project.Email.dto.MailDto;
+import com.project.Email.service.EmailService;
+
+
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
+
 
 
 
@@ -41,7 +49,11 @@ import com.project.model.KakaoProfile;
 import com.project.service.MemberService;
 
 
+import jakarta.transaction.Transactional;
+
+
 import jakarta.servlet.http.HttpSession;
+
 
 
 import jakarta.validation.Valid;
@@ -53,6 +65,9 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 	
     private final MemberService memberService;
+    private final EmailService emailService;
+    
+
 
 
     @GetMapping(value = "/login")
@@ -60,7 +75,39 @@ public class MemberController {
 		return "login";
 	}
 
+    //이메일 보내기 
     
+    @Transactional
+    @PostMapping("/sendEmail") //members/sendEmail
+    public String sendEmail(@RequestParam("memberEmail") String memberEmail){
+        // 임시 비밀번호 생성 & 임시비밀번호로 변경 & 메일 내용 담기
+        MailDto dto = emailService.createMailAndChangePassword(memberEmail);
+        // 메일 보내기
+        emailService.mailSend(dto);
+
+        return "members/login";
+    }
+    
+    /*
+    @GetMapping(value="/sendEmail")
+    public String newlogin() {
+		return "login";
+	}
+    */
+    
+    //이메일 중복 체크 
+    @PostMapping("/emailDuplication") //members/emailDuplication
+    public @ResponseBody
+    String emailDuplication(@RequestParam("memberEmail") String memberEmail) {
+        String result = emailService.emailDuplication(memberEmail);
+        return result;
+    }
+
+    
+
+
+    
+
 
     //회원가입 뷰 페이지 출력
     @GetMapping(value = "/new")
@@ -68,8 +115,7 @@ public class MemberController {
         model.addAttribute("memberFormDto", new MemberFormDto());
         return "memberForm";
     }
-    
-    
+
     @PostMapping(value="/new")
     public String memberForm(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
     	System.out.println("컨트롤러 호출됨 ");
@@ -272,8 +318,6 @@ public String questionDelete(Principal principal, @PathVariable("idx") Long idx)
 
 
 
-    //로그인 
-
 
 
   
@@ -309,7 +353,7 @@ public String questionDelete(Principal principal, @PathVariable("idx") Long idx)
 
 
  
-}
+
 
 
     //로그인 
@@ -351,7 +395,16 @@ public String questionDelete(Principal principal, @PathVariable("idx") Long idx)
  
     
  
-    }
 
-  
+
+
+   
+
+
+
+
+
+
+    }
+}
 
