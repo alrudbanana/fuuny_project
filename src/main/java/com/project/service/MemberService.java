@@ -35,6 +35,7 @@ import com.project.entity.Member;
 import com.project.repository.MemberRepository;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -55,6 +56,7 @@ public class MemberService implements UserDetailsService {
 		member.setDetailAdr(memberFromDto.getDetailAdr());
 		member.setRole(Role.USER);
 		this.memberRepository.save(member);
+		
 		
 	}
 	
@@ -110,6 +112,22 @@ public class MemberService implements UserDetailsService {
 		return new User(member.getEmail(),member.getMemPass(),authorities);
     }  
     
+
+  //사용자 조회 
+    public Member getMember(String memName) {
+    	
+    	  	
+    	 Optional<Member> member = this.memberRepository.findByEmail(memName);
+    	 if (member.isPresent()) {
+    		
+    		 return member.get();
+    	 } else {
+    		
+    		 throw new DataNotFoundException("siteuser not found ");
+    	 }
+    }
+
   
+
 
 }

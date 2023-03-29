@@ -3,6 +3,7 @@ package com.project.entity;
 
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -35,10 +36,12 @@ public class Question extends BaseEntity {
 	   private String content;
 	   
 	   @ManyToOne
-	   private Member author;
+	   private Member member;
 	   
 	   @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
 	   private List<Answer> answerList;
+	   
+	   
 	   
 	   
 	   

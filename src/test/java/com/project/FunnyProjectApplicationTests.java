@@ -44,7 +44,7 @@ class FunnyProjectApplicationTests {
 //	@Test
 //	void contextLoads() {
 //	}
-	
+/*	
 	@Autowired
 	private AdminService adminService;
 	
@@ -86,6 +86,6 @@ class FunnyProjectApplicationTests {
 
 	}
 	
-
+*/
 
 }

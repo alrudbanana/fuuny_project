@@ -26,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 	 @Bean
 	    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

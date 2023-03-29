@@ -105,6 +105,47 @@ public String memberModify( @Valid MemberFormDto memberFormDto, BindingResult bi
 
 
 
+    //로그인 
+    @GetMapping(value = "/login")
+    public String login(){
+        return "login";
+    }
+
+    
+    @GetMapping(value = "/login/error")
+    public String loginError(Model model){
+        model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
+        return "login";
+    }
+    
+    @PostMapping("/join")
+    public String newMember(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
+       
+    	System.out.println("컨트롤러 호출됨 ");
+    	System.out.println(memberFormDto.getMemName());
+    	
+    	if(bindingResult.hasErrors()){
+            return "join";
+        }
+    	
+       try {
+    	 
+    	  this.memberService.saveMember(memberFormDto);
+    	  
+       }catch(Exception e) {
+    	   model.addAttribute("save_errors","아이디 혹은 이메일 중복");
+    	   return "join";
+       }
+
+        return "redirect:/";
+    }
+ 
+    }
+   
+
+
+
 
 }
+
 
