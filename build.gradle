@@ -24,7 +24,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
-	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+	//implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'              //타임리프 레이아웃 사용 라이브러리
 
@@ -42,7 +42,7 @@ dependencies {
 	
 	implementation 'com.mysql:mysql-connector-j'
 
-		implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+		//implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
 
 	//jackson
