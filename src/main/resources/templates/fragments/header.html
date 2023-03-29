@@ -1,18 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+ 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
-
-
-<div th:fragment="header">
-
-
-
- 
- </div>
-
+<script type="text/javascript" th:src="@{/js/header.js}"></script>
 
 <div th:fragment="header">
+
 
   <nav class="navbar">
     <div class="navbar_logo">
@@ -49,10 +42,9 @@
     <a href="#" class="navbar_toogleBtn">
       <img src="img/hamburger.png">
     </a>
-	</nav>
-
+   </nav>
 	<script src="/js/header.js"></script>
-</div>
 
+</div>
 
 </html>

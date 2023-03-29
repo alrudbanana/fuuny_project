@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 import org.springframework.aot.hint.MemberCategory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Service;
 
 import com.project.DataNotFoundException;
@@ -31,6 +30,7 @@ import com.project.DataNotFoundException;
 import com.project.Role;
 import com.project.dto.MemberDto;
 import com.project.dto.MemberFormDto;
+import com.project.dto.pwdDto;
 import com.project.entity.Member;
 import com.project.repository.MemberRepository;
 
@@ -66,26 +66,16 @@ public class MemberService implements UserDetailsService {
 	
 	public Member getMember(Long idx) {
 		Optional<Member> op = this.memberRepository.findById(idx) ;
-		if ( op.isPresent()) {		// op에 값이 존재하는 경우 
-			return op.get();	// Question 객체를 리턴
+		if ( op.isPresent()) {		 
+			return op.get();	
 		}else {
-			// 사용자 정의 예외 : 
-			// throw : 예외를 강제로 발생
-			// throws : 예외를 요청한 곳에서 처리하도록 미루는 것
 			throw new DataNotFoundException("요청한 파일을 찾지 못했습니다.") ;
 		}
 	
 	}
-	
+	//정보수정
 	 public void modify( Member member , MemberDto memberDto , String email , String memName, String memPhone, String zipcode, String streeAdr, String detailAdr) {
-		 
-		 Optional<Member> modifymember = memberRepository.findByEmail(email);
-		 String pass = modifymember.get().getMemPass();
-		 if(!passwordEncoder.matches(memberDto.getMemPass(), pass)){
-			 throw new DataNotFoundException("비밀번호가 일치하지 않습니다.");
-		
-		 }else {
-		 
+		 	 
 		 member.setEmail(email);
 		 member.setMemPass(this.passwordEncoder.encode(member.getMemPass()));
 		 member.setMemName(memName);
@@ -94,12 +84,12 @@ public class MemberService implements UserDetailsService {
 		 member.setStreetAdr(streeAdr);
 		 member.setDetailAdr(detailAdr);
 		 this.memberRepository.save(member);
-		 }
+		 
 	 }
 	 
 	 
-	 
-	 public void modifyPw(Member member ) throws Exception {
+	 //2.비밀번호 수정
+	 public void modifyPw(Member member) throws Exception {
 		 
 		 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 	
@@ -117,7 +107,6 @@ public class MemberService implements UserDetailsService {
 	 
 	//로그인
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    	System.out.println(email); //콘솔에 정보를 출력함 : 개발 완료 시는 제거함 
 		
 		Optional<Member> _Member=this.memberRepository.findByEmail(email);
 		
@@ -178,10 +167,21 @@ public class MemberService implements UserDetailsService {
     	 }
     }
 
-  
-
-
-
+    public boolean checkPassword(Long member_id, String checkPassword) {
+        Member member = memberRepository.findById(member_id).orElseThrow(() ->
+                new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
+        String realPassword = member.getMemPass();
+        boolean matches = passwordEncoder.matches(checkPassword, realPassword);
+        return matches;
+    }
+    
+    //비밀번호 수정
+	 public void modifyPw(pwdDto pwdDto , Member member) {
+		 
+		 member.setMemPass(this.passwordEncoder.encode(pwdDto.getNewPwd()));
+		 
+		 this.memberRepository.save(member);
+	 }
 
     
 }
