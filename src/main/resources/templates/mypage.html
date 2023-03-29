@@ -1,10 +1,28 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
+<html xmlns:th="http://www.thymeleaf.org"
+ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
 <head>
 
 	
 </head>
+
+<header>
+      
+      </li>
+      <li><a href="">홈</a></li>
+      <li><a href="">공지사항</a></li>
+      <li><a href="">문의사항</a></li>
+      <li><a href="">프로젝트올리기</a></li>
+    </ul>
+    <ul class="navbar_login">
+      <li><a href="/members/login">로그인</a></li>
+      <li><a href="">회원가입</a></li>
+    </ul>
+
+ 
+ </div>
+</header>
 
 <body>
 
@@ -17,6 +35,7 @@
 
 
 <table >
+
 
     <tr>
       <th scope="row">이메일</th>
@@ -42,7 +61,36 @@
     
 
 </table>
-		<a href =/members/modify/{idx}><button>회원정보 수정하기</button></a>
+		<a th:href="@{|/members/modify/${member.idx}|}"><button>회원정보 수정하기</button></a>
+		<a href="javascript:void(0);" class="delete" th:data-uri="@{|/members/delete/${member.idx}|}" ><button>회원탈퇴하기</button></a>
+		<a th:href="@{/members/modify/pwd}"><button>비밀번호 변경하기</button></a>
+		
+
+<!--  
+<div class="card-body">
+	<div>
+				<label class="form-label">현재비밀번호입력</label>
+				<input type="password" id="pwd" placeholder = "현재 비밀번호를 입력" >
+	</div>
+	<div>		
+				<label class="form-label">새로 사용할 비밀번호 입력</label>
+				<input type="password" id="pwd1" placeholder = "새로운 비밀번호를 입력" >
+	</div>
+	<div>		
+				<label class="form-label">새로 사용할 비밀번호를 한번 더 입력해주세요</label>
+				<input type="password" id="pwd2" placeholder = "새로운 비밀번호를 입력" >
+	</div>			
+				<div id = "errormessege"></div>
+				<input type="button" id="button" value="완료">
+			</div>
+	</div>
+<div class="text-center">
+<button class="btn bg-gradient-primary w-100 my-4 mb-2" id="checkPwd"> 비밀번호 확인</button>
+
+-->
+
+
+
 
 <!-- 
 		<h4>이메일</h4>
@@ -57,5 +105,15 @@
 		<h4 th:text="${member.DetailAdr}"></h4>
  -->			
 
-			
+<script >
+	const delete_elements = document.getElementsByClassName("delete");
+	Array.from(delete_elements).forEach(function(element) {
+		element.addEventListener('click', function() {
+			if (confirm("정말로 탈퇴하시겠습니까?")) {
+				location.href = this.dataset.uri;
+			};
+		});
+	});
+</script>
+
 </html>

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       lang="ko">
@@ -8,20 +9,31 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>메인</title>
+=======
+<html lang="ko"
+	xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+>
+
+<th:block layout:fragment="css">
+>>>>>>> origin/develop
     <style>
         *{
             
             margin: 0;
             padding: 0;
+            font-family: 'NanumSquareNeo-Variable';
             
         }
        
-
+/*
         header{
             background-color: antiquewhite;
             height: 200px;
             text-align: center;
         }
+  */      
         .main {
             height: 1000px;
             /* border: 1px solid red; */
@@ -43,33 +55,56 @@
         width: 100%;
        }
        h3{
-        margin: 35px 0 20px 0;
+        margin: 35px 0 20px 50px;
+        text-align: left;
        }
 
        .row{
         /* border: 1px solid blue; */
         height: 900px;
+
        }
        .col-lg-3 {
-        border: 1px solid orange;
+        /* border: 1px solid orange; */
         display: inline-block;
         width: 250px;
         height: 350px;
-        margin: 10px 20px;
+        margin: 10px 20px;       
+     
+       }
+     
+     
+
+       .main_img{
+        background-color: rgb(239, 231, 221);
+        width: 100%;
+        height: 50%;
+       }
+      .main_cate {
+        font-size: 12px;
+        color: gray;
+        /* border: 1px solid red; */
+     
+
+      }
+      .main_name {
+        font-weight: bold;
+        color:black;
         
-     
-       }
-       .col-lg-3 img{
-        width: 70%;
-       }
-
        
-
+      }
+       .main_name:hover {
      
-
-
-
-        <!--푸터-->
+        color:gray;
+        
+       
+      }
+      .main_detail {
+		  font-size: 13px;
+	  }
+      
+       
+        /* 푸터 */
         footer{
            
     
@@ -79,15 +114,26 @@
             background-color: rgb(246, 225, 247);
             text-align: center;
         }
-
+        @font-face {
+	font-family: 'NanumSquareNeo-Variable';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2')
+		format('woff2');
+	font-weight: normal;
+	font-style: normal;
+}
 
     </style>
-</head>
-<body>
-<!-- ㅇ아아아 -->
+</th:block>
+
+
+
+<div layout:fragment="content">
+
     <div class="rap">
 
         <!--헤더시작-->
+<<<<<<< HEAD
         <header>
             
             헤더입니다.
@@ -98,6 +144,9 @@
             </ul>
 			
         </header>
+=======
+    <header><div data-include="header.html"></div></header>
+>>>>>>> origin/develop
         <!--헤더 끝-->
         
 
@@ -109,26 +158,24 @@
             
                 
                 <img id="banner" src="./img/banner.png">
-                <h3>인기상품</h3>
+                <h3>인기 프로젝트</h3>
 
                 <div class="container text-center">
                     <div class="row">
-                        <div class="col-lg-3">                        
-                        <div>이미지</div>
-                        <div>상세정보</div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div>이미지</div>
-                            <div>상세정보</div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div>이미지</div>
-                            <div>상세정보</div>
-                        </div>
-                         <div class="col-lg-3">
-                            <div>이미지</div>
-                            <div>상세정보</div>
-                        </div>                    
+                        
+							<div class="col-lg-3" th:each="item : ${itemList}">
+								<div class="main_img"></div>	<!-- 이미지-->
+                                <div class="main_cate" th:text="${item.itemCategory}"></div>	<!-- 카테고리-->
+								<a th:href="@{|/item/${item.idx}|}"><div class="main_name" th:text="${item.itemName}"></div></a>		<!-- 제목-->
+								<div class="main_detail" th:text="${item.itemDetail}"></div>	<!-- 설명-->
+								
+														
+															
+							</div>
+						
+					
+                        
+                        
 
                     </div>
                 </div>
@@ -145,12 +192,12 @@
 
         <!--푸터시작-->
         <footer>
-            <div id="foot">
-            푸터
-        </div>
+    
         </footer>
         <!--푸터 끝-->
     </div>
+    <script src="./js/header.js"></script>
     
-</body>
+</div>
+
 </html>

@@ -1,5 +1,7 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko"
+	xmlns:th="http://www.thymeleaf.org"
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <!-- Required meta tags -->
 <meta charset="utf-8">
@@ -9,11 +11,33 @@
 <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
 <!-- sbb CSS -->
 <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+<!-- header CSS -->
+<link rel="stylesheet" type="text/css" th:href="@{/header.css}">
+<!-- 
+   Header CSS
+ -->
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap" rel="stylesheet">
+
+
 <title>Hello, sbb!</title>
+
+
+    <th:block layout:fragment="script"></th:block>
+    <th:block layout:fragment="css"></th:block>
+
+
 </head>
 <body>
+    <div th:replace="fragments/header::header"></div>
+    
 	<!-- 기본 템플릿 안에 삽입될 내용 Start -->
 	<th:block layout:fragment="content"></th:block>
 	<!-- 기본 템플릿 안에 삽입될 내용 End -->
+	
+  <div th:replace="fragments/footer::footer"></div>
+  
 </body>
 </html>
