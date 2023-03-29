@@ -51,11 +51,12 @@ public class QuestionService {
 		}
 	}
 
-	public void create(String title, String content, Member member) {
+	public void create(String title, String content, Member member , String boardCategory) {
 		Question q = new Question();
 		q.setTitle(title);
 		q.setContent(content);
 		q.setMember(member);
+		q.setBoardCategory(boardCategory);
 		q.setRegTime(LocalDateTime.now());
 		this.questionRepository.save(q);
 	}

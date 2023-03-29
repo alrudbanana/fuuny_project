@@ -35,10 +35,17 @@ public class QuestionController {
 
 	@GetMapping("/question/list")
 	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "kw", defaultValue = "") String kw) {
+			@RequestParam(value = "kw", defaultValue = "") String kw 
+		//	, Question question
+			) {
+		
 		Page<Question> paging = this.questionService.getList(page, kw);
+		
+		
+		
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
+		//model.addAttribute("question", question);
 		return "question_list";
 	}
 
@@ -68,7 +75,7 @@ public class QuestionController {
 		}
 
 		Member member = this.memberService.getMember(principal.getName());
-		this.questionService.create(questionForm.getTitle(), questionForm.getContent(), member);
+		this.questionService.create(questionForm.getTitle(), questionForm.getContent(), member, questionForm.getBoardCategory());
 
 		return "redirect:/question/list";
 	}

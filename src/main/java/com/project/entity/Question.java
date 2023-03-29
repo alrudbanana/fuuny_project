@@ -42,7 +42,7 @@ public class Question extends BaseEntity {
 	   private List<Answer> answerList;
 	   
 	   
-	   
+	   private String boardCategory;
 	   
 	   
 
