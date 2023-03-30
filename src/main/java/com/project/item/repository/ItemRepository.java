@@ -35,5 +35,7 @@ public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredi
     
    
     List<Item> findByItemsellstatusIn(List<ItemSellStatus> itemSellStatus);
+
+	Page<Item> findByItemsellstatusIn(List<ItemSellStatus> cond, Pageable pageable);
 }
 

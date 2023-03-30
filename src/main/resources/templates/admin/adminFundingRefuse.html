@@ -10,7 +10,7 @@
 
 	<div class="container text-center">
 		<div>
-			<h2>프로젝트 마감 관리</h2>
+			<h2>프로젝트 거절 관리</h2>
 			<br> <a class="btn btn-dark" th:href="@{/admin/funding}">프로젝트
 				대기중 관리</a> <a class="btn btn-dark" th:href="@{/admin/funding/approve}">프로젝트
 				승인 관리</a> <a class="btn btn-dark" th:href="@{/admin/funding/end}">프로젝트
@@ -26,7 +26,8 @@
 						<a style="text-decoration: none;"
 							th:href="@{|/admin/item/detail/${item.id}|}">
 							<div class="card-body">
-								<h3 class=" text-dark" th:text="${item.itemsellstatus}"></h3>
+								<h3 class="card-text text-danger"
+									th:text="${item.itemsellstatus}"></h3>
 								<h4 class="card-title text-dark" th:text="${item.itemNm}"></h4>
 								<h5 class="card-text text-dark" th:text="${item.itemCategory}"></h5>
 								<h5 class="card-text text-danger" th:text="${item.price}"></h5>
