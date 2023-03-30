@@ -15,12 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.project.DataNotFoundException;
 import com.project.Role;
 import com.project.constant.ItemSellStatus;
+import com.project.dto.AdminItemDto;
 import com.project.entity.Member;
 import com.project.entity.Notice;
 import com.project.item.entity.Item;
 import com.project.item.repository.ItemRepository;
 import com.project.repository.AdminRepository;
 import com.project.repository.MemberRepository;
+
 
 import lombok.RequiredArgsConstructor;
 
@@ -111,10 +113,12 @@ public class AdminService {
 	}
 
 	// 아이템 불러오기
-	public Page<Item> getItemList(int page) {
-		Pageable pageable = PageRequest.of(page, 12);
-		return this.itemRepository.findAll(pageable);
-	}
+//	public Page<AdminItemDto> getItemList(int page) {
+//		List<Sort.Order> sorts = new ArrayList<>();
+//        sorts.add(Sort.Order.desc("id"));
+//		Pageable pageable = PageRequest.of(page, 12, Sort.by(sorts));
+//		return this.itemRepository.getAdminItemPageNew(pageable);
+//	}
 
 	// 아이템 상세 불러오기
 	public Item getItemDetail(Long id) {
@@ -128,9 +132,14 @@ public class AdminService {
 
 	//2023.03.28 enum 타입 불러오기
 	@Transactional
-	public Page<Item> getItemCondition(List<ItemSellStatus> cond, Pageable pageable) {
+	public Page<Item> getItemCondition(List<ItemSellStatus> cond, Pageable pageable) {	
 		return this.itemRepository.findByItemsellstatusIn(cond, pageable);
 	}
+	
+	@Transactional
+    public Page<AdminItemDto> getAdminItemPageNew(List<ItemSellStatus> cond, Pageable pageable){
+        return itemRepository.getAdminItemPageNew(cond,pageable);
+    }
 
 	// 2023.03.29 프로젝트 권한 수정 완료
 	public void modifyItemRole(Long id, ItemSellStatus role) {

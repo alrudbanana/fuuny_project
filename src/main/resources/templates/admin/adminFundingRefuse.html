@@ -26,8 +26,8 @@
 						<a style="text-decoration: none;"
 							th:href="@{|/admin/item/detail/${item.id}|}">
 							<div class="card-body">
-								<h3 class="card-text text-danger"
-									th:text="${item.itemsellstatus}"></h3>
+							<img th:src="${item.imgUrl}" class="card-img-top" th:alt="${item.itemNm}" height="400">
+								<h3 class=" text-dark" th:text="${item.itemSellStatus}"></h3>
 								<h4 class="card-title text-dark" th:text="${item.itemNm}"></h4>
 								<h5 class="card-text text-dark" th:text="${item.itemCategory}"></h5>
 								<h5 class="card-text text-danger" th:text="${item.price}"></h5>

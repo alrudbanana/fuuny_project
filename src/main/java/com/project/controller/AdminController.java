@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.project.Role;
 import com.project.constant.ItemSellStatus;
 import com.project.constant.RoleMemberCode;
+import com.project.dto.AdminItemDto;
 import com.project.dto.NoticeFormDto;
 import com.project.entity.Member;
 import com.project.entity.Notice;
@@ -39,9 +41,33 @@ public class AdminController {
 	private final AdminService adminService;
 
 	@GetMapping(value = "/main")
-	public String adminMain(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
-		Page<Item> paging = this.adminService.getItemList(page);
-		model.addAttribute("paging", paging);
+	public String adminMain(Model model, Optional<Integer> page) {
+		List<ItemSellStatus> aa = new ArrayList();
+		aa.add(ItemSellStatus.WAIT);
+		aa.add(ItemSellStatus.CLOSE);
+		aa.add(ItemSellStatus.CONFIRM);
+		aa.add(ItemSellStatus.REFUSE);
+		aa.add(ItemSellStatus.SELL);
+		aa.add(ItemSellStatus.SOLD_OUT);
+		
+		System.out.println("컨트롤러 호출됨");
+
+		List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9, Sort.by(sorts));
+		
+		System.out.println("pageable 잘 호출됨 ");
+		
+		Page<AdminItemDto> itemCondition = this.adminService.getAdminItemPageNew(aa, pageable);
+		
+		System.out.println("itemcondition 잘 호출됨");
+		
+		model.addAttribute("items", itemCondition);
+		model.addAttribute("maxPage", 5);
+		
+		System.out.println("백엔드 로직 완료 ");
+		
+		
 		return "admin/adminMain";
 	}
 
@@ -50,9 +76,11 @@ public class AdminController {
 		List<ItemSellStatus> aa = new ArrayList();
 		aa.add(ItemSellStatus.WAIT);
 
-		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9);
+		List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9, Sort.by(sorts));
 
-		Page<Item> itemCondition = this.adminService.getItemCondition(aa, pageable);
+		Page<AdminItemDto> itemCondition = this.adminService.getAdminItemPageNew(aa, pageable);
 
 		model.addAttribute("items", itemCondition);
 		model.addAttribute("maxPage", 5);
@@ -66,9 +94,11 @@ public class AdminController {
 		aa.add(ItemSellStatus.SELL);
 		aa.add(ItemSellStatus.SOLD_OUT);
 
-		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9);
+		List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9, Sort.by(sorts));
 
-		Page<Item> itemCondition = this.adminService.getItemCondition(aa, pageable);
+		Page<AdminItemDto> itemCondition = this.adminService.getAdminItemPageNew(aa, pageable);
 
 		model.addAttribute("items", itemCondition);
 		model.addAttribute("maxPage", 5);
@@ -80,9 +110,11 @@ public class AdminController {
 		List<ItemSellStatus> aa = new ArrayList();
 		aa.add(ItemSellStatus.CLOSE);
 
-		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9);
+		List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9, Sort.by(sorts));
 
-		Page<Item> itemCondition = this.adminService.getItemCondition(aa, pageable);
+		Page<AdminItemDto> itemCondition = this.adminService.getAdminItemPageNew(aa, pageable);
 
 		model.addAttribute("items", itemCondition);
 		model.addAttribute("maxPage", 5);
@@ -94,9 +126,11 @@ public class AdminController {
 		List<ItemSellStatus> aa = new ArrayList();
 		aa.add(ItemSellStatus.REFUSE);
 
-		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9);
-
-		Page<Item> itemCondition = this.adminService.getItemCondition(aa, pageable);
+		List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9, Sort.by(sorts));
+		
+		Page<AdminItemDto> itemCondition = this.adminService.getAdminItemPageNew(aa, pageable);
 
 		model.addAttribute("items", itemCondition);
 		model.addAttribute("maxPage", 5);

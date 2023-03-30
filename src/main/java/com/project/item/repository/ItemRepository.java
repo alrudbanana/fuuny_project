@@ -13,7 +13,8 @@ import com.project.constant.ItemSellStatus;
 import com.project.item.entity.Item;
 
 
-public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredicateExecutor<Item>, ItemRepositoryCustom {
+public interface ItemRepository extends JpaRepository<Item, Long>, 
+			QuerydslPredicateExecutor<Item>, ItemRepositoryCustom {
 
 	List<Item> findByItemNm(String itemNm);
 
