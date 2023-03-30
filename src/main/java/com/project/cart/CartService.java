@@ -10,8 +10,11 @@ import org.thymeleaf.util.StringUtils;
 import com.project.entity.Member;
 import com.project.item.entity.Item;
 import com.project.item.repository.ItemRepository;
+import com.project.order.OrderDto;
+import com.project.order.OrderService;
 import com.project.repository.MemberEmailRepository;
 import com.project.repository.MemberRepository;
+
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +29,7 @@ public class CartService {
     private final MemberEmailRepository mmr;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
-  //  private final OrderService orderService;
+    private final OrderService orderService;
 
     public Long addCart(CartItemDto cartItemDto, String email){
 
@@ -100,43 +103,44 @@ public class CartService {
         cartItemRepository.delete(cartItem);
     }
 
-    /*
-    public Long orderCartItem(List<CartOrderDto> cartOrderDtoList, String email){
+
+    public Long orderCartItem(CartOrderDto cartOrderDto, String email){
     	
     	//List 선언 
         List<OrderDto> orderDtoList = new ArrayList<>();
 
         //Client 에서 넘오는 리스트안에 저장된 CertItemID를 끄집어내서        
-        
-        for (CartOrderDto cartOrderDto : cartOrderDtoList) {
+
+        // 후원금 추가(donation)로 인해 기존 cartOrderDtoList 파라미터에서 cartOrderDto 파라미터로 변경 2023-03-29, 크몽
+        for (CartOrderDto cartOrder : cartOrderDto.getCartOrderDtoList()) {
             CartItem cartItem = cartItemRepository
-                            .findById(cartOrderDto.getCartItemId())
+                            .findById(cartOrder.getCartItemId())
                             .orElseThrow(EntityNotFoundException::new);
 
             //장바구니 아이템 테이블의 정보를 끄집어 내서 order 테이블에 저장하기위해서 
             // orderDto 제품번호, 주문한 갯수 정보만 넣어서 orderDtoList에 저장 
             OrderDto orderDto = new OrderDto();
             orderDto.setItemId(cartItem.getItem().getId());
-          orderDto.setCount(cartItem.getCount());
+            orderDto.setCount(cartItem.getCount());
             orderDtoList.add(orderDto);
         }
-        */
 
-        /*
         
         //cert_item 테이블의 값을 order, order_item에 값을 Insert 
-       Long orderId = orderService.orders(orderDtoList, email);
+        // 후원금 추가(donation)로 인해 cartOrderDto 파라미터 추가 2023-03-29, kk
+        Long orderId = orderService.orders(cartOrderDto, orderDtoList, email);
         
         // cert_item 테이블의 선택된 itemId의 대해서 제거 
-        for (CartOrderDto cartOrderDto : cartOrderDtoList) {
+        for (CartOrderDto cartOrder : cartOrderDto.getCartOrderDtoList()) {
             CartItem cartItem = cartItemRepository
-                            .findById(cartOrderDto.getCartItemId())
+                            .findById(cartOrder.getCartItemId())
                             .orElseThrow(EntityNotFoundException::new);
             cartItemRepository.delete(cartItem);
         }
 
         return orderId;
     }
-    */
+
+    
 
 }
