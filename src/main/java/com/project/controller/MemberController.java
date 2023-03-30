@@ -89,8 +89,7 @@ public class MemberController {
 		return "login";
 	}
 
-    //이메일 보내기 
-    
+    //이메일 보내기
     @Transactional
     @PostMapping("/sendEmail") //members/sendEmail
     public String sendEmail(@RequestParam("memberEmail") String memberEmail){
@@ -98,16 +97,9 @@ public class MemberController {
         MailDto dto = emailService.createMailAndChangePassword(memberEmail);
         // 메일 보내기
         emailService.mailSend(dto);
-
-        return "members/login";
+        System.out.println("메일전송완료");
+        return "login";
     }
-    
-    /*
-    @GetMapping(value="/sendEmail")
-    public String newlogin() {
-		return "login";
-	}
-    */
     
     //이메일 중복 체크 
     @PostMapping("/emailDuplication") //members/emailDuplication
@@ -275,14 +267,14 @@ public class MemberController {
 	
 	
 	
-		//회원 탈퇴
-		@PreAuthorize("isAuthenticated()")
-		@GetMapping("/delete/{idx}")
-		public String questionDelete(Principal principal, @PathVariable("idx") Long idx) {
-			Member member = this.memberService.getMember(idx);
-		  this.memberService.delete(member);
-		  return "redirect:/";
-		  }
+	//회원 탈퇴
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/delete/{idx}")
+	public String questionDelete(Principal principal, @PathVariable("idx") Long idx) {
+		Member member = this.memberService.getMember(idx);
+		this.memberService.delete(member);
+		 return "redirect:/";
+	}
 
 
     //로그인 
@@ -316,46 +308,6 @@ public class MemberController {
 
 
     }
-
-
-
-    //로그인 
-//    @GetMapping(value = "/login")
-//    public String login(){
-//        return "login";
-//    }
-//
-//    
-//    @GetMapping(value = "/login/error")
-//    public String loginError(Model model){
-//        model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
-//        return "login";
-//    }
-//    
-//    @PostMapping("/join")
-//    public String newMember(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
-//       
-//    	System.out.println("컨트롤러 호출됨 ");
-//    	System.out.println(memberFormDto.getName());
-//    	
-//    	if(bindingResult.hasErrors()){
-//            return "join";
-//        }
-//    	
-//       try {
-//    	 
-//    	  this.memberService.save(memberFormDto);
-//    	  
-//       }catch(Exception e) {
-//    	   model.addAttribute("save_errors","아이디 혹은 이메일 중복");
-//    	   return "join";
-//       }
-//
-//        return "redirect:/";
-//    }
-
-
- 
     
 
 }
