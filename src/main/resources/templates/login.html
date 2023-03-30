@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
  	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
+      
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -109,18 +110,18 @@
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 	<script>
-    $("#checkEmail").click(function () {
-        const userEmail = $("#userEmail").val();
+    $("#checkEmail").click(function () { //클릭이벤트 버튼, 이메일 중복검사 수행
+        const userEmail = $("#userEmail").val(); //id가 userEmail 인 HTML요소를 선택해 사용자가 입력한 주소를 가져옴
         const sendEmail = document.forms["sendEmail"];
         $.ajax({
-            type: 'post',
-            url: 'emailDuplication',
-            data: {
+            type: 'post', //HTTP 방식지정. Post 
+            url: 'emailDuplication', //Ajax요청이 보내질 서버의 Url 
+            data: { //서버로 보낼 데이터 memberEmail이라는 이름으로 사용자가 입력한 이메일 주소를 보냄 
                 'memberEmail': userEmail
             },
-            dataType: "text",
-            success: function (result) {
-                if(result == "no"){
+            dataType: "text", //서버로 보낼 데이터 타입 지정
+            success: function (result) { //ajax요청이 성공적으로 완료되면 실행되는 함수 
+                if(result == "no"){ //no라는 문자열이 반환되면 이미 이메일주소가 있다는 것을 의미함
                     // 중복되는 것이 있다면 no == 일치하는 이메일이 있다!
                     alert('임시비밀번호를 전송 했습니다.');
                     sendEmail.submit();
