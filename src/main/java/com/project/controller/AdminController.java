@@ -49,25 +49,24 @@ public class AdminController {
 		aa.add(ItemSellStatus.REFUSE);
 		aa.add(ItemSellStatus.SELL);
 		aa.add(ItemSellStatus.SOLD_OUT);
-		
+
 		System.out.println("컨트롤러 호출됨");
 
 		List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("id"));
+		sorts.add(Sort.Order.desc("id"));
 		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9, Sort.by(sorts));
-		
+
 		System.out.println("pageable 잘 호출됨 ");
-		
+
 		Page<AdminItemDto> itemCondition = this.adminService.getAdminItemPageNew(aa, pageable);
-		
+
 		System.out.println("itemcondition 잘 호출됨");
-		
+
 		model.addAttribute("items", itemCondition);
 		model.addAttribute("maxPage", 5);
-		
+
 		System.out.println("백엔드 로직 완료 ");
-		
-		
+
 		return "admin/adminMain";
 	}
 
@@ -77,7 +76,7 @@ public class AdminController {
 		aa.add(ItemSellStatus.WAIT);
 
 		List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("id"));
+		sorts.add(Sort.Order.desc("id"));
 		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9, Sort.by(sorts));
 
 		Page<AdminItemDto> itemCondition = this.adminService.getAdminItemPageNew(aa, pageable);
@@ -95,7 +94,7 @@ public class AdminController {
 		aa.add(ItemSellStatus.SOLD_OUT);
 
 		List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("id"));
+		sorts.add(Sort.Order.desc("id"));
 		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9, Sort.by(sorts));
 
 		Page<AdminItemDto> itemCondition = this.adminService.getAdminItemPageNew(aa, pageable);
@@ -111,7 +110,7 @@ public class AdminController {
 		aa.add(ItemSellStatus.CLOSE);
 
 		List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("id"));
+		sorts.add(Sort.Order.desc("id"));
 		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9, Sort.by(sorts));
 
 		Page<AdminItemDto> itemCondition = this.adminService.getAdminItemPageNew(aa, pageable);
@@ -127,9 +126,9 @@ public class AdminController {
 		aa.add(ItemSellStatus.REFUSE);
 
 		List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("id"));
+		sorts.add(Sort.Order.desc("id"));
 		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9, Sort.by(sorts));
-		
+
 		Page<AdminItemDto> itemCondition = this.adminService.getAdminItemPageNew(aa, pageable);
 
 		model.addAttribute("items", itemCondition);
@@ -207,7 +206,8 @@ public class AdminController {
 
 	// 2023.03.27 유저 권한 수정 완료
 	@PostMapping("/member/modify")
-	public String memberRoleModify(@RequestParam(value = "param1") Long param1, @RequestParam(value = "param2") Role param2) {
+	public String memberRoleModify(@RequestParam(value = "param1") Long param1,
+			@RequestParam(value = "param2") Role param2) {
 
 		System.out.println("param1 : " + param1 + ", param2 : " + param2);
 
@@ -215,7 +215,7 @@ public class AdminController {
 		return "redirect:/admin/userManage";
 	}
 
-	//셀렉트 타임리프로 구현
+	// 셀렉트 타임리프로 구현
 	@ModelAttribute("roleMemberCode")
 	public List<RoleMemberCode> roleMemberCode() {
 		List<RoleMemberCode> roleMemberCode = new ArrayList<>();
@@ -240,49 +240,88 @@ public class AdminController {
 		model.addAttribute("item", item);
 		return "admin/adminItemDetail";
 	}
-	
-	// 2023.03.29 유저 권한 수정 완료
-		@PostMapping("/item/role/modify")
-		public @ResponseBody String itemRoleModify(@RequestParam(value = "param1") Long param1, 
-					@RequestParam(value = "param2") int param2) {
-			
-			int pageNum = param1.intValue();
-			
-			ItemSellStatus itemRole;
 
-			System.out.println("param1 : " + param1 + ", param2 : " + param2);
-			
-			if(param2 == 1) {
-				System.out.println("승인까지 넘어옴");
-				itemRole = ItemSellStatus.CONFIRM;
-				this.adminService.modifyItemRole(param1, itemRole);
-				
-				return "/admin/item/detail/"+pageNum;
+	// 2023.03.29 프로젝트 권한 수정 완료
+	@PostMapping("/item/role/modify")
+	public @ResponseBody String itemRoleModify(@RequestParam(value = "param1") Long param1,
+			@RequestParam(value = "param2") int param2) {
 
-			}else if(param2 == 2) {
-				System.out.println("거절까지 넘어옴");
-				itemRole = ItemSellStatus.REFUSE;
-				this.adminService.modifyItemRole(param1, itemRole);
-				
-				return "/admin/item/detail/"+pageNum;
+		int pageNum = param1.intValue();
 
-			}else if(param2 == 3) {
-				System.out.println("대기까지 넘어옴");
-				itemRole = ItemSellStatus.WAIT;
-				this.adminService.modifyItemRole(param1, itemRole);
-				
-				return "/admin/item/detail/"+pageNum;
+		ItemSellStatus itemRole;
 
-			}else{
-				System.out.println("삭제까지 넘어옴");
-				this.adminService.deleteItem(param1);
-				
-				return "/admin/main";
+		System.out.println("param1 : " + param1 + ", param2 : " + param2);
 
-			}
+		if (param2 == 1) {
+			System.out.println("승인까지 넘어옴");
+			itemRole = ItemSellStatus.CONFIRM;
+			this.adminService.modifyItemRole(param1, itemRole);
 
-			
+			return "/admin/item/detail/" + pageNum;
+
+		} else if (param2 == 2) {
+			System.out.println("거절까지 넘어옴");
+			itemRole = ItemSellStatus.REFUSE;
+			this.adminService.modifyItemRole(param1, itemRole);
+
+			return "/admin/item/detail/" + pageNum;
+
+		} else if (param2 == 3) {
+			System.out.println("대기까지 넘어옴");
+			itemRole = ItemSellStatus.WAIT;
+			this.adminService.modifyItemRole(param1, itemRole);
+
+			return "/admin/item/detail/" + pageNum;
+
+		} else {
+			System.out.println("삭제까지 넘어옴");
+			this.adminService.deleteItem(param1);
+
+			return "/admin/main";
 
 		}
+	}
+
+	// 2023.03.31 판매자의 프로젝트 관리 페이지
+	@GetMapping(value = "/seller/main")
+	public String adminSellerMain(@RequestParam(value = "value", defaultValue = "1") int param1,
+			Model model, Optional<Integer> page) {
+
+		List<ItemSellStatus> aa = new ArrayList();
+		if(param1 == 1) {
+			//대기
+			aa.add(ItemSellStatus.WAIT);
+		}else if(param1 == 2) {
+			//승인
+			aa.add(ItemSellStatus.CONFIRM);
+		}else if(param1 == 3) {
+			//판매
+			aa.add(ItemSellStatus.SELL);
+		}else if(param1 == 4) {
+			//매진
+			aa.add(ItemSellStatus.SOLD_OUT);
+		}else if(param1 == 5) {
+			//마감
+			aa.add(ItemSellStatus.CLOSE);
+		}else {
+			//param1 값 : 6
+			//거절
+			aa.add(ItemSellStatus.REFUSE);
+		}
+		
+		List<Sort.Order> sorts = new ArrayList<>();
+		sorts.add(Sort.Order.desc("id"));
+		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9, Sort.by(sorts));
+
+		Page<AdminItemDto> itemCondition = this.adminService.getAdminItemPageNew(aa, pageable);
+
+		model.addAttribute("items", itemCondition);
+		model.addAttribute("maxPage", 5);
+		
+		System.out.println("param1 : " + param1);
+
+		return "admin/adminSellerFundingWait";
+	}
+
 
 }
