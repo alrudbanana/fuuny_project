@@ -4,7 +4,9 @@ import java.time.LocalDate;
 
 import com.project.constant.ItemSellStatus;
 import com.project.entity.BaseEntity;
+import com.project.exception.OutOfStockException;
 import com.project.item.dto.ItemFormDto;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -56,6 +58,8 @@ public class Item extends BaseEntity{
 	@Column(nullable = false)
 	private LocalDate endDate; //프로젝트 마감 날짜
 	
+	private int Donation; // 후원금
+	
  
 	
 	//상품 수정 메소드 
@@ -70,4 +74,16 @@ public class Item extends BaseEntity{
         this.startDate = itemFormDto.getStartDate();
         this.endDate = itemFormDto.getEndDate();
     }
+	  public void removeStock(int stockNumber){
+	        int restStock = this.stockNumber - stockNumber;
+	        if(restStock<0){
+	            throw new OutOfStockException("상품의 재고가 부족 합니다. (현재 재고 수량: " + this.stockNumber + ")");
+	        }
+	        this.stockNumber = restStock;
+	    }
+
+	    public void addStock(int stockNumber){
+	        this.stockNumber += stockNumber;
+	    }
+	
 }
