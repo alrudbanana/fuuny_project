@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.thymeleaf.util.StringUtils;
 
 import com.project.constant.ItemSellStatus;
+import com.project.dto.AdminItemDto;
+import com.project.dto.QAdminItemDto;
 import com.project.item.dto.ItemSearchDto;
 import com.project.item.dto.MainItemDto;
 import com.project.item.dto.QMainItemDto;
@@ -91,6 +93,8 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
 	    private BooleanExpression itemNmLike(String searchQuery) {
 	        return StringUtils.isEmpty(searchQuery) ? null : QItem.item.itemNm.like("%" + searchQuery + "%");
 	    }
+	    
+	    
 
 	    @Override
 	    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
@@ -128,6 +132,71 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
 	        return new PageImpl<>(content, pageable, total);
 
 	    }
+	    
+	  //2023.03.30 권한 리스트와 이미지를 한번에 갖고 오는 커스텀 레파지토리
+	    private BooleanExpression itemRoleLike(List<ItemSellStatus> cond) {
+	        if (cond == null || cond.isEmpty()) {
+	            return null;
+	        }
+	        BooleanExpression expression = null;
+	        for (ItemSellStatus status : cond) {
+	            if (expression == null) {
+	                expression = QItem.item.itemsellstatus.eq(status);
+	            } else {
+	                expression = expression.or(QItem.item.itemsellstatus.eq(status));
+	                
+	                System.out.println(status);
+	                System.out.println(expression);
+	                
+	            }
+	        }
+	        return expression;
+	    }
+	    
+	    //2023.03.30 권한 리스트와 이미지를 한번에 갖고 오는 커스텀 레파지토리
+	    @Override
+	    public Page<AdminItemDto> getAdminItemPageNew(List<ItemSellStatus> cond, Pageable pageable){
+	    	
+	    	System.out.println("Custon 레파지토리 잘 호출됨 ");
+	    	
+	    	QItem item = QItem.item;
+	        QItemImg itemImg = QItemImg.itemImg;
+	        
+	        List<AdminItemDto> content = queryFactory
+	        		.select(
+	        				new QAdminItemDto(
+	        						item.id,
+	    	                        item.itemNm,
+	    	                        item.itemDetail,
+	    	                        itemImg.imgUrl,
+	    	                        item.price,
+	    	                        item.itemCategory,
+	    	                        item.itemsellstatus,
+	    	                        item.regTime
+	        						)
+	        				)
+	        		.from(itemImg)
+	                .join(itemImg.item, item)
+	                .where(itemImg.repimgYn.eq("Y"),
+	                		itemRoleLike(cond))
+	                .orderBy(item.id.desc())
+	                .offset(pageable.getOffset())
+	                .limit(pageable.getPageSize())
+	                .fetch();
+	        
+	        
+	        
+	        
+	        Long total = queryFactory
+	                .select(item.count())
+	                .from(itemImg)
+	                .join(itemImg.item, item)
+	                .where(itemImg.repimgYn.eq("Y"),
+	                		itemRoleLike(cond))
+	                .fetchOne();
 
+	        return new PageImpl<>(content, pageable, total);        				
+	    	
+	    }
 
 }

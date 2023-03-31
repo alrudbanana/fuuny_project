@@ -17,7 +17,7 @@
 
     <!-- 나의 스타일 추가 -->
     <link rel="stylesheet" href="/css/login.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2')">
+    
 	<style>
 		#errormessagess{
 		position:absolute;
@@ -26,7 +26,7 @@
 
 	</style>
   
- <div layout:fragment="content">  
+ <div layout:fragment="content" id="wrap">  
  <!--임시 비번 모달-->
 <div id="findPw" class="modal fade">
     <div class="modal-dialog modal-dialog-centered modal-login">
@@ -42,7 +42,7 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <form role="form" class="text-start" action="/member/sendEmail" method="post" name="sendEmail">
+                                    <form role="form" class="text-start" action="/members/sendEmail" method="post" name="sendEmail">
                                         <p>입력한 이메일로 임시 비밀번호가 전송됩니다.</p>
                                         <div class="input-group input-group-outline my-3">
                                             <label class="form-label">Email</label>
@@ -71,25 +71,32 @@
       <div id="loginBox">
       
         <!-- 로그인 페이지 타이틀 -->
-        <div id="loginBoxTitle">Funny login</div>
+        <div id="loginBoxTitle"></div>
         <!-- 아이디, 비번, 버튼 박스 -->
         <form th:action="@{/members/login}" method="post">
+        <div th:if="${param.error}" id="errormessagess">
+            <p>
+                사용자ID 또는 비밀번호를 확인해 주세요.
+            </p>
+        </div>
+        
         <div id="inputBox">
-          <div class="input-form-box"><span>이메일 </span><input type="text" name="username" id="email" class="form-control"></div>
-          <div class="input-form-box"><span>비밀번호 </span><input type="password"name="password" id="password" class="form-control"></div>
-          <div class="button-login-box" >
-            <button type="submit" class="btn btn-primary btn-xs" style="width:115%">로그인</button>
+          <div class="input-form-box"><span>이메일 </span><input type="text" name="username" id="email" class="form-control-email"></div>
+          <div class="input-form-box"><span>비밀번호 </span><input type="password"name="password" id="password" class="form-control-password"></div>
+          <div class="button-login-box">
+            <button type="submit" class="btn btn-primary btn-xs" >로그인</button>
           </div>
-          <div sec:authorize="isAuthenticated()" style="background-color:pink; padding:1em;">
-			    <a href="/logout">로그아웃</a>
+          <div>
+			    <a href="/logout"  class="btn btn-primary btn-xs" >로그아웃</a>
 			</div>
           <div class="button-login-box" >
             <a href="https://kauth.kakao.com/oauth/authorize?client_id=6b36f27350db8f1bdd0436a0710b7bae&redirect_uri=http://localhost:9404/oauth/kakao&response_type=code" onclick="function1()"><img src="/img/kakao_login_medium_wide.png"></a>
+          	<div>
+			    <a class="btn btn-primary btn-xs" href="https://kauth.kakao.com/oauth/logout?client_id=6b36f27350db8f1bdd0436a0710b7bae&logout_redirect_uri=http://localhost:9404/">카카오 로그아웃</a>
+			</div>
           </div>
           
-          <div>
-			    <a href="https://kauth.kakao.com/oauth/logout?client_id=6b36f27350db8f1bdd0436a0710b7bae&logout_redirect_uri=http://localhost:9404/">로그아웃</a>
-			</div>
+          	
 			
 			<p class="mt-4 text-sm text-center">
                                     <button type="button" class="btn btn-link" data-bs-toggle="modal"
@@ -100,11 +107,7 @@
         </form>
       </div>
       
-      <div th:if="${param.error}" id="errormessagess">
-            <p>
-                사용자ID 또는 비밀번호를 확인해 주세요.
-            </p>
-        </div>
+
     </div>
 
     <!-- Bootstrap Bundle with Popper -->

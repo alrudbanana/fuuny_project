@@ -40,6 +40,9 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
     
+    //3.30 프로필 이미지
+    private String imgurl;
+    
     //주소
     @NotEmpty
     private String zipcode;

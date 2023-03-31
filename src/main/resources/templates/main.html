@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 
 
+
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/layout}"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <th:block layout:fragment="css">
+
 
 	<style>
 * {
@@ -110,14 +112,14 @@ footer {
 
 	<div class="rap">
 
-		<!--헤더시작-->
+
+        <!--헤더시작-->
 
 
-		<header>
-			<div data-include="header.html"></div>
-		</header>
+    <header><div data-include="header.html"></div></header>
 
-		<!--헤더 끝-->
+        <!--헤더 끝-->
+        
 
 
 		<!--메인시작-->
@@ -136,6 +138,7 @@ footer {
 						<div class="col-lg-3" th:each="mainItem : ${items.getContent()}">
 							<div class="main_img">
 								<img th:src="${mainItem.imgUrl}" th:alt="${mainItem.itemNm}">
+
 							</div>
 							<div class="main_cate" th:text="${mainItem.itemCategory}"></div>
 							<a th:href="@{|/item/${mainItem.id}|}">
@@ -145,14 +148,8 @@ footer {
 						</div>
 
 
-
-
-
 					</div>
 				</div>
-
-
-
 
 
 			</div>
