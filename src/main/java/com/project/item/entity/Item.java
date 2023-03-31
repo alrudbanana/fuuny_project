@@ -56,7 +56,7 @@ public class Item extends BaseEntity{
 	@Column(nullable = false)
 	private LocalDate endDate; //프로젝트 마감 날짜
 	
- 
+	
 	
 	//상품 수정 메소드 
 	public void updateItem(ItemFormDto itemFormDto){
@@ -70,4 +70,11 @@ public class Item extends BaseEntity{
         this.startDate = itemFormDto.getStartDate();
         this.endDate = itemFormDto.getEndDate();
     }
+	
+	//취소 시 재고 증가 
+	 public void addStock(int stockNumber){
+	        this.stockNumber += stockNumber;
+	    }
+	 
+
 }

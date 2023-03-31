@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter @Setter
 @Table(name="cart_item")
 public class CartItem extends BaseEntity {
-
+	//cart에 담긴 특정 아이템의 정보의 수량을 저장 
     @Id
     @GeneratedValue
     @Column(name = "cart_item_id")
@@ -32,7 +32,7 @@ public class CartItem extends BaseEntity {
     @JoinColumn(name = "item_id")
     private Item item;
 
-    private int count;
+    private int count; //카트에 담긴 상품 개수 
 
     public static CartItem createCartItem(Cart cart, Item item, int count) {
         CartItem cartItem = new CartItem();
