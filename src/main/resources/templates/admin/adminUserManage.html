@@ -11,8 +11,8 @@
 	
 </script>
 
-<meta name="_csrf" th:content="${_csrf.token}" />
-<meta name="_csrf_header" th:content="${_csrf.headerName}" />
+<meta name="_csrf" content="${_csrf.token}" />
+<meta name="_csrf_header" content="${_csrf.headerName}" />
 
 </head>
 
@@ -104,15 +104,15 @@
 
 			//var select = document.getElementById(idx).value();
 
-			var token = $("meta[name='_csrf']").attr("content");
-			var header = $("meta[name='_csrf_header']").attr("content");
+			//var token = $("meta[name='_csrf']").attr("content");
+			//var header = $("meta[name='_csrf_header']").attr("content");
 
 			$.ajax({
 				type : "post",
 				url : "http://localhost:9404/admin/member/modify",
-				beforeSend : function(xhr) {
-					xhr.setRequestHeader(header, token);
-				},
+				//beforeSend : function(xhr) {
+				//	xhr.setRequestHeader(header, token);
+				//},
 
 				data : params,
 
