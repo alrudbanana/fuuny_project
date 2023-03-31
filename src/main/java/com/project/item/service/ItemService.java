@@ -97,4 +97,13 @@ public class ItemService {
 	    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
 	        return itemRepository.getMainItemPage(itemSearchDto, pageable);
 	    }
+	 
+	 public List<Item> findAll() {
+		 return itemRepository.findAll();
+	 }
+	 
+	//id 값으로 상세페이지 아이템 불러오기
+		public List<Item> getList() {
+			return this.itemRepository.findAll();
+		}
 }

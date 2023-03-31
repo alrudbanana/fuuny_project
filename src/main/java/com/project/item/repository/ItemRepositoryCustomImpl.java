@@ -18,6 +18,7 @@ import com.project.item.entity.QItemImg;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import jakarta.persistence.EntityManager;
 
 public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
@@ -103,7 +104,9 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
 	                        item.itemNm,
 	                        item.itemDetail,
 	                        itemImg.imgUrl,
-	                        item.price)
+	                        item.price,
+	                        item.itemCategory
+	                    		)
 	                )
 	                .from(itemImg)
 	                .join(itemImg.item, item)

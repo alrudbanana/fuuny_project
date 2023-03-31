@@ -143,8 +143,8 @@
         <!--메인시작-->
         <section>
             <div class="main">
-            	<button th:text="${itemDto.itemCategory}" type=submit id="btn_category"></button>               
-                <h1 th:text="${itemDto.itemName}" >제목입니다.</h1>
+            	<button th:text="${item.itemCategory}" type=submit id="btn_category"></button>               
+                <h1 th:text="${item.itemNm}" >제목입니다.</h1>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
@@ -165,16 +165,16 @@
         <div class="main_line"></div>
         <table class="tb_price">
             <tr>
-            <td class="td_1" th:text="${itemDto.itemTargetPrice}">목표금액</td>
+            <td class="td_1" th:text="${item.Price2}">목표금액</td>
             <td class="td_2">원</td>
             </tr>
             <tr>
                 <td class="td_1">펀딩 기간</td>
-                <td class="td_2"><span th:text="${itemDto.itemStartDate}"></span> ~ <span th:text="${itemDto.itemEndDate}"></span></td>
+                <td class="td_2"><span th:text="${item.startDate}"></span> ~ <span th:text="${item.endDate}"></span></td>
             </tr>
             <tr>
                 <td class="td_1">결제</td>
-                <td class="td_2">목표금액 달성시 <span th:text="${itemDto.itemEndDate}"></span>에 결제 진행</td>
+                <td class="td_2">목표금액 달성시 <span th:text="${item.endDate}"></span>에 결제 진행</td>
             </tr>
         </table>
         <div class="btn_good">
@@ -192,7 +192,7 @@
   </div>
  
   <div class="main_line"></div>
-   <p th:text="${itemDto.itemDetail}">설명</p>
+   <p th:text="${item.itemDetail}">설명</p>
 
 </div>
 

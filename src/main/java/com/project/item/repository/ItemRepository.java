@@ -1,6 +1,7 @@
 package com.project.item.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +16,10 @@ import com.project.item.entity.Item;
 
 public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredicateExecutor<Item>, ItemRepositoryCustom {
 
-	List<Item> findByItemNm(String itemNm);
+	
+	Optional<Item> findById(Long id);
+	
+   List<Item> findByItemNm(String itemNm);
 
     List<Item> findByItemNmOrItemDetail(String itemNm, String itemDetail);
 
@@ -36,4 +40,3 @@ public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredi
    
     List<Item> findByItemsellstatusIn(List<ItemSellStatus> itemSellStatus);
 }
-
