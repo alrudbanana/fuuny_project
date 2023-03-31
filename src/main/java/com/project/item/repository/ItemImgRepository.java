@@ -13,5 +13,4 @@ public interface ItemImgRepository extends JpaRepository<ItemImg, Long> {
 	
 	//이민창 03/30 추가
 	ItemImg findByItemIdAndRepimgYn(Long itemId, String repimgYn);
-	
 }
