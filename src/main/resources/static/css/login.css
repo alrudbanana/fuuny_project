@@ -1,15 +1,13 @@
-* { padding: 0; margin: 0; }
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap');
-html, body {
+
+
+#wrap {
   height: 100%;
   background: #ffffff;
 }
 
 #container {
-  display: flex;
-  flex-direction: row;
   justify-content: center;
-  align-items: center;
+  text-align: center;
   height: 100%;
 }
 
@@ -29,7 +27,7 @@ html, body {
 	padding:10px;
  	margin: 20px 0;
 }
-#loginBoxTitle {
+#loginBox {
   color:#000000;
   font-weight: bold;
   font-size: 32px;
@@ -46,11 +44,4 @@ html, body {
 
 #inputBox button {
   padding: 3px 5px;
-}
-
-@font-face {
-  font-family: 'NanumSquareNeo-Variable';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
 }
