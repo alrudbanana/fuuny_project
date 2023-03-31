@@ -166,11 +166,15 @@ public class ItemController {
 		public String itemDtl(Model model, @PathVariable("id") Long id) {
 		
 			ItemFormDto itemFormDto = itemService.getItemDtl(id);
+			long remainingDays = itemFormDto.getRemainingDays();
 			
 		//	List<Item> itemList = this.itemService.getList();
 			model.addAttribute("item", itemFormDto);
+			model.addAttribute("remainingDays", remainingDays);
 			return "item/itemDtl";
 		}
+		
+		
 		
 	 
 

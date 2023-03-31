@@ -1,6 +1,7 @@
 package com.project.item.entity;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 import com.project.constant.ItemSellStatus;
 import com.project.entity.BaseEntity;
@@ -60,6 +61,8 @@ public class Item extends BaseEntity{
 	
 	private int Donation; // 후원금
 	
+	
+	
  
 	
 	//상품 수정 메소드 
@@ -85,5 +88,15 @@ public class Item extends BaseEntity{
 	    public void addStock(int stockNumber){
 	        this.stockNumber += stockNumber;
 	    }
+	    
+	    
+	    //펀딩 남은일자 메소드
+	    public long getRemainingDays() {
+	    	LocalDate today = LocalDate.now();
+	    	return ChronoUnit.DAYS.between(today, endDate);
+	    }
+	    
+	    
+	    
 	
 }
