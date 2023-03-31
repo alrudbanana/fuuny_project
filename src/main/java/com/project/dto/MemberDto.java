@@ -3,6 +3,7 @@ package com.project.dto;
 import org.hibernate.validator.constraints.Length;
 
 import com.project.Role;
+import com.project.entity.Member;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -36,5 +37,16 @@ public class MemberDto {
 	    private String streetAdr;
 	    
 	    private String detailAdr;
+	    
+	    //3.30 프로필 이미지
+	    private String imgurl;
+	    
+	    public Member saveMemberProfile(MemberDto memberProfile) {
+	    	
+	    	Member member = new Member();
+	    	member.setImgurl(memberProfile.getImgurl());
+	    	
+	    	return member;
+	    }
 	    
 	}
