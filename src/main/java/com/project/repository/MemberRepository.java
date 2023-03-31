@@ -21,6 +21,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 		Optional<Member> findByMemName(String memname);
 
 	
+		//3.30 멤버 프로필 관련(옵셔널x)
+		Member findByIdx(Long idx);
 
 
 }

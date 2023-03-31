@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.project.Email.dto.MailDto;
 import com.project.Email.service.EmailService;
@@ -333,6 +334,18 @@ public class MemberController {
 
 
     
+    
+    //3.30 프로필 업데이트
+    @PostMapping("/profile/img/{member}")
+    public String uploadImg(@PathVariable("member") String memberIdx, @RequestParam("file") MultipartFile file) {
+        Long id = Long.valueOf(memberIdx);
+        try {
+            memberService.saveProfileImage(id, file);
+            return "redirect:/members/detail";
+        } catch (Exception e) {
+        	return "redirect:/members/detail";
+        }
+    }
     
 
 }

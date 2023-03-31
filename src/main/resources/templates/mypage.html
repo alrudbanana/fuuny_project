@@ -4,6 +4,26 @@
       layout:decorate="~{layouts/layout1}">
 <head>
 
+<style type="text/css">
+	.btn-upload {
+  width: 180px;
+  height: 30px;
+  background: #fff;
+  border: 1px solid rgb(77,77,77);
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  }
+
+	
+	#file {
+	  display: none;
+	}
+</style>
+
 	
 </head>
 
@@ -35,6 +55,25 @@
 
 
 <table >
+
+	<tr>
+      <th scope="row"></th>
+      <td>
+	      <!-- 기본이미지 출력확인 후 주석처리
+	      <img th:src="@{/img/profile/default.png}" alt="profile">
+	         -->
+	       <img th:src="${member.imgurl}" height="150px" width="150px">
+	      <!-- 프로필 이미지 업로드 폼 -->
+			<form method="POST" th:action="@{'/members/profile/img/' + ${member.idx}}" enctype="multipart/form-data">
+				<input type="hidden" name="id" th:value="${member.idx}">
+				<label for="file">
+				  <div class="btn-upload">프로필 이미지 선택</div>
+				</label>
+			  <input type="file" name="file" accept="image/*" id="file">
+			  <button type="submit" class="btn-upload">Upload</button>
+			</form>
+      </td>
+    </tr>
 
 
     <tr>

@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.springframework.aot.hint.MemberCategory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -24,15 +25,17 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.project.DataNotFoundException;
-
+import com.project.FileUploadUtil;
 import com.project.Role;
 import com.project.dto.MemberDto;
 import com.project.dto.MemberFormDto;
 import com.project.dto.MemberUpdateDto;
 import com.project.dto.pwdDto;
 import com.project.entity.Member;
+import com.project.item.service.FileService;
 import com.project.repository.MemberRepository;
 
 import jakarta.transaction.Transactional;
@@ -43,11 +46,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional
 public class MemberService implements UserDetailsService {
+	
+	//프로필 경로 추가
+	@Value("${memberImgLocation}")
+	private String memberImgLocation;
+	
 	private final PasswordEncoder passwordEncoder;
 	private final MemberRepository memberRepository;
+	private final FileService fileService;
 	
 	//2023.03.25 유저생성시 권한, 생성날짜 추가생성
 	public void saveMember(MemberFormDto memberFromDto) {
+		
+		String uploadDir = "/img/profile/default.png"; //프로필 이미지 디폴트
+		
 		Member member = new Member();
 		member.setEmail(memberFromDto.getEmail());
 		member.setMemPass(this.passwordEncoder.encode(memberFromDto.getMemPass()));
@@ -59,6 +71,8 @@ public class MemberService implements UserDetailsService {
 
 		member.setRole(memberFromDto.getRole());
 		member.setRegTime(LocalDateTime.now());
+		
+		member.setImgurl(uploadDir); //프로필 이미지 저장
 
 		this.memberRepository.save(member);
 		
@@ -191,6 +205,25 @@ public class MemberService implements UserDetailsService {
 		    Member member = memberRepository.findById(memberId).orElseThrow();
 		    member.setMemPass(memberPassword);
 		    memberRepository.save(member);
-		}
-	}
+	 }
+	 
+	 
+	 //3.30 프로필 이미지 업로드
+	 public void saveProfileImage(Long memberIdx, MultipartFile file) throws Exception {
+	    	Member member = memberRepository.findByIdx(memberIdx);
+	        
+	    	String oriImgName = file.getOriginalFilename();
+	    	
+	    	String imgName = fileService.uploadFile(memberImgLocation, oriImgName, file.getBytes());
+	        String uploadDir = "/img/profile/" + imgName;
+	        
+	        member.setImgurl(uploadDir);
+	        memberRepository.save(member);
+
+	        FileUploadUtil.saveFile(uploadDir, oriImgName, file);
+	  }
+	 
+	
+	 
+}
 
