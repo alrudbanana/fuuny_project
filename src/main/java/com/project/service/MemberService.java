@@ -185,9 +185,8 @@ public class MemberService implements UserDetailsService {
 	 }
 	 
 	 private final MemberUpdateDto memberUpdateDto;
+
 	 //임시비밀번호로 비밀번호 수정 
-
-
 	 public void updatePassword(Long memberId, String memberPassword) {
 		    Member member = memberRepository.findById(memberId).orElseThrow();
 		    member.setMemPass(memberPassword);
