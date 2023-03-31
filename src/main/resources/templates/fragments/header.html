@@ -26,24 +26,29 @@
             <li>음악</li>
             <li>공연</li>          
 
-          </ul>
+         </ul>
         </li>
      </div>
   
       <li><a href="">공지사항</a></li>
-      <li><a href="">문의사항</a></li>  
+      <li><a href="/question/list">문의사항</a></li>  
     </ul>
     <ul class="navbar_login">
-      <li><a href="/members/login">로그인</a></li>
-      <li><a href="/members/new">회원가입</a></li>
+     <li sec:authorize="isAnonymous()" class="sub_btn"><a href="/members/login">로그인</a></li>
+      <li sec:authorize="isAuthenticated()" class="sub_btn"><a href = "/members/logout">로그아웃</a></li>
+      <li sec:authorize="isAuthenticated()" class="sub_btn"><a href="/members/detail">마이페이지</a></li>
+      
+      <li sec:authorize="isAnonymous()" class="sub_btn"><a href="/members/new">회원가입</a></li>
+      	<li sec:authorize="hasAnyAuthority('ADMIN')"><a href="/admin/main">관리자 페이지</a></li>
+      	<li><div class="profile"><img src=" "></div></li>
     </ul>
 
     <a href="#" class="navbar_toogleBtn">
-      <img src="img/hamburger.png">
+      <img src="./img/hamburger.png">
     </a>
-	</nav>
-
+   </nav>
 	<script src="/js/header.js"></script>
+
 </div>
 
 </html>
