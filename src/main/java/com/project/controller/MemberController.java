@@ -81,16 +81,70 @@ public class MemberController {
 
     private final EmailService emailService;
     
-
-
-
+    
+    //로그인 
     @GetMapping(value = "/login")
 	public String login() {
 		return "login";
 	}
-
-    //이메일 보내기 
     
+    //로그인 에러 
+    @GetMapping(value = "/login/error")
+    public String loginError(Model model){
+        model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
+        return "login";
+    }
+//    //카카오 로그인 
+//    @GetMapping("/kakaologin")
+//    public String KaKaoLogin(@RequestParam(value = "code", required = false) String code, Model model,
+//                             HttpSession session) throws Exception {
+//        String access_Token = ms.getKaKaoAccessToken(code);
+//        String userInfo = ms.getUserInfo(access_Token);
+//        System.out.println("###access_Token#### : " + access_Token);
+//        System.out.println("###userInfo#### : " + userInfo);
+//        System.out.println("#########" + code);
+//
+//        if(userInfo.equals("no")){
+//            model.addAttribute("msg","해당 이메일로 회원가입을 먼저 해주세요");
+//            model.addAttribute("member", new MemberSaveDTO());
+//            return "/member/save";
+//        } else {
+//            session.setAttribute(LOGIN_EMAIL, userInfo);
+//            Long loginId = ms.findByMemberId(userInfo);
+//            session.setAttribute("loginId", loginId);
+//            String redirectURL = (String) session.getAttribute("redirectURL");
+//
+//            if (redirectURL != null){
+//                return "redirect:" + redirectURL;
+//            }else{
+//                return "redirect:/board/";
+//            }
+//        }
+//    }
+    //회원가입 
+    @PostMapping("/join")
+    public String newMember(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
+       
+    	System.out.println("컨트롤러 호출됨 ");
+    	System.out.println(memberFormDto.getMemName());
+    	
+    	if(bindingResult.hasErrors()){
+            return "join";
+        }
+    	
+       try {
+    	 
+    	  this.memberService.saveMember(memberFormDto);
+    	  
+       }catch(Exception e) {
+    	   model.addAttribute("save_errors","아이디 혹은 이메일 중복");
+    	   return "join";
+       }
+
+        return "redirect:/";
+    }
+
+    //이메일 보내기
     @Transactional
     @PostMapping("/sendEmail") //members/sendEmail
     public String sendEmail(@RequestParam("memberEmail") String memberEmail){
@@ -98,16 +152,9 @@ public class MemberController {
         MailDto dto = emailService.createMailAndChangePassword(memberEmail);
         // 메일 보내기
         emailService.mailSend(dto);
-
-        return "members/login";
+        System.out.println("메일전송완료");
+        return "login";
     }
-    
-    /*
-    @GetMapping(value="/sendEmail")
-    public String newlogin() {
-		return "login";
-	}
-    */
     
     //이메일 중복 체크 
     @PostMapping("/emailDuplication") //members/emailDuplication
@@ -275,87 +322,17 @@ public class MemberController {
 	
 	
 	
-		//회원 탈퇴
-		@PreAuthorize("isAuthenticated()")
-		@GetMapping("/delete/{idx}")
-		public String questionDelete(Principal principal, @PathVariable("idx") Long idx) {
-			Member member = this.memberService.getMember(idx);
-		  this.memberService.delete(member);
-		  return "redirect:/";
-		  }
+	//회원 탈퇴
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/delete/{idx}")
+	public String questionDelete(Principal principal, @PathVariable("idx") Long idx) {
+		Member member = this.memberService.getMember(idx);
+		this.memberService.delete(member);
+		 return "redirect:/";
+	}
 
 
-    //로그인 
-		
-    @GetMapping(value = "/login/error")
-    public String loginError(Model model){
-        model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
-        return "login";
-    }
     
-    @PostMapping("/join")
-    public String newMember(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
-       
-    	System.out.println("컨트롤러 호출됨 ");
-    	System.out.println(memberFormDto.getMemName());
-    	
-    	if(bindingResult.hasErrors()){
-            return "join";
-        }
-    	
-       try {
-    	 
-    	  this.memberService.saveMember(memberFormDto);
-    	  
-       }catch(Exception e) {
-    	   model.addAttribute("save_errors","아이디 혹은 이메일 중복");
-    	   return "join";
-       }
-
-        return "redirect:/";
-
-
-    }
-
-
-
-    //로그인 
-//    @GetMapping(value = "/login")
-//    public String login(){
-//        return "login";
-//    }
-//
-//    
-//    @GetMapping(value = "/login/error")
-//    public String loginError(Model model){
-//        model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
-//        return "login";
-//    }
-//    
-//    @PostMapping("/join")
-//    public String newMember(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
-//       
-//    	System.out.println("컨트롤러 호출됨 ");
-//    	System.out.println(memberFormDto.getName());
-//    	
-//    	if(bindingResult.hasErrors()){
-//            return "join";
-//        }
-//    	
-//       try {
-//    	 
-//    	  this.memberService.save(memberFormDto);
-//    	  
-//       }catch(Exception e) {
-//    	   model.addAttribute("save_errors","아이디 혹은 이메일 중복");
-//    	   return "join";
-//       }
-//
-//        return "redirect:/";
-//    }
-
-
- 
     
 
 }

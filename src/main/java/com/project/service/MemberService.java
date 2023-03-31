@@ -30,6 +30,7 @@ import com.project.DataNotFoundException;
 import com.project.Role;
 import com.project.dto.MemberDto;
 import com.project.dto.MemberFormDto;
+import com.project.dto.MemberUpdateDto;
 import com.project.dto.pwdDto;
 import com.project.entity.Member;
 import com.project.repository.MemberRepository;
@@ -182,6 +183,14 @@ public class MemberService implements UserDetailsService {
 		 
 		 this.memberRepository.save(member);
 	 }
+	 
+	 private final MemberUpdateDto memberUpdateDto;
 
-    
-}
+	 //임시비밀번호로 비밀번호 수정 
+	 public void updatePassword(Long memberId, String memberPassword) {
+		    Member member = memberRepository.findById(memberId).orElseThrow();
+		    member.setMemPass(memberPassword);
+		    memberRepository.save(member);
+		}
+	}
+

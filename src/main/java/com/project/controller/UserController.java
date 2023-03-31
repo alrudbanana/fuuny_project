@@ -32,27 +32,25 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
-@RestController //(1) 카카오 로그인 Controller 
+@RestController
 public class UserController {
 	
     @Autowired
     UserRepository userRepository;
 
     @Autowired
-    private UserService userService; //(2)
-    
-    private User user; //안되면 kakaoprofile로 다시 
-    private KakaoProfile kakaoProfile; 
-    // 프론트에서 인가코드 받아오는 url
-   @GetMapping("/oauth/kakao") // (3)
-   public OauthToken getLogin(@RequestParam("code") String code) { //(4)
+    private UserService userService;
 
-       // 넘어온 인가 코드를 통해 access_token 발급 //(5)
-       OauthToken oauthToken = userService.getAccessToken(code);
-       ///(1)
-       //발급 받은 accessToken 으로 카카오 회원 정보 DB 저장
-       User user = userService.saveUser(oauthToken.getAccess_token());
-       return oauthToken;
-
-   }
+    @GetMapping("/oauth/kakao")
+    public String getLogin(@RequestParam("code") String code, HttpSession session, HttpServletResponse response) {
+        OauthToken oauthToken = userService.getAccessToken(code);
+        User user = userService.saveUser(oauthToken.getAccess_token());
+        session.setAttribute("user", user); // 로그인한 유저를 세션에 저장
+        try {
+            response.sendRedirect("/"); // home으로 redirect
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

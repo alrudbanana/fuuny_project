@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
- 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<script type="text/javascript" th:src="@{/js/header.js}"></script>
+
+
 
 <div th:fragment="header">
-
 
   <nav class="navbar">
     <div class="navbar_logo">
@@ -35,16 +34,16 @@
       <li><a href="">문의사항</a></li>  
     </ul>
     <ul class="navbar_login">
-      <li><a href="">로그인</a></li>
-      <li><a href="">회원가입</a></li>
+      <li><a href="/members/login">로그인</a></li>
+      <li><a href="/members/new">회원가입</a></li>
     </ul>
 
     <a href="#" class="navbar_toogleBtn">
       <img src="img/hamburger.png">
     </a>
-   </nav>
-	<script src="/js/header.js"></script>
+	</nav>
 
+	<script src="/js/header.js"></script>
 </div>
 
 </html>
