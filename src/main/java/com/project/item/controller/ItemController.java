@@ -1,5 +1,6 @@
 package com.project.item.controller;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,11 +16,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.project.entity.Member;
 import com.project.item.dto.ItemFormDto;
 import com.project.item.dto.ItemSearchDto;
 import com.project.item.dto.MainItemDto;
 import com.project.item.entity.Item;
 import com.project.item.service.ItemService;
+import com.project.service.MemberService;
+
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 public class ItemController {
 	
 private final ItemService itemService;
+private final MemberService memberService;
 	
 	//상품등록 폼 전달 
 	@GetMapping(value = "/saler/item/new")
@@ -76,10 +81,10 @@ private final ItemService itemService;
 
 	        return "item/ItemForm";
 	    }
-	 //상품 수정 메소드 
+	 //상품 수정 메소드 /23.04.01 프로필이미지 관련 principal추가
 	 @PostMapping(value = "/saler/item/{itemId}")
 	    public String itemUpdate(@Valid ItemFormDto itemFormDto, BindingResult bindingResult,
-	                             @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList, Model model){
+	                             @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList, Model model, Principal principal ){
 	        if(bindingResult.hasErrors()){
 	            return "item/ItemForm";
 	        }
@@ -95,6 +100,11 @@ private final ItemService itemService;
 	            model.addAttribute("errorMessage", "상품 수정 중 에러가 발생하였습니다.");
 	            return "item/itemForm";
 	        }
+	        
+	        if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
+	             Member member = memberService.getMember1(principal.getName());
+	             model.addAttribute("member", member);   
+	         }
 
 	        return "redirect:/saler/items";
 	    }
@@ -113,9 +123,9 @@ private final ItemService itemService;
 
 */
 	 
-	 //상품 관리 화면 이동 및 조회한 상품 데이터 화면에 전달 로직 
+	 //상품 관리 화면 이동 및 조회한 상품 데이터 화면에 전달 로직 /23.04.01 프로필이미지 관련 principal추가
 	 @GetMapping(value = {"/saler/items", "/saler/items/{page}"})
-	    public String itemManage(ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page, Model model){
+	    public String itemManage(ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page, Model model, Principal principal){
 
 	        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5); //한 페이지에 보여지는 상품의 수 (0, n) <- 0, 페이지 갯수가 없을수 있어서 / 갯수 조절시 n값 변경  
 	        Page<Item> items = itemService.getAdminItemPage(itemSearchDto, pageable);
@@ -123,6 +133,11 @@ private final ItemService itemService;
 	        model.addAttribute("items", items); //조회한 상품 데이터 및 페이징 정보 뷰에 전달 
 	        model.addAttribute("itemSearchDto", itemSearchDto); //페이지 전환시 기존 검색조건 유지한체 이동 가능 
 	        model.addAttribute("maxPage", 5); //페이지 번호의 최대 갯수 5 개의 이동할 페이지번호만 보여줌 0~4 
+	        
+	        if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
+	             Member member = memberService.getMember1(principal.getName());
+	             model.addAttribute("member", member);   
+	         }
 
 	        return "item/itemlist";
 	    }

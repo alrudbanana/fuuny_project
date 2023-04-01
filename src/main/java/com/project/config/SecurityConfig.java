@@ -46,6 +46,7 @@ public class SecurityConfig {
 	    	.and()
 			.formLogin()
 			.loginPage("/members/login")
+			.loginProcessingUrl("/members/login")
 			.defaultSuccessUrl("/")
 			
 			//로그아웃

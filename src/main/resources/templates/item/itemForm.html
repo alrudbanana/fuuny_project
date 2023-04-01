@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout1}">
+<html xmlns:th="http://www.thymeleaf.org">
+ <!-- 
+ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}"
+  -->    
 
 <!-- 캘린더관련 js/css 추가 -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -54,10 +56,14 @@ function bindDomEvent(){
 
 //펀딩기간 스크립트
 $(function () {
+	
+	
+	
      $('#startDate, #endDate').datepicker({
        dateFormat: 'yy-mm-dd',
-       minDate: 0,
+       minDate: new Date(),
        onSelect: function (selectedDate) {
+    	   
          var option = this.id == 'startDate' ? 'minDate' : 'maxDate';
          var instance = $(this).data('datepicker');
          var date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);

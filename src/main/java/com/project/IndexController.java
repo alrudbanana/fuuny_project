@@ -1,14 +1,18 @@
 package com.project;
 
+import java.nio.file.attribute.UserPrincipal;
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.project.entity.Member;
 import com.project.item.entity.Item;
 import com.project.item.repository.ItemRepository;
 import com.project.item.service.ItemService;
+import com.project.repository.MemberRepository;
 import com.project.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
@@ -30,13 +34,17 @@ public class IndexController {
    }
    */
    
-   //홈
+   	  //홈 /23.04.01 프로필이미지 관련 principal추가
       @RequestMapping(value = "/")
-      public String main(Model model) {
+      public String main(Principal principal, Model model) {
          List<Item> itemList = this.itemRepository.findAll();
          model.addAttribute("itemList", itemList);
          
-         
+         if (!(principal == null)) {
+             Member member = memberService.getMember1(principal.getName());
+             model.addAttribute("member", member);   
+         }
+       
          return "main";
       }
    
