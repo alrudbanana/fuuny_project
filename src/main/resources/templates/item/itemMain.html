@@ -9,6 +9,7 @@
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
+  
         .carousel-inner > .item {
             height: 350px;
         }
@@ -39,7 +40,20 @@
     		margin: 20px;
     	}    
     	
-	
+    	@font-face {
+			font-family: 'NanumSquareNeo-Variable';
+			src:
+				url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2')
+				format('woff2');
+			font-weight: normal;
+			font-style: normal;
+		}
+		
+		.card {
+		  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+		}
+
+
     </style>
     
 <!-- Slick Slider CSS -->
@@ -61,7 +75,7 @@
       dots: false, //슬라이드 아래 점 살리고 싶으면 true
       arrows: false,
       infinite: true,
-      slidesToShow: 3,
+      slidesToShow: 5,
       slidesToScroll: 1
       /* 적용이 안됨
       centerMode: true,
@@ -76,45 +90,41 @@
 
 <div layout:fragment="content">
 
-    
+<div class="site-wrap">   
     <div class="center">
-    	<h2>당신의 아이디어를 함께 실현합니다 <br> 지금 바로 Funny와 펀딩을 시작하세요!</h2>
-
-    </div>
-     <!-- 샐러일때만 보이게 / 페이지자체가 판매자메인페이지라서 안해도 될듯?
-	<div sec:authorize="hasAnyAuthority('ROLE_SEllER')"> </div> 
-	 --> 
-	 <div class="center">
-        <a class="btn btn-primary" href="/saler/item/new" >프로젝트 등록</a>
-        <a class="btn btn-primary" href="#">프로젝트 목록</a>
-     </div>            
-
-	<!-- 화면 하단 프로젝트 카드 리스트 -->
-	<div id="item-slider" class="row">
-	  <th:block th:each="item, status: ${items.getContent()}">
-	    <div class="col-md-4 margin">
-	      <div class="card">
-	        <a th:href="'/saler/item/' +${item.id}" class="text-dark">
-	          <img th:src="${item.imgUrl}" class="card-img-top" th:alt="${item.itemNm}" height="400">
-	          <div class="card-body">
-	            <h4 class="card-title">[[${item.itemNm}]]</h4>
-	            <p class="card-text">[[${item.itemDetail}]]</p>
-	            <h3 class="card-title text-danger">[[${item.price}]]원</h3>
-	          </div>
-	        </a>
-	      </div>
+ 
+ 			<div class="mt-5">
+	    	<h3 class="mt-5">당신의 아이디어를 함께 실현합니다 <br> 지금 바로 Funny와 펀딩을 시작하세요!</h3>
+			</div>
 	    </div>
-	  </th:block>
+	     <!-- 샐러일때만 보이게 / 페이지자체가 판매자메인페이지라서 안해도 될듯?
+		<div sec:authorize="hasAnyAuthority('ROLE_SEllER')"> </div> 
+		 --> 
+		 <div class="center mt-5 mb-5" >
+	        <a class="btn btn-primary" href="/saler/item/new" >프로젝트 등록</a>
+	        <a class="btn btn-primary" href="/saler/items">프로젝트 목록</a>
+	     </div>            
+	
+		<!-- 화면 하단 프로젝트 카드 리스트 -->
+		<div id="item-slider" class="row">
+		  <th:block th:each="item, status: ${items.getContent()}">
+		    <div class="col-md-4 margin">
+		      <div class="card" style="width: 300px; height: 450px; border-radius: 20px;">
+		        <a th:href="@{|/item/${item.id}|}" class="text-dark">
+		          <img th:src="${item.imgUrl}" class="card-img-top" th:alt="${item.itemNm}"  style="border-radius: 20px 20px 0 0; height: 300px;">
+		          <div class="card-body">
+		            <h4 class="card-title">[[${item.itemNm}]]</h4>
+		            <p class="card-text">[[${item.itemDetail}]]</p>
+		            <h3 class="card-title text-danger">[[${item.price}]]원</h3>
+		          </div>
+		        </a>
+		      </div>
+		    </div>
+		  </th:block>
+		</div>
+	
+	
 	</div>
 
-        <!-- 헤더에 서치 안넣는다면 넣어보기 (검색 로직 구현안함)
-    <form class="form-inline my-2 my-lg-0" th:action="@{/saler/main}" method="get">
-    	<input name="searchQuery" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" th:value="${itemSearchDto.searchQuery}">
-    	<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-	</form>
-		<div th:if="${not #strings.isEmpty(itemSearchDto.searchQuery)}" class="center">
-		    <p class="h3 font-weight-bold" th:text="${itemSearchDto.searchQuery} + '검색 결과'"></p>
-		</div>
-    	 -->
-
 </div>
+</html>

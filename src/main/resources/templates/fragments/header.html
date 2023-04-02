@@ -43,13 +43,19 @@
       
       <li sec:authorize="isAnonymous()" class="sub_btn"><a href="/members/new">회원가입</a></li>
 
-         <li sec:authorize="hasAnyAuthority('ADMIN')"><a href="/admin/main">관리자 페이지</a></li>
+	  <li sec:authorize="hasAnyAuthority('SELLER')" class="sub_btn"><a href="/saler/main">프로젝트 페이지</a></li>
+      <li sec:authorize="hasAnyAuthority('ADMIN')"><a href="/admin/main">관리자 페이지</a></li>
        
-      <!-- 로그아웃 상태시 디폴프 프로필 이미지 출력 -->
+      <!-- 로그아웃 상태시 디폴트 프로필 이미지 출력 -->
       <li sec:authorize="isAnonymous()"><div class="profile"><img th:src="@{/img/profile/default.png}"></div></li>
-      <!-- 로그인 상태시 멤버의  imgurl 출력 -->
-      <li sec:authorize="isAuthenticated()"><div class="profile"><img th:src="${member.imgurl}"></div></li>
-     
+      <!-- 로그인 상태시 멤버의  imgurl 출력 // 23.04.02 member에 자꾸 null이라고 떠서 일단 디폴이미지뜨게 수정-->
+      <li sec:authorize="isAuthenticated()">
+		  <div class="profile"> <!-- mamver이 널값이 아니면 member.imgurl, 아니면 디폴트이미지 -->
+		    <img th:src="${member != null ? member.imgurl : '/img/profile/default.png'}">
+		  </div>
+	  </li>
+      
+      
     </ul>
 
     <a href="#" class="navbar_toogleBtn">

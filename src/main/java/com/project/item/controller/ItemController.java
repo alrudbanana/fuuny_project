@@ -35,7 +35,7 @@ public class ItemController {
 
 private final ItemService itemService;
 private final MemberService memberService;
-prviate final ItemRepository itemRepository;
+private final ItemRepository itemRepository;
 	
 	//상품등록 폼 전달 
 	@GetMapping(value = "/saler/item/new")
