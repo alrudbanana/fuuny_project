@@ -29,7 +29,7 @@
             <li>음악</li>
             <li>공연</li>          
 
-          </ul>
+         </ul>
         </li>
      </div>
   
@@ -42,22 +42,22 @@
       <li sec:authorize="isAuthenticated()" class="sub_btn"><a href="/members/detail">마이페이지</a></li>
       
       <li sec:authorize="isAnonymous()" class="sub_btn"><a href="/members/new">회원가입</a></li>
+
          <li sec:authorize="hasAnyAuthority('ADMIN')"><a href="/admin/main">관리자 페이지</a></li>
        
       <!-- 로그아웃 상태시 디폴프 프로필 이미지 출력 -->
       <li sec:authorize="isAnonymous()"><div class="profile"><img th:src="@{/img/profile/default.png}"></div></li>
       <!-- 로그인 상태시 멤버의  imgurl 출력 -->
       <li sec:authorize="isAuthenticated()"><div class="profile"><img th:src="${member.imgurl}"></div></li>
-      
-         
+     
     </ul>
 
     <a href="#" class="navbar_toogleBtn">
       <img src="./img/hamburger.png">
     </a>
    </nav>
-   <script src="/js/header.js"></script>
 
+	<script src="/js/header.js"></script>
 </div>
 
 </html>

@@ -17,9 +17,12 @@ import com.project.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
 
+
+
 @Controller
 @RequiredArgsConstructor
 public class IndexController {
+
 
    private final ItemService itemService;
    private final ItemRepository itemRepository;
@@ -49,17 +52,57 @@ public class IndexController {
       }
    
 
+
    
 
-   //홈
-/*
-      @RequestMapping(value = "/")
-      public String index() {
-         
-         return "main";
-      }
-*/
+		/*
+		@RequestMapping(value = "/members/login")
+		public String login() {
+			return "login";
+		}
+		*/
+		//회원가입 
+//		@RequestMapping(value = "/join")
+//		public String join() {
+//			return "join";
+//		}
+		
+//		//공지사항
+//		@RequestMapping(value = "/notice")
+//		public String notice() {
+//			 
+//			return "notice";
+//		}
+//		
+//		//상품리스트
+//		@RequestMapping(value = "/list")
+//		public String list() {
+//			 
+//			return "list";
+//		}
+//		//상품상세
+//			@RequestMapping(value = "/product")
+//			public String product() {
+//				 
+//				return "product";
+//			}
+//			
+//			
+//		//카카오 로그인
+//			@RequestMapping(value = "/kakao")
+//			public String kakao() {
+//				return "kakao";
+//			}
+//			
+//			
+//		//네이버 로그인	
+//			@RequestMapping("/naver")
+//		    public String naver() {
+//		        return "naver";
+//		    }
+		
 
+	
       /*
       @RequestMapping(value = "/members/login")
       public String login() {
@@ -108,3 +151,4 @@ public class IndexController {
       
 
    }
+

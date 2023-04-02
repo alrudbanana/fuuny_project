@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
+
 import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -86,7 +89,7 @@ public class CartController {
 
         return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
     }
-/*
+
     @PostMapping(value = "/cart/orders")
     public @ResponseBody ResponseEntity orderCartItem(@RequestBody CartOrderDto cartOrderDto, Principal principal){
 
@@ -96,7 +99,7 @@ public class CartController {
         for ( int i = 0 ; i < cartOrderDtoList.size() ; i++) {
         	CartOrderDto cartOrderDto1 = cartOrderDtoList.get(i); 
         	
-        	System.out.println(">>>>>>>>>>>>>>>" +  cartOrderDto1.getCartItemId());
+        	System.out.println("CartItemId >>>>>>>>>>>>>>> " +  cartOrderDto1.getCartItemId());
         	
         }        
 
@@ -110,9 +113,8 @@ public class CartController {
             }
         }
 
-       Long orderId = cartService.orderCartItem(cartOrderDtoList, principal.getName());
-       return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+        Long orderId = cartService.orderCartItem(cartOrderDto, principal.getName());
+        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
     }
-    */
 
 }

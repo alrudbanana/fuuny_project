@@ -21,6 +21,7 @@ import com.project.item.dto.ItemFormDto;
 import com.project.item.dto.ItemSearchDto;
 import com.project.item.dto.MainItemDto;
 import com.project.item.entity.Item;
+import com.project.item.repository.ItemRepository;
 import com.project.item.service.ItemService;
 import com.project.service.MemberService;
 
@@ -31,9 +32,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Controller
 public class ItemController {
-	
+
 private final ItemService itemService;
 private final MemberService memberService;
+prviate final ItemRepository itemRepository;
 	
 	//상품등록 폼 전달 
 	@GetMapping(value = "/saler/item/new")
@@ -141,5 +143,56 @@ private final MemberService memberService;
 
 	        return "item/itemlist";
 	    }
+	 
+	 //메인페이지에 상품데이터 가져오기
+	 @GetMapping(value = "/")
+	 public String main(ItemSearchDto itemSearchDto, Optional<Integer> page, Model model) {
+		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0,6);
+		 Page<MainItemDto> items =
+				 itemService.getMainItemPage(itemSearchDto, pageable);
+		 List<Item> itemList = this.itemRepository.findAll();
+		 
+		 /* 출력 정보 확인 */ 
+		 List<MainItemDto> item = items.getContent(); 
+		 for (int i = 0 ; i < item.size() ; i++) {
+			 
+			 MainItemDto dto = item.get(i); 
+			 System.out.println(dto.getItemCategory());
+			 System.out.println(dto.getImgUrl());
+		 }
+		 
+		
+		 model.addAttribute("items", items);
+		 model.addAttribute("itemSearchDto", itemSearchDto);		
+		 model.addAttribute("maxPage" , 5);
+		 
+		 System.out.println("컨트롤러 잘 호출됨 :::: ");
+		 
+		 return "main";
+		 
+	 }
+	 
+		//상세페이지
+		@GetMapping(value = "/item/{id}")
+		
+		public String itemDtl(Model model, @PathVariable("id") Long id) {
+		
+			ItemFormDto itemFormDto = itemService.getItemDtl(id);
+			long remainingDays = itemFormDto.getRemainingDays();
+			
+		//	List<Item> itemList = this.itemService.getList();
+			model.addAttribute("item", itemFormDto);
+			model.addAttribute("remainingDays", remainingDays);
+			return "item/itemDtl";
+		}
+		
+		
+		
+	 
+
+	 
+	 
+
+		
 	    
 }
