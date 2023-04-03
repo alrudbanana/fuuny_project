@@ -31,8 +31,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
-	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
-
+	
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'              //타임리프 레이아웃 사용 라이브러리
 
 	implementation 'org.springframework.boot:spring-boot-starter-validation'

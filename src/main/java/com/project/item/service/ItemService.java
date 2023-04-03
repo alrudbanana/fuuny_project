@@ -106,4 +106,6 @@ public class ItemService {
 		public List<Item> getList() {
 			return this.itemRepository.findAll();
 		}
+		
+		
 }
