@@ -39,8 +39,12 @@
       <li><a href="">문의사항</a></li>  
     </ul>
     <ul class="navbar_login">
-      <li><a href="">로그인</a></li>
-      <li><a href="">회원가입</a></li>
+ <li sec:authorize="isAnonymous()"><a href="/members/login">로그인</a></li>
+      <li sec:authorize="isAuthenticated()"><a href = "/members/logout">로그아웃</a></li>
+      <li sec:authorize="isAuthenticated()" ><a href="/members/detail">마이페이지</a></li>
+      
+      <li><a href="/members/new">회원가입</a></li>
+      	<li sec:authorize="hasAnyAuthority('ADMIN')"><a href="/admin/main">관리자 페이지</a></li>
     </ul>
 
     <a href="#" class="navbar_toogleBtn">

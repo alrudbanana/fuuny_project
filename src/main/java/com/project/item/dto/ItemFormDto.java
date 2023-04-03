@@ -1,6 +1,7 @@
 package com.project.item.dto;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,12 +9,11 @@ import org.modelmapper.ModelMapper;
 
 import com.project.constant.ItemSellStatus;
 import com.project.item.entity.Item;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @NoArgsConstructor
@@ -42,7 +42,8 @@ public class ItemFormDto {
 	private LocalDate startDate; //프로젝트 시작 날짜
 	
     @NotNull(message = "프로젝트 마감일은 필수 선택 값입니다.")
-	private LocalDate endDate; //프로젝트 마감 날짜
+	private LocalDate endDate; //프로젝트 마감 날짜  
+  
 	
 
     private ItemSellStatus itemsellstatus;
@@ -60,5 +61,12 @@ public class ItemFormDto {
 
     public static ItemFormDto of(Item item){
         return modelMapper.map(item,ItemFormDto.class);
+    }
+    
+    
+    //펀딩 남은 일자 구하는 메소드
+    public long getRemainingDays() {
+    	LocalDate today = LocalDate.now();
+    	return ChronoUnit.DAYS.between(today, endDate);
     }
 }

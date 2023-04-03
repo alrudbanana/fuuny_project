@@ -32,6 +32,7 @@ public class EmailService {
 	private PasswordEncoder passwordEncoder;
 	
  // 메일 내용을 생성하고 임시 비밀번호로 회원 비밀번호를 변경
+
 	public MailDto createMailAndChangePassword(String memberEmail) {
 	    String tempPassword = getTempPassword();
 	    String encodedPassword = passwordEncoder.encode(tempPassword); // 임시 비밀번호를 암호화합니다.
@@ -43,6 +44,7 @@ public class EmailService {
 	    updatePassword(encodedPassword,memberEmail); // 암호화된 비밀번호를 DB에 저장합니다.
 	    return dto;
 	}
+
 
     //임시 비밀번호로 업데이트
     public void updatePassword(String str, String userEmail){

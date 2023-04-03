@@ -1,7 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout1}">
+<html xmlns:th="http://www.thymeleaf.org">
+	<!-- 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}"
+       -->
+ 
 
 <!-- 캘린더관련 js/css 추가 -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -17,6 +20,14 @@
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
+    
+    * {
+	margin: 0;
+	padding: 0;
+	font-family: 'NanumSquareNeo-Variable';
+}
+
+        
         .input-group {
             margin-bottom : 15px
         }
@@ -30,7 +41,18 @@
         #errormessagess{
       position:absolute;
       top:50px;
+      
       }
+    
+      @font-face {
+	font-family: 'NanumSquareNeo-Variable';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2')
+		format('woff2');
+	font-weight: normal;
+	font-style: normal;
+}
+   
       
       @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap');
       
@@ -54,10 +76,14 @@ function bindDomEvent(){
 
 //펀딩기간 스크립트
 $(function () {
+	
+	
+	
      $('#startDate, #endDate').datepicker({
        dateFormat: 'yy-mm-dd',
-       minDate: 0,
+       minDate: new Date(),
        onSelect: function (selectedDate) {
+    	   
          var option = this.id == 'startDate' ? 'minDate' : 'maxDate';
          var instance = $(this).data('datepicker');
          var date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
@@ -69,140 +95,153 @@ $(function () {
 </script>
 
 <div layout:fragment="content"> 
-   
-<!--  html 전체 영역을 지정하는 container -->
-<div id="container">
 
-   <form role="form" method="post" enctype="multipart/form-data" th:object="${itemFormDto}">
-      <p class="h2">
-         상품 등록
-      </p>
-      
-      <input type="hidden" th:field="*{id}">
-      
-      <div class="form-group">
+
+    
+<div class="container" style="width: 1700px;">
+<!--  html 전체 영역을 지정하는 container -->
+    <div class="row">
+        <div class="col-md-6 offset-md-3 mb-5 mb-md-3">
+        	<div class="mb-4"></div>
+            	<h2 class="h3 mb-3 offset-md-4 text-black">프로젝트 등록</h2>
+            <div class="p-3 p-lg-5 border">
+            
+            <form role="form" method="post" enctype="multipart/form-data" th:object="${itemFormDto}" class="form-group">
+
+            
+	            <input type="hidden" th:field="*{id}">
+	            
+	            <div class="form-group">
          <select th:field="*{ItemSellStatus}" class="custom-select">
             <option value="WAIT"> 등록을 하게 되면 승인을 기다려야 합니다 </option>
          </select>
       </div>
-      
-      <div class="input-group">
-         <div class="input-group-prepend">
-              <span class="input-group-text">프로젝트 제목</span>
-           </div>
-           <input type="text" th:field="*{itemNm}" class="form-control" placeholder="프로젝트 제목을 입력해주세요">
-      </div>
-      <p th:if="${#fields.hasErrors('itemNm')}" th:errors="*{itemNm}" class="fieldError">Incorrect data</p>
-   
-       <!-- 카테고리 -->
-       <div class="input-group">
-         <div class="input-group-prepend">
-              <span class="input-group-text">카테고리</span>
-           </div>
-           <select th:field="*{itemCategory}" class="custom-select">
-            <option value="" selected> 카테고리를 선택해주세요 </option> <!-- 기본 값 -->
-               <option value="디자인문구"> 디자인 문구 </option>
-               <option value="푸드"> 푸드 </option>
-               <option value="영화"> 영화 · 비디오 </option>
-               <option value="캐릭터굿즈"> 캐릭터 · 굿즈 </option>
-               <option value="향수뷰티"> 향수 · 뷰티 </option>
-               <option value="디자인"> 디자인 </option>
-               <option value="공연"> 공연 </option>
-               <option value="디지털게임"> 디지털 게임 </option>
-               <option value="홈리빙"> 홈 · 리빙 </option>
-               <option value="의류"> 의류 </option>
-               <option value="예술"> 예술 </option>
-               <option value="웹툰"> 웹툰 · 만화 </option>
-               <option value="테크가전"> 테크 · 가전 </option>
-               <option value="잡화"> 잡화 </option>
-               <option value="사진"> 사진 </option>
-               <option value="반려동물"> 반려동물 </option>
-               <option value="주얼리"> 주얼리 </option>
-               <option value="음악"> 음악 </option>
-         </select>
-      </div>
-      <p th:if="${#fields.hasErrors('itemCategory')}" th:errors="*{itemCategory}" class="fieldError">Incorrect data</p>
-       <div class="input-group">
-         <div class="input-group-prepend">
-              <span class="input-group-text">프로젝트 상세설명</span>
-           </div>
-           <input type="text" th:field="*{itemDetail}" class="form-control" placeholder="프로젝트 상세내용을 입력해주세요">
-      </div>
-      <p th:if="${#fields.hasErrors('itemDetail')}" th:errors="*{itemDetail}" class="fieldError">Incorrect data</p>
-   
-   
-       <div class="input-group">
-         <div class="input-group-prepend">
-              <span class="input-group-text">목표 금액</span>
-           </div>
-           <input type="text" th:field="*{price2}" class="form-control" placeholder="목표 금액을 입력해주세요">
-      </div>
-      <p th:if="${#fields.hasErrors('price2')}" th:errors="*{price2}" class="fieldError">Incorrect data</p>
-   
-   
-       <div class="input-group">
-         <div class="input-group-prepend">
-              <span class="input-group-text">상품 금액</span>
-           </div>
-           <input type="text" th:field="*{price}" class="form-control" placeholder="판매 금액을 입력해주세요">
-      </div>
-      <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="fieldError">Incorrect data</p>
-   
-   
-       <div class="input-group">
-         <div class="input-group-prepend">
-              <span class="input-group-text"> 상품 재고 </span>
-           </div>
-           <input type="text" th:field="*{stockNumber}" class="form-control" placeholder="상품 재고를 입력해주세요">
-      </div>
-      <p th:if="${#fields.hasErrors('stockNumber')}" th:errors="*{stockNumber}" class="fieldError">Incorrect data</p>
-       
-   
-      <!-- 프로젝트 일정 달력으로 -->
-       <div class="input-group">
-         <div class="input-group-prepend">
-              <span class="input-group-text">프로젝트 일정</span>
-           </div>
-           <input type="date" th:field="*{startDate}" placeholder="프로젝트 오픈 날짜" />
-           <input type="date" th:field="*{endDate}" placeholder="프로젝트 마감 날짜" />
-      </div> 
-
-      <p th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}" class="fieldError">Incorrect data</p>
-      <p th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}" class="fieldError">Incorrect data</p>
-
-      <p th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}" class="fieldError">Incorrect data</p>
-       <p th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}" class="fieldError">Incorrect data</p>
-
-   
-      <div th:if="${#lists.isEmpty(itemFormDto.itemImgDtoList)}">
-               <div class="form-group" th:each="num: ${#numbers.sequence(1,5)}">
-                   <div class="custom-file img-div">
-                       <input type="file" class="custom-file-input" name="itemImgFile">
-                       <label class="custom-file-label" th:text="상품이미지 + ${num}"></label>
-                   </div>
-               </div>
-           </div>
-   
-           <div th:if = "${not #lists.isEmpty(itemFormDto.itemImgDtoList)}">
-               <div class="form-group" th:each="itemImgDto, status: ${itemFormDto.itemImgDtoList}">
-                   <div class="custom-file img-div">
-                       <input type="file" class="custom-file-input" name="itemImgFile">
-                       <input type="hidden" name="itemImgIds" th:value="${itemImgDto.id}">
-                       <label class="custom-file-label" th:text="${not #strings.isEmpty(itemImgDto.oriImgName)} ? ${itemImgDto.oriImgName} : '상품이미지' + ${status.index+1}"></label>
-                   </div>
-               </div>
-           </div>
-   
-       
-   
-        <div th:if="${#strings.isEmpty(itemFormDto.id)}" style="text-align: center">
-           <button th:formaction="@{/saler/item/new}" type="submit" class="btn btn-primary">저장</button>
-       </div>
-    <!--   토큰 -->
-       <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
- 		 
-   </form>
+	
+	              <div class="form-group row mb-4">
+	                <div class="col-md-12">
+	                  <label class="text-black">프로젝트 제목 <span class="text-danger">*</label>
+	                  <input type="text" class="form-control" th:field="*{itemNm}" placeholder="프로젝트 제목을 입력해주세요">
+	                </div>
+	              </div>
+	            <p th:if="${#fields.hasErrors('itemNm')}" th:errors="*{itemNm}" class="fieldError">Incorrect data</p>
+	        
+	            <!-- 카테고리 -->
+	            <div class="form-group  mb-4">
+	                <label class="text-black">카테고리 <span class="text-danger">*</span></label>
+	                <br>
+	                <select th:field="*{itemCategory}" class="custom-select">
+	                  <option value="" selected> 카테고리를 선택해주세요 </option> <!-- 기본 값 -->
+	                    <option value="디자인문구"> 디자인 문구 </option>
+	                    <option value="푸드"> 푸드 </option>
+	                    <option value="영화"> 영화 · 비디오 </option>
+	                    <option value="캐릭터굿즈"> 캐릭터 · 굿즈 </option>
+	                    <option value="향수뷰티"> 향수 · 뷰티 </option>
+	                    <option value="디자인"> 디자인 </option>
+	                    <option value="공연"> 공연 </option>
+	                    <option value="디지털게임"> 디지털 게임 </option>
+	                    <option value="홈리빙"> 홈 · 리빙 </option>
+	                    <option value="의류"> 의류 </option>
+	                    <option value="예술"> 예술 </option>
+	                    <option value="웹툰"> 웹툰 · 만화 </option>
+	                    <option value="테크가전"> 테크 · 가전 </option>
+	                    <option value="잡화"> 잡화 </option>
+	                    <option value="사진"> 사진 </option>
+	                    <option value="반려동물"> 반려동물 </option>
+	                    <option value="주얼리"> 주얼리 </option>
+	                    <option value="음악"> 음악 </option>  
+	                </select>
+	              </div>
+	            <p th:if="${#fields.hasErrors('itemCategory')}" th:errors="*{itemCategory}" class="fieldError">Incorrect data</p>
+	
+	
+	            <div class="form-group row mb-4">
+	              <div class="col-md-12">
+	                <label class="text-black">프로젝트 상세설명 <span class="text-danger">*</label>
+	                    <textarea type="textarea" class="form-control" th:field="*{itemDetail}" placeholder="프로젝트 상세내용을 입력해주세요" style="height:100px; vertical-align: top;" />
+	              </div>
+	            </div>
+	            <p th:if="${#fields.hasErrors('itemDetail')}" th:errors="*{itemDetail}" class="fieldError">Incorrect data</p>
+	        
+	        
+	            <div class="form-group row mb-4">
+	                <div class="col-md-12">
+	                  <label class="text-black">목표 금액 <span class="text-danger">*</label>
+	                  <input type="text" class="form-control" th:field="*{price2}" placeholder="목표 금액을 입력해주세요">
+	                </div>
+	              </div>
+	            <p th:if="${#fields.hasErrors('price2')}" th:errors="*{price2}" class="fieldError">Incorrect data</p>
+	        
+	        
+	            <div class="form-group row mb-4">
+	                <div class="col-md-12">
+	                  <label class="text-black">상품 금액 <span class="text-danger">*</label>
+	                  <input type="text" class="form-control" th:field="*{price}" placeholder="판매 금액을 입력해주세요">
+	                </div>
+	              </div>
+	            <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="fieldError">Incorrect data</p>
+	        
+	        
+	            <div class="form-group row mb-4">
+	                <div class="col-md-12">
+	                  <label class="text-black">상품 재고 <span class="text-danger">*</label>
+	                  <input type="text" class="form-control" th:field="*{stockNumber}" placeholder="상품 재고를 입력해주세요">
+	                </div>
+	              </div>
+	            <p th:if="${#fields.hasErrors('stockNumber')}" th:errors="*{stockNumber}" class="fieldError">Incorrect data</p>
+	            
+	        
+	            <!-- 프로젝트 일정 달력으로 -->
+	            <div class="form-group row mb-4">
+	                <div class="col-md-12">
+	                  <label class="text-black">프로젝트 일정 <span class="text-danger">*</label>
+	                    <div class="input-group">
+					      <input type="date" th:field="*{startDate}" placeholder="프로젝트 오픈 날짜" class="form-control" style="width: 200px;" />
+					      <input type="date" th:field="*{endDate}" placeholder="프로젝트 마감 날짜" class="form-control" style="width: 200px;" />
+					    </div>
+	                </div>
+	              </div> 
+	            <p th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}" class="fieldError">Incorrect data</p>
+	            <p th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}" class="fieldError">Incorrect data</p>
+	
+				<div class="form-group row mb-4">
+	                <div class="col-md-12">
+	                  <label class="text-black">상품 이미지 <span class="text-danger">*</label>
+	                </div>
+	              </div>
+	        
+		            <div th:if="${#lists.isEmpty(itemFormDto.itemImgDtoList)}">
+		                    <div class="form-group" th:each="num: ${#numbers.sequence(1,5)}">
+		                        <div class="custom-file img-div">
+		                            <input type="file" class="custom-file-input" name="itemImgFile">
+		                            <label class="custom-file-label" th:text="상품이미지 + ${num}"></label>
+		                        </div>
+		                    </div>
+		            </div>
+	        
+	                <div th:if = "${not #lists.isEmpty(itemFormDto.itemImgDtoList)}">
+	                    <div class="form-group" th:each="itemImgDto, status: ${itemFormDto.itemImgDtoList}">
+	                        <div class="custom-file img-div">
+	                            <input type="file" class="custom-file-input" name="itemImgFile">
+	                            <input type="hidden" name="itemImgIds" th:value="${itemImgDto.id}">
+	                            <label class="custom-file-label" th:text="${not #strings.isEmpty(itemImgDto.oriImgName)} ? ${itemImgDto.oriImgName} : '상품이미지' + ${status.index+1}"></label>
+	                        </div>
+	                    </div>
+	                </div>
+	        
+	        		<br>
+	                <div th:if="${#strings.isEmpty(itemFormDto.id)}" style="text-align: center">
+	                	<button th:formaction="@{/saler/item/new}" type="submit" class="btn btn-primary btn-lg py-2 btn-block" style="width: 250px;">프로젝트 등록</button>
+	           		</div>
+	            <!--   토큰 -->
+	            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+	                
+            </form>
+            </div>
+        </div>
+    </div>
+    
 
 </div>
+
 
 </html>
