@@ -27,6 +27,7 @@ import com.project.dto.AdminItemDto;
 import com.project.dto.NoticeFormDto;
 import com.project.entity.Member;
 import com.project.entity.Notice;
+import com.project.item.dto.ItemFormDto;
 import com.project.item.entity.Item;
 import com.project.service.AdminService;
 
@@ -233,11 +234,15 @@ public class AdminController {
 		return "redirect:/admin/userManage";
 	}
 
-	// 2023.03.28 프로젝트 상세 보기
+	//2023.03.28 프로젝트 상세 보기
+	//2023.04.01 이미지 포함해서 출력하기
 	@GetMapping(value = "/item/detail/{id}")
 	public String detail(Model model, @PathVariable("id") Long id) {
-		Item item = this.adminService.getItemDetail(id);
-		model.addAttribute("item", item);
+		//이미지 빼고 불러오기
+//		Item item = this.adminService.getItemDetail(id);
+//		model.addAttribute("item", item);
+		ItemFormDto itemFormDto = adminService.getItemDetailNew(id);
+        model.addAttribute("item", itemFormDto);
 		return "admin/adminItemDetail";
 	}
 
@@ -273,13 +278,14 @@ public class AdminController {
 
 			return "/admin/item/detail/" + pageNum;
 
-		} else {
+		} else{
 			System.out.println("삭제까지 넘어옴");
 			this.adminService.deleteItem(param1);
 
 			return "/admin/main";
-
 		}
+
+
 	}
 
 	// 2023.03.31 판매자의 프로젝트 관리 페이지
@@ -322,6 +328,56 @@ public class AdminController {
 
 		return "admin/adminSellerFundingWait";
 	}
+	
+	
+	//2023.04.01 판매자 프로젝트 관리 상세 페이지 + 이미지 포함
+	@GetMapping(value = "/item/detail/seller/{id}")
+	public String detailSeller(Model model, @PathVariable("id") Long id) {
+		//이미지 빼고 불러오기
+//		Item item = this.adminService.getItemDetail(id);
+//		model.addAttribute("item", item);
+		
+		ItemFormDto itemFormDto = adminService.getItemDetailNew(id);
+        model.addAttribute("item", itemFormDto);
+		return "admin/adminSellerFundingDetail";
+	}
+	
+	//2023.04.01 판매자 프로젝트 권한 관리 수정 완료
+		@PostMapping("/item/seller/role/modify")
+		public @ResponseBody String itemSellerRoleModify(@RequestParam(value = "param1") Long param1,
+				@RequestParam(value = "param2") int param2) {
+
+			int pageNum = param1.intValue();
+
+			ItemSellStatus itemRole;
+
+			System.out.println("param1 : " + param1 + ", param2 : " + param2);
+
+			if (param2 == 1) {
+				System.out.println("승인까지 넘어옴");
+				itemRole = ItemSellStatus.CONFIRM;
+				this.adminService.modifyItemRole(param1, itemRole);
+
+				return "/admin/item/detail/seller/" + pageNum;
+
+			} else if (param2 == 4) {
+				System.out.println("삭제까지 넘어옴");
+				this.adminService.deleteItem(param1);
+
+				return "/admin/seller/main";
+			}else{
+				System.out.println("판매까지 넘어옴");
+				itemRole = ItemSellStatus.SELL;
+				this.adminService.modifyItemRole(param1, itemRole);
+
+				return "/admin/item/detail/seller/" + pageNum;
+
+			}
+		}
+	
+	
+	
+	
 
 
 }

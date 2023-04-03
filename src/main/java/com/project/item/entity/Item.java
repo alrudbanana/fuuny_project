@@ -73,7 +73,7 @@ public class Item extends BaseEntity{
         this.price2 = itemFormDto.getPrice2();
         this.stockNumber = itemFormDto.getStockNumber();
         this.itemDetail = itemFormDto.getItemDetail();
-        this.itemsellstatus = itemFormDto.getItemSellStatus();
+        this.itemsellstatus = itemFormDto.getItemsellstatus();
         this.startDate = itemFormDto.getStartDate();
         this.endDate = itemFormDto.getEndDate();
     }

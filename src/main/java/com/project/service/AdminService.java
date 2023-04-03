@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,12 +20,16 @@ import com.project.constant.ItemSellStatus;
 import com.project.dto.AdminItemDto;
 import com.project.entity.Member;
 import com.project.entity.Notice;
+import com.project.item.dto.ItemFormDto;
+import com.project.item.dto.ItemImgDto;
 import com.project.item.entity.Item;
+import com.project.item.entity.ItemImg;
+import com.project.item.repository.ItemImgRepository;
 import com.project.item.repository.ItemRepository;
 import com.project.repository.AdminRepository;
 import com.project.repository.MemberRepository;
 
-
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -33,6 +39,7 @@ public class AdminService {
 	private final AdminRepository adminRepository;
 	private final MemberRepository memberRepository;
 	private final ItemRepository itemRepository;
+	private final ItemImgRepository itemImgRepository;
 
 	// 공지 리스트 불러오기
 	public List<Notice> getList() {
@@ -46,6 +53,8 @@ public class AdminService {
 		Pageable pageable = PageRequest.of(page, 3, Sort.by(sorts));
 		return this.memberRepository.findAll(pageable);
 	}
+	
+
 
 	// 공지 하나 갖고 오기
 	public Notice getNotice(Integer id) {
@@ -126,9 +135,33 @@ public class AdminService {
 		if (item.isPresent()) {
 			return item.get();
 		} else {
-			throw new DataNotFoundException("question not found");
+			throw new DataNotFoundException("Item not found");
 		}
 	}
+	
+	//2023.04.01 아이템 상세 불러오기 + 이미지 포함
+	@Transactional
+    public ItemFormDto getItemDetailNew(Long itemId){
+    	
+
+        List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId);
+        
+        List<ItemImgDto> itemImgDtoList = new ArrayList<>();
+        
+        for (ItemImg itemImg : itemImgList) {
+        	
+            ItemImgDto itemImgDto = ItemImgDto.of(itemImg);
+            itemImgDtoList.add(itemImgDto);
+        }     
+         
+        Item item = itemRepository.findById(itemId)
+        		.orElseThrow(EntityNotFoundException::new);
+        
+        
+        ItemFormDto itemFormDto = ItemFormDto.of(item);
+        itemFormDto.setItemImgDtoList(itemImgDtoList);
+        return itemFormDto;
+    }
 
 	//2023.03.28 enum 타입 불러오기
 	@Transactional
@@ -141,7 +174,7 @@ public class AdminService {
         return itemRepository.getAdminItemPageNew(cond,pageable);
     }
 
-	// 2023.03.29 프로젝트 권한 수정 완료
+	//2023.03.29 프로젝트 권한 수정 완료
 	public void modifyItemRole(Long id, ItemSellStatus role) {
 
 		Item item = this.itemRepository.findById(id).get();
@@ -149,10 +182,17 @@ public class AdminService {
 		this.itemRepository.save(item);
 	}
 
-	// 2023.03.29 프로젝트 삭제
+	//2023.03.29 프로젝트 삭제
+	//2023.04.01 연관된 이미지까지 삭제
 	public void deleteItem(Long id) {
-		Item item = this.itemRepository.findById(id).get();
-		this.itemRepository.delete(item);
+		List<ItemImg> itemImgs = this.itemImgRepository.findByItemId(id);
+	    this.itemImgRepository.deleteAll(itemImgs);
+
+
+	    Item item = this.itemRepository.findById(id).orElse(null);
+	    if (item != null) {
+	        this.itemRepository.delete(item);
+	    }
 	}
 
 }
