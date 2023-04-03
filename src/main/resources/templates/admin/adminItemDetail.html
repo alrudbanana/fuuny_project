@@ -31,95 +31,96 @@
 		<div th:text="${item.price}"></div>
 		<div th:text="${item.price2}"></div>
 
+		<div th:each="itemImg : ${item.itemImgDtoList}" class="text-center">
+			<img th:if="${not #strings.isEmpty(itemImg.imgUrl)}"
+				th:src="${itemImg.imgUrl}" class="rounded mgb-15" width="800">
+		</div>
+
 
 		<a class="approve btn btn-success" href="javascript:void(0);"
-				th:if="${item.itemsellstatus.toString().equals('WAIT')}"
-				th:myId="${item.id}" th:num="1"
-				onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">승인으로 변경</a>
-			
-		<a class="refuse btn btn-warning" href="javascript:void(0);"
-				th:if="${item.itemsellstatus.toString().equals('WAIT')} 
+			th:if="${item.itemsellstatus.toString().equals('WAIT')}"
+			th:myId="${item.id}" th:num="1"
+			onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">승인으로
+			변경</a> <a class="refuse btn btn-warning" href="javascript:void(0);"
+			th:if="${item.itemsellstatus.toString().equals('WAIT')} 
 				or ${item.itemsellstatus.toString().equals('CONFIRM')}
 	 			or ${item.itemsellstatus.toString().equals('SELL')} 
 	 			or ${item.itemsellstatus.toString().equals('SOLD_OUT')}"
-				th:myId="${item.id}" th:num="2"
-				onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">거절로 변경</a> 
-			
-		<a class="wait btn btn-secondary" href="javascript:void(0);"
-				th:if="${item.itemsellstatus.toString().equals('REFUSE')} 
+			th:myId="${item.id}" th:num="2"
+			onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">거절로
+			변경</a> <a class="wait btn btn-secondary" href="javascript:void(0);"
+			th:if="${item.itemsellstatus.toString().equals('REFUSE')} 
 				or ${item.itemsellstatus.toString().equals('CONFIRM')}
 	 			or ${item.itemsellstatus.toString().equals('SELL')} 
 	 			or ${item.itemsellstatus.toString().equals('SOLD_OUT')}"
-				th:myId="${item.id}" th:num="3"
-				onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">대기중으로 변경</a> 
-			
-		<a class="delete btn btn-danger" href="javascript:void(0);" 
-				th:if="${item.itemsellstatus.toString().equals('REFUSE')}"
-				th:myId="${item.id}" th:num="4"
-				onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">삭제하기</a>
+			th:myId="${item.id}" th:num="3"
+			onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">대기중으로
+			변경</a> <a class="delete btn btn-danger" href="javascript:void(0);"
+			th:if="${item.itemsellstatus.toString().equals('REFUSE')}"
+			th:myId="${item.id}" th:num="4"
+			onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">삭제하기</a>
 
 
 	</div>
-	
+
 	<script type="text/javascript" th:inline="javascript">
 		//2023.03.29 아이템 권한 수정
-		function modifyRole(id,num) {
+		function modifyRole(id, num) {
 			const val1 = id;
 			const val2 = num;
 			let firstAlert = null;
 			let secondAlert = null;
-			
+
 			console.log(val1, val2);
-			
-			if(num == 1){
+
+			if (num == 1) {
 				firstAlert = "승인으로 변경하시겠습니까?";
 				secondAlert = "승인되었습니다";
-			}else if(num == 2){
+			} else if (num == 2) {
 				firstAlert = "거절로 변경하시겠습니까?";
 				secondAlert = "거절되었습니다";
-			}else if(num == 3){
+			} else if (num == 3) {
 				firstAlert = "대기로 변경하시겠습니까?";
 				secondAlert = "대기로 변경되었습니다";
-			}else if(num == 4){
-				ffirstAlert = "삭제하시겠습니까?";
+			} else if (num == 4) {
+				firstAlert = "삭제하시겠습니까?";
 				secondAlert = "삭제되었습니다";
 			}
-			
-			if(confirm(firstAlert)){
 
-			alert(secondAlert);
+			if (confirm(firstAlert)) {
 
-			const params = {
-				"param1" : val1,
-				"param2" : val2
-			}
+				alert(secondAlert);
 
-			//var select = document.getElementById(idx).value();
-
-			var token = $("meta[name='_csrf']").attr("content");
-			var header = $("meta[name='_csrf_header']").attr("content");
-
-			$.ajax({
-				type : "post",
-				url : "http://localhost:9404/admin/item/role/modify",
-				//beforeSend : function(xhr) {
-				//	xhr.setRequestHeader(header, token);
-				//},
-
-				data : params,
-
-				success : function(res) {
-					console.log("성공", res);
-					location.href = "http://localhost:9404"+res;
-				},
-
-				error : function() {
-					console.log("실패 ")
+				const params = {
+					"param1" : val1,
+					"param2" : val2
 				}
-			})
-		}}
-		
-		
+
+				//var select = document.getElementById(idx).value();
+
+				var token = $("meta[name='_csrf']").attr("content");
+				var header = $("meta[name='_csrf_header']").attr("content");
+
+				$.ajax({
+					type : "post",
+					url : "http://localhost:9404/admin/item/role/modify",
+					//beforeSend : function(xhr) {
+					//	xhr.setRequestHeader(header, token);
+					//},
+
+					data : params,
+
+					success : function(res) {
+						console.log("성공", res);
+						location.href = "http://localhost:9404" + res;
+					},
+
+					error : function() {
+						console.log("실패 ")
+					}
+				})
+			}
+		}
 	</script>
 
 </div>

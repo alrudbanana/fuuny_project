@@ -147,11 +147,11 @@ public class MemberService implements UserDetailsService {
 		}else if("SELLER".equals(member.getRole().toString())){
 			authorities.add(new SimpleGrantedAuthority(Role.SELLER.getValue()));
 			System.out.println("SELLER Role 호출됨");
-			System.out.println(Role.ADMIN.getValue());
+			System.out.println(Role.SELLER.getValue());
 		}else if("USER".equals(member.getRole().toString())){
 			authorities.add(new SimpleGrantedAuthority(Role.USER.getValue()));
 			System.out.println("USER Role 호출됨");
-			System.out.println(Role.ADMIN.getValue());
+			System.out.println(Role.USER.getValue());
 		}
 
 		return new User(member.getEmail(),member.getMemPass(), authorities);

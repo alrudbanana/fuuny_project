@@ -45,7 +45,7 @@ public class ItemFormDto {
 	private LocalDate endDate; //프로젝트 마감 날짜
 	
 
-    private ItemSellStatus itemSellStatus;
+    private ItemSellStatus itemsellstatus;
     //상퓸 저장 후 상품 이미지 정보를 수정하는 리스트 
     private List<ItemImgDto> itemImgDtoList = new ArrayList<>();
     //상품의 이미지 아이디를 저장하는 리스트, 상품이 들어가있지않아 값을 비워놈 

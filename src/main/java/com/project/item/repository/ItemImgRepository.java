@@ -10,5 +10,6 @@ import com.project.item.entity.ItemImg;
 public interface ItemImgRepository extends JpaRepository<ItemImg, Long> {
 	List<ItemImg> findByItemIdOrderByIdAsc(Long itemId);
 	
-	
+	//2023.04.01 프로젝트 삭제시 연관된 이미지까지 삭제
+	List<ItemImg> findByItemId(Long itemId);
 }
