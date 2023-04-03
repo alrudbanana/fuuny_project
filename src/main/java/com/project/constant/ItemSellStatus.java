@@ -16,4 +16,13 @@ public enum ItemSellStatus {
     public String getStatus() {
         return status;
     }
+    //23.04.03 추기 ItemsellStatus 가 null이어도 검색 가능하게 null 추가 
+    public static ItemSellStatus fromStatus(String status) {
+        for (ItemSellStatus itemSellStatus : ItemSellStatus.values()) {
+            if (itemSellStatus.getStatus().equals(status)) {
+                return itemSellStatus;
+            }
+        }
+        return null;
+    }
 }

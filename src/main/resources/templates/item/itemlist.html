@@ -7,30 +7,7 @@
 
 
 <!-- 사용자 스크립트 추가 -->
-<th:block layout:fragment="script">
-    <script th:inline="javascript">
 
-        $(document).ready(function(){
-            $("#searchBtn").on("click",function(e) {
-                e.preventDefault();
-                page(0);
-            });
-        });
-
-        function page(page){
-            var searchDateType = $("#searchDateType").val();
-            var searchSellStatus = $("#searchSellStatus").val();
-            var searchBy = $("#searchBy").val();
-            var searchQuery = $("#searchQuery").val();
-
-            location.href="/admin/items/" + page + "?searchDateType=" + searchDateType
-            + "&searchSellStatus=" + searchSellStatus
-            + "&searchBy=" + searchBy
-            + "&searchQuery=" + searchQuery;
-        }
-
-    </script>
-</th:block>
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -43,7 +20,34 @@
 <title>상품 관리 화면 페이지</title>
 
 <div layout:fragment="content"> <!-- 오류 수정 : form 태그가 있어야 검색 돌아감  -->
-  <form th:action="@{'/saler/items/' + ${items.number}}" role="form" method="get" th:object="${items}">
+
+    <script th:inline="javascript">
+    $(document).ready(function(){
+        $("#searchBtn").on("click",function(e) {
+        	consol.log("클릭")
+            e.preventDefault();
+            page(0);
+        });
+    });
+
+    function page(page) {
+        var searchDateType = $("#searchDateType").val();
+        var searchSellStatus = $("#searchSellStatus").val();  // 값이 없을 경우 'SELL'로 기본값 설정
+        var searchBy = $("#searchBy").val();
+        var searchQuery = $("#searchQuery").val();
+
+        location.href = "/saler/items/" + page + "?searchDateType=" + searchDateType
+            + "&searchSellStatus=" + searchSellStatus
+            + "&searchBy=" + searchBy
+            + "&searchQuery=" + searchQuery;
+    }
+
+    </script>
+
+
+
+ <center><h1 class="mt-5 mb-5">나의 프로젝트 리스트</h1></center>
+  <form th:action="@{'/saler/items/' + ${items.number}}" role="form" method="get" th:object="${item}">
         <table class="table table-hover">
             <thead>
             <tr class="table-active">
@@ -51,7 +55,7 @@
                 <td>상품명</td>
                 <td>등록일</td>
                 <td>수정일</td>
-                <td>상태<td>
+                <td>상태</td>
 				<td>카테고리</td>
                 <td>재고</td>
 
@@ -96,7 +100,7 @@
             </ul>
         </div>
 	<!-- 페이징처리 끝 -->	
-	
+	<!-- 검색 -->
         <div class="form-inline justify-content-center" th:object="${itemSearchDto}">
             <select th:field="*{searchDateType}" class="form-select" id="exampleSelect1" style="width:auto;">
                 <option value="all">전체기간</option>
@@ -106,10 +110,14 @@
                 <option value="6m">6개월</option>
             </select>
             <select th:field="*{searchSellStatus}" class="form-select" id="exampleSelect1" style="width:auto;">
-                <option value="">판매상태(전체)</option>
-                <option value="SELL">판매</option>
-                <option value="SOLD_OUT">품절</option>
-            </select>
+			   		<option value="">판매상태(전체)</option>
+				    <option value="SELL">판매중</option>
+				    <option value="SOLD_OUT">품절</option>
+				    <option value="WAIT">대기</option>
+				    <option value="CONFIRM">승인</option>
+				    <option value="REFUSE">반려</option>
+				    <option value="CLOSE">종료</option>
+			</select>	
             <select th:field="*{searchBy}" class="form-select" id="exampleSelect1" style="width:auto;">
                 <option value="itemNm">상품명</option>
                 <option value="itemCategory">카테고리</option>
@@ -119,5 +127,4 @@
         </div>
     </form>
 </div>
-
 </html>

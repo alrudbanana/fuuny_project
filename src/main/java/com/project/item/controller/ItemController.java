@@ -110,20 +110,7 @@ private final ItemRepository itemRepository;
 
 	        return "redirect:/saler/items";
 	    }
-	 /*
-	//메인아이템 불러오기
-     @GetMapping(value = "item/itemlist")
-     public String main(ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page, Model model) {
-         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 8);
-         Page<MainItemDto> items = itemService.getMainItemPage(itemSearchDto, pageable);
-         model.addAttribute("items", items);
-         model.addAttribute("itemSearchDto", itemSearchDto);
-         model.addAttribute("maxPage", 5);
 
-         return "item/mainitmelist";
-     }
-
-*/
 	 
 	 //상품 관리 화면 이동 및 조회한 상품 데이터 화면에 전달 로직 /23.04.01 프로필이미지 관련 principal추가
 	 @GetMapping(value = {"/saler/items", "/saler/items/{page}"})
