@@ -67,7 +67,7 @@
              
                 <td th:text="${item.regTime}"></td>
                 <td th:text="${item.updateTime}"></td>
-                <td th:text="${item.itemsellstatus == T(com.project.constant.ItemSellStatus).SELL} ? '판매중' : '품절'"></td>
+               	<td th:text="${item.itemsellstatus.isSell() ? '판매중' : '품절'}"></td>
                 <td th:text="${item.itemCategory}"></td>
                 <td th:text="${item.stockNumber}"></td>
             </tr>
