@@ -144,9 +144,9 @@ private final ItemRepository itemRepository;
 	        return "item/itemlist";
 	    }
 	 
-	 //메인페이지에 상품데이터 가져오기
+	 //메인페이지에 상품데이터 가져오기 //23.04.03 프로필 이미지 관련 변수 추가
 	 @GetMapping(value = "/")
-	 public String main(ItemSearchDto itemSearchDto, Optional<Integer> page, Model model) {
+	 public String main(ItemSearchDto itemSearchDto, Optional<Integer> page, Model model, Principal principal) {
 		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0,6);
 		 Page<MainItemDto> items =
 				 itemService.getMainItemPage(itemSearchDto, pageable);
@@ -165,6 +165,12 @@ private final ItemRepository itemRepository;
 		 model.addAttribute("items", items);
 		 model.addAttribute("itemSearchDto", itemSearchDto);		
 		 model.addAttribute("maxPage" , 5);
+		 
+		 if (!(principal == null)) {
+	          Member member = memberService.getMember1(principal.getName());
+	          model.addAttribute("member", member);   
+	      }
+	    
 		 
 		 System.out.println("컨트롤러 잘 호출됨 :::: ");
 		 
