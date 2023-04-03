@@ -23,7 +23,9 @@ import com.project.item.dto.MainItemDto;
 import com.project.item.entity.Item;
 import com.project.item.repository.ItemRepository;
 import com.project.item.service.ItemService;
+
 import com.project.service.MemberService;
+
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -36,6 +38,7 @@ public class ItemController {
 private final ItemService itemService;
 private final MemberService memberService;
 private final ItemRepository itemRepository;
+
 	
 	//상품등록 폼 전달 
 	@GetMapping(value = "/saler/item/new")
@@ -144,6 +147,7 @@ private final ItemRepository itemRepository;
 	        return "item/itemlist";
 	    }
 	 
+
 	 //메인페이지에 상품데이터 가져오기 //23.04.03 프로필 이미지 관련 변수 추가
 	 @GetMapping(value = "/")
 	 public String main(ItemSearchDto itemSearchDto, Optional<Integer> page, Model model, Principal principal) {
@@ -166,12 +170,12 @@ private final ItemRepository itemRepository;
 		 model.addAttribute("itemSearchDto", itemSearchDto);		
 		 model.addAttribute("maxPage" , 5);
 		 
+
 		 if (!(principal == null)) {
 	          Member member = memberService.getMember1(principal.getName());
 	          model.addAttribute("member", member);   
 	      }
 	    
-		 
 		 System.out.println("컨트롤러 잘 호출됨 :::: ");
 		 
 		 return "main";
@@ -192,11 +196,7 @@ private final ItemRepository itemRepository;
 			return "item/itemDtl";
 		}
 		
-		
-		
-	 
 
-	 
 	 
 
 		

@@ -16,6 +16,5 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 	List<Question> findBytitleLike(String title);
 	Page<Question> findAll(Pageable pageable);
 	Page<Question> findAll(Specification<Question> spec, Pageable pageable);
-	
-
+	Page<Question> findByMemberIdx(Long Idx , Pageable pageable);
 }
