@@ -17,5 +17,5 @@ public class CartOrderDto {
     private int Donation; //후원금 추가
 
     private List<CartOrderDto> cartOrderDtoList;
-
+    
 }

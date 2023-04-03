@@ -53,7 +53,7 @@ public class OrderService {
         Member member = memberRepository.findByEmail(email);
 
         List<OrderItem> orderItemList = new ArrayList<>();
-        OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount());
+        OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount(), orderDto.getDonation());
         orderItemList.add(orderItem);
         Order order = Order.createOrder(member, orderItemList);
         orderRepository.save(order);
@@ -105,36 +105,21 @@ public class OrderService {
                 .orElseThrow(EntityNotFoundException::new);
         order.cancelOrder();
     }
-
+    
     public Long orders(CartOrderDto cartOrderDto, List<OrderDto> orderDtoList, String email){
-    	
-    	System.out.println("오더 서비스에서 작동됨");
         Member member = memberRepository.findByEmail(email);
-        
-        //orderItemList 선언 : Order : order_item 
+
         List<OrderItem> orderItemList = new ArrayList<>();
-        System.out.println("orderItemList 호출됨");
-        
         for (OrderDto orderDto : orderDtoList) {
-        	
-        	System.out.println("For 문 돌아감 :  "+orderDto.getItemId());
-        	
-        	
             Item item = itemRepository.findById(orderDto.getItemId())
                     .orElseThrow(EntityNotFoundException::new);
-
-            item.setDonation(cartOrderDto.getDonation());// 후원금 추가 2023-03-29, kk
-
-            OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount());
-            System.out.println("orderItem 값 넣기 확인 : " + orderItem.getDonation());
+            OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount(), cartOrderDto.getDonation());
             orderItemList.add(orderItem);
         }
 
         Order order = Order.createOrder(member, orderItemList);
-        System.out.println("오더까지 잘 들어감");
         orderRepository.save(order);
 
         return order.getId();
     }
-
 }

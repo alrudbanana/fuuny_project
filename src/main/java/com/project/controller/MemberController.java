@@ -95,33 +95,7 @@ public class MemberController {
         model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
         return "login";
     }
-//    //카카오 로그인 
-//    @GetMapping("/kakaologin")
-//    public String KaKaoLogin(@RequestParam(value = "code", required = false) String code, Model model,
-//                             HttpSession session) throws Exception {
-//        String access_Token = ms.getKaKaoAccessToken(code);
-//        String userInfo = ms.getUserInfo(access_Token);
-//        System.out.println("###access_Token#### : " + access_Token);
-//        System.out.println("###userInfo#### : " + userInfo);
-//        System.out.println("#########" + code);
-//
-//        if(userInfo.equals("no")){
-//            model.addAttribute("msg","해당 이메일로 회원가입을 먼저 해주세요");
-//            model.addAttribute("member", new MemberSaveDTO());
-//            return "/member/save";
-//        } else {
-//            session.setAttribute(LOGIN_EMAIL, userInfo);
-//            Long loginId = ms.findByMemberId(userInfo);
-//            session.setAttribute("loginId", loginId);
-//            String redirectURL = (String) session.getAttribute("redirectURL");
-//
-//            if (redirectURL != null){
-//                return "redirect:" + redirectURL;
-//            }else{
-//                return "redirect:/board/";
-//            }
-//        }
-//    }
+
     //회원가입 
     @PostMapping("/join")
     public String newMember(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){

@@ -59,12 +59,6 @@ public class Item extends BaseEntity{
 	@Column(nullable = false)
 	private LocalDate endDate; //프로젝트 마감 날짜
 	
-	private int Donation; // 후원금
-	
-	
-	
- 
-	
 	//상품 수정 메소드 
 	public void updateItem(ItemFormDto itemFormDto){
         this.itemNm = itemFormDto.getItemNm();
@@ -77,6 +71,12 @@ public class Item extends BaseEntity{
         this.startDate = itemFormDto.getStartDate();
         this.endDate = itemFormDto.getEndDate();
     }
+	
+	//취소 시 재고 증가 
+	 public void addStock(int stockNumber){
+	        this.stockNumber += stockNumber;
+	    }
+	
 	  public void removeStock(int stockNumber){
 	        int restStock = this.stockNumber - stockNumber;
 	        if(restStock<0){
@@ -85,11 +85,6 @@ public class Item extends BaseEntity{
 	        this.stockNumber = restStock;
 	    }
 
-	    public void addStock(int stockNumber){
-	        this.stockNumber += stockNumber;
-	    }
-	    
-	    
 	    //펀딩 남은일자 메소드
 	    public long getRemainingDays() {
 	    	LocalDate today = LocalDate.now();
@@ -97,6 +92,4 @@ public class Item extends BaseEntity{
 	    }
 	    
 	    
-	    
-	
 }

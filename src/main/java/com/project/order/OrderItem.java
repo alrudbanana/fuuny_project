@@ -1,10 +1,7 @@
 package com.project.order;
 
-
-
 import com.project.entity.BaseEntity;
 import com.project.item.entity.Item;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,22 +34,33 @@ public class OrderItem extends BaseEntity {
 
     private int donation; //후원금
     
-    public static OrderItem createOrderItem(Item item, int count){
+    
+    //주문 상품 객체 생성 
+    public static OrderItem createOrderItem(Item item, int count, int donation){
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item);
         orderItem.setCount(count);
         orderItem.setOrderPrice(item.getPrice());
-        orderItem.setDonation(item.getDonation());
-        item.removeStock(count);
+        orderItem.setDonation(donation);
+        item.setStockNumber(item.getStockNumber() - count); //재고 감소 
         return orderItem;
     }
-
-    public int getTotalPrice(){
-        return orderPrice*count;
-    }
-
+    
+    //취소 시 stock (+)
     public void cancel() {
-        this.getItem().addStock(count);
+        this.getItem().addStock(this.count);
     }
-
+    
+    public int getTotalPrice(){
+        return (orderPrice * count) + donation;
+    }
+    
+    //후원금 취소 
+    public void cancelDonation(int donation) {
+        int updatedDonation = this.donation - donation;
+        if(updatedDonation < 0) { // 후원금이 음수가 되지 않도록 체크
+            updatedDonation = 0;
+        }
+        this.donation = updatedDonation;
+    }
 }

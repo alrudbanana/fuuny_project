@@ -102,6 +102,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
            QItem item = QItem.item;
            QItemImg itemImg = QItemImg.itemImg;
 
+
            List<MainItemDto> content = queryFactory
                   .select(Projections.constructor( //2023.03.31 미경 수정 
                       MainItemDto.class,
@@ -118,6 +119,8 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
                   .offset(pageable.getOffset())
                   .limit(pageable.getPageSize())
                   .fetch();
+
+	        
 
            Long total = queryFactory
                    .select(item.count())
