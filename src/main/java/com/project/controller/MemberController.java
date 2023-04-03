@@ -10,6 +10,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -51,14 +52,13 @@ import com.project.dto.MemberDto;
 import com.project.dto.MemberFormDto;
 import com.project.dto.pwdDto;
 import com.project.entity.Member;
-
+import com.project.entity.Question;
 import com.project.repository.MemberRepository;
-
+import com.project.repository.QuestionRepository;
 import com.project.model.KakaoProfile;
 
 import com.project.service.MemberService;
-
-
+import com.project.service.QuestionService;
 
 import jakarta.transaction.Transactional;
 
@@ -82,6 +82,9 @@ public class MemberController {
 
     private final EmailService emailService;
     
+    private final QuestionService questionService;
+    
+    private final QuestionRepository questionRepository;
     
     //로그인 
     @GetMapping(value = "/login")
@@ -196,7 +199,7 @@ public class MemberController {
    
     }
 
-    //메인페이지에서 마이페이지 조회
+    //마이페이지 조회
     @GetMapping("/detail")
 	public String detail(Model model, Principal principal) {
 
@@ -208,26 +211,16 @@ public class MemberController {
 		return "mypage"; 
 	}
 	
-    
-    //회원 정보 수정 후 마이페이지 조회
-	@GetMapping(value = "/detail/{idx}")
-	public String detail(Model model, @PathVariable("idx") Long idx) {
-
-		Member b = this.memberService.getMember(idx);
-
-		model.addAttribute("member", b);
-
-		return "mypage"; 
-
-	}
 	
 	
 	//회원정보 수정
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping(value = "/modify/{idx}")
-	public String memberModify(MemberDto memberDto, @PathVariable("idx") Long idx, Principal principal) {
+	@GetMapping(value = "/modify")
+	public String memberModify(MemberDto memberDto, Principal principal) {
 
-		Member member = this.memberService.getMember(idx);
+		 String name = principal.getName();
+		 Optional<Member> modify = memberRepository.findByEmail(name);
+		 Member member = modify.get();
 		
 		memberDto.setEmail(member.getEmail());
 		memberDto.setMemName(member.getMemName());
@@ -241,20 +234,17 @@ public class MemberController {
 
 
 	@PreAuthorize("isAuthenticated()")
-	@PostMapping(value = "/modify/{idx}")
+	@PostMapping(value = "/modify")
 	public String memberModify( @Valid MemberDto memberDto, BindingResult bindingResult, 
-			Principal principal, Member member,  String email , @PathVariable("idx") Long idx , 
-			Model model) {
-
+			Principal principal,  String email , Model model) {
 		
-		 Optional<Member> modifymember = memberRepository.findByEmail(email);
-		 String pass = modifymember.get().getMemPass();
-		 System.out.println("Pass ========>" + pass);
+		 Optional<Member> modify = memberRepository.findByEmail(email);
+		 Member member = modify.get();
+		 String pass = modify.get().getMemPass();
 		 
 		 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		 if(!encoder.matches(memberDto.getMemPass(), pass)){
 					 
-			 System.out.println("비밀번호 불일치 로그 ================");
 			 model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다. ");
 		
 			 return "mypagemodify";
@@ -267,10 +257,9 @@ public class MemberController {
 		}
 		
 		
-		this.memberService.modify(member, memberDto, memberDto.getEmail(), memberDto.getMemName(), memberDto.getMemPhone(), memberDto.getZipcode(), memberDto.getStreetAdr(), memberDto.getDetailAdr());
-		return String.format("redirect:/members/detail/%s", idx);
+		this.memberService.modify(member, memberDto);
+		return String.format("redirect:/members/detail");
 	}
-	
 	
 	//비밀번호 변경하기
 	@PreAuthorize("isAuthenticated()")
@@ -309,8 +298,7 @@ public class MemberController {
 			 }
 			 
 		    	if(!pwdDto.getNewPwd().equals(pwdDto.getNewPwd2())) {
-		    		 bindingResult.rejectValue("memPass2", "passwordInCorrect", 
-		                     "2개의 패스워드가 일치하지 않습니다.");
+		    		model.addAttribute("errorMessage", "2개의 패스워드가 일치하지 않습니다.");
 		             return "pwdmodify";
 		    	}
 			if(bindingResult.hasErrors()) {
@@ -320,9 +308,7 @@ public class MemberController {
 			this.memberService.modifyPw(pwdDto , member);
 			return String.format("redirect:/members/detail");
 	}
-	
-	
-	
+		
 	//회원 탈퇴
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/delete/{idx}")
@@ -346,6 +332,20 @@ public class MemberController {
         	return "redirect:/members/detail";
         }
     }
+    
+
+	//마이페이지에서 문의내역조회
+    @GetMapping("/question/list/{idx}")
+    
+    public String list (Model model , Member member ,  @PathVariable("idx") Long idx , @RequestParam(value="page", defaultValue="0") int page) {
+		
+		Page<Question> paging = questionService.myquestionlist( page , idx);
+		
+		model.addAttribute("paging", paging);
+		
+		return "mypagequestionlist";
+    
+}
     
 
 }

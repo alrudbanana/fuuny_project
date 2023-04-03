@@ -31,14 +31,14 @@ public class IndexController {
    */
    
    //홈
-      @RequestMapping(value = "/")
-      public String main(Model model) {
-         List<Item> itemList = this.itemRepository.findAll();
-         model.addAttribute("itemList", itemList);
-         
-         
-         return "main";
-      }
+//      @RequestMapping(value = "/")
+//      public String main(Model model) {
+//         List<Item> itemList = this.itemRepository.findAll();
+//         model.addAttribute("itemList", itemList);
+//         
+//         
+//         return "main";
+//      }
    
 
    

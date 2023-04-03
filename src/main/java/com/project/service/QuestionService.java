@@ -102,4 +102,12 @@ public class QuestionService {
 			}
 		};
 	}
+	
+	//마이페이지에서 문의내역 확인
+	public Page<Question> myquestionlist(int page , Long Idx){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("regTime"));
+		Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+	return this.questionRepository.findByMemberIdx(Idx , pageable);
+	}
 }
