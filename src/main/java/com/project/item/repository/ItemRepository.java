@@ -42,4 +42,7 @@ public interface ItemRepository extends JpaRepository<Item, Long>,
     List<Item> findByItemsellstatusIn(List<ItemSellStatus> itemSellStatus);
 
 	Page<Item> findByItemsellstatusIn(List<ItemSellStatus> cond, Pageable pageable);
+	
+	//카테고리
+	List<Item> findByItemCategory(String itemCategory);
 }

@@ -7,11 +7,25 @@
 	layout:decorate="~{layouts/layout}"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
- 
-  
+<th:block layout:fragment="script">
+	<script src="./js/header.js"></script>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+
+	<script>
+		$(document).ready(function() {
+			$('.slider').bxSlider();
+		});
+	</script>
+</th:block>
+
+
 
 <th:block layout:fragment="css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+	<link rel="stylesheet"
+		href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
 
 	<style>
 * {
@@ -21,9 +35,10 @@
 }
 
 .main {
-	height: 1000px;
+	height: 100%;
 	/* border: 1px solid red; */
 	text-align: center;
+
 }
 
 h1 {
@@ -49,8 +64,8 @@ h3 {
 }
 
 .row {
-	/* border: 1px solid blue; */
-	height: 900px;
+	/* border: 1px solid blue; */ 
+	height: 100%;
 }
 
 .col-lg-3 {
@@ -63,20 +78,18 @@ h3 {
 	padding: 10px;
 }
 
-
 .main_img {
 	margin: 0px auto;
-  overflow: hidden;
+	overflow: hidden;
 }
 
-
 .main_img img {
-	width:230px;
-	height : 150px;
+	width: 230px;
+	height: 150px;
 	transition: all 0.2s linear;
 }
 
-.main_img:hover img{
+.main_img:hover img {
 	transform: scale(1.4);
 }
 
@@ -90,7 +103,7 @@ h3 {
 .main_name {
 	font-weight: bold;
 	color: black;
-	margin : 3px 0;
+	margin: 3px 0;
 }
 
 .main_name:hover {
@@ -99,7 +112,7 @@ h3 {
 
 .main_detail {
 	font-size: 13px;
-	margin-top:15px;
+	margin-top: 15px;
 }
 
 @font-face {
@@ -120,13 +133,13 @@ h3 {
 	<div class="rap">
 
 
-        <!--헤더시작-->
+		<!--헤더시작-->
 
 
-    <header><div data-include="header.html"></div></header>
+		<div data-include="header.html"></div>
 
-        <!--헤더 끝-->
-        
+		<!--헤더 끝-->
+
 
 
 		<!--메인시작-->
@@ -136,11 +149,21 @@ h3 {
 
 
 				<div class="slider">
-					<div ><img id="banner" src="./img/banner.png"></div>
-					<div><img id="banner" src="./img/banner2.png"></div>
-					<div ><img id="banner" src="./img/banner3.png"></div>
-					<div ><img id="banner" src="./img/banner4.png"></div>
-					<div ><img id="banner" src="./img/banner5.png"></div>
+					<div>
+						<img id="banner" src="./img/banner.png">
+					</div>
+					<div>
+						<img id="banner" src="./img/banner2.png">
+					</div>
+					<div>
+						<img id="banner" src="./img/banner3.png">
+					</div>
+					<div>
+						<img id="banner" src="./img/banner4.png">
+					</div>
+					<div>
+						<img id="banner" src="./img/banner5.png">
+					</div>
 				</div>
 				<h3>인기 프로젝트</h3>
 
@@ -170,20 +193,10 @@ h3 {
 
 
 
-		<!--푸터시작-->
-
-		<!--푸터 끝-->
 	</div>
-	<script src="./js/header.js"></script>
-	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
 
-    <script>
-        $(document).ready(function(){
-          $('.slider').bxSlider();
-        });
-      </script>
 
 </div>
+
 
 </html>
