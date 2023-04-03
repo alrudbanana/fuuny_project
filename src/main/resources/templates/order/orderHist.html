@@ -4,17 +4,11 @@
       layout:decorate="~{layouts/layout1}">
 
 
-    <meta name="_csrf" th:content="${_csrf.token}"/>
-    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-
-
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
 
     <script th:inline="javascript">
         function cancelOrder(orderId) {
-            var token = $("meta[name='_csrf']").attr("content");
-            var header = $("meta[name='_csrf_header']").attr("content");
 
             var url = "/order/" + orderId + "/cancel";
             var paramData = {
@@ -28,10 +22,6 @@
                 type     : "POST",
                 contentType : "application/json",
                 data     : param,
-                beforeSend : function(xhr){
-                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-                    xhr.setRequestHeader(header, token);
-                },
                 dataType : "json",
                 cache   : false,
                 success  : function(result, status){
@@ -82,13 +72,38 @@
         .fs24{
             font-size:24px
         }
+
+        
+       
+		/* 상단 원형 박스 */
+        .top_circle_box{width: 100%; display: flex; justify-content: center;}
+        .top_circle_box > div{width: 80px; height: 80px; display: flex; justify-content: center; align-items: center; border-radius: 50%; text-align: center; position: relative;}
+        .top_circle_box > div.top_circle_box_1{background: #fff; border: 1px dotted #6d6d6d; margin-right: 40px;} /*왼쪽박스 색담당*/
+        .top_circle_box > div.top_circle_box_1::after{content: ""; position: absolute; width: 100%; height: 1px; border-top: 1px dotted #6d6d6d; top: 50%; left: 50%; transform: translateY(-50%); z-index: -1;}
+        .top_circle_box > div.top_circle_box_2{background: #00c4c4; color: #fff; } /*오른쪽박스 색담당*/
+	
+	 
+	
+
     </style>
 </th:block>
 
 <div layout:fragment="content" class="content-mg">
 
+
+	    <div class="top_circle_box">
+        <div class="top_circle_box_1">
+            리워드<br/>선택
+        </div>
+        <div class="top_circle_box_2">
+            결제<br/>예약
+        </div>
+    </div>
+
+
     <h2 class="mb-4">
-        구매 이력
+        결제 예약
+
     </h2>
 
     <div th:each="order : ${orders.getContent()}">
@@ -126,7 +141,8 @@
                     <div class="fs18 font-weight-light">
                         <span th:text="${orderItem.orderPrice} +'원'"></span>
                         <span th:text="${orderItem.count} +'개'"></span>
-                        <span th:text="'후원금' + ${orderItem.donation} +'원'"></span> <!-- 후원금 추가 2023-03-29, kk -->
+                        <span th:text="'후원금' + ${orderItem.donation} +'원'"></span> 
+
                     </div>
                 </div>
             </div>

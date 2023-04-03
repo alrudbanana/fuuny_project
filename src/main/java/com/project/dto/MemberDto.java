@@ -30,7 +30,7 @@ public class MemberDto {
 	    private String memPhone; //휴대폰
 	    
 	    private Role role;
-
+	    
 	    @NotEmpty(message = "주소는 필수 입력 값입니다.")
 	    private String zipcode;
 

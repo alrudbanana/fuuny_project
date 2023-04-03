@@ -44,6 +44,7 @@ public class QuestionController {
 		model.addAttribute("kw", kw);
 		return "question_list";
 	}
+	
 
 	@GetMapping(value = "/question/detail/{id}")
 	public String detail(Model model, @PathVariable("id") Long id, AnswerForm answerForm) {

@@ -1,5 +1,5 @@
-<!DOCTYPE html>
 
+<!DOCTYPE html>
 
 
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
@@ -20,7 +20,6 @@
 		});
 	</script>
 </th:block>
-
 
 
 <th:block layout:fragment="css">
@@ -106,13 +105,27 @@ h3 {
 	margin: 3px 0;
 }
 
+
 .main_name:hover {
 	color: gray;
 }
 
 .main_detail {
 	font-size: 13px;
+
+}
+
+/* 푸터 */
+footer {
+	
+}
+
+#foot {
+	height: 200px;
+	background-color: rgb(246, 225, 247);
+	text-align: center;
 	margin-top: 15px;
+
 }
 
 @font-face {
@@ -133,12 +146,15 @@ h3 {
 	<div class="rap">
 
 
+
 		<!--헤더시작-->
 
 
 		<div data-include="header.html"></div>
 
+
 		<!--헤더 끝-->
+
 
 
 
@@ -165,6 +181,7 @@ h3 {
 						<img id="banner" src="./img/banner5.png">
 					</div>
 				</div>
+
 				<h3>인기 프로젝트</h3>
 
 				<div class="container text-center">
@@ -183,18 +200,28 @@ h3 {
 						</div>
 
 
+
 					</div>
 				</div>
+
 
 
 			</div>
 		</section>
 		<!--메인 끝-->
 
+			</div>
+		</section>
+		<!--메인 끝-->
 
 
 	</div>
 
+		<!--푸터시작-->
+		<footer> </footer>
+		<!--푸터 끝-->
+	</div>
+	<script src="./js/header.js"></script>
 
 </div>
 

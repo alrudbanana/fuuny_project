@@ -107,6 +107,7 @@ public class ItemService {
 		public List<Item> getList() {
 			return this.itemRepository.findAll();
 		}
+
 		
 	//카테고리별 리스트
 
@@ -114,4 +115,5 @@ public class ItemService {
 		return itemRepository.findByItemCategory(itemCategory);
 	}
 		
+
 }

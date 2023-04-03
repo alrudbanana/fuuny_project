@@ -37,6 +37,7 @@ public class IndexController {
    }
    */
    
+
    	  //홈 /23.04.01 프로필이미지 관련 principal추가
 	   @RequestMapping(value = "/")
 	   public String main(Principal principal, Model model) {
@@ -51,7 +52,7 @@ public class IndexController {
 	      return "main";
 	   }
    
-   
+
 
 
    

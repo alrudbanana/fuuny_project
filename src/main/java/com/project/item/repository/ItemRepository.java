@@ -15,11 +15,12 @@ import com.project.item.entity.Item;
 
 
 public interface ItemRepository extends JpaRepository<Item, Long>, 
-			QuerydslPredicateExecutor<Item>, ItemRepositoryCustom {
+         QuerydslPredicateExecutor<Item>, ItemRepositoryCustom {
+
 
 	
 	Optional<Item> findById(Long id);
-	
+
    List<Item> findByItemNm(String itemNm);
 
     List<Item> findByItemNmOrItemDetail(String itemNm, String itemDetail);
@@ -40,6 +41,7 @@ public interface ItemRepository extends JpaRepository<Item, Long>,
     
    
     List<Item> findByItemsellstatusIn(List<ItemSellStatus> itemSellStatus);
+
 
 	Page<Item> findByItemsellstatusIn(List<ItemSellStatus> cond, Pageable pageable);
 	

@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.project.DataNotFoundException;
 import com.project.Role;
 import com.project.constant.ItemSellStatus;
-import com.project.dto.AdminItemDto;
 import com.project.entity.Member;
 import com.project.entity.Notice;
 import com.project.item.dto.ItemFormDto;
@@ -29,6 +28,7 @@ import com.project.item.repository.ItemRepository;
 import com.project.repository.AdminRepository;
 import com.project.repository.MemberRepository;
 
+
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -36,6 +36,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdminService {
 
+	
+private final AdminRepository adminRepository;
+private final MemberRepository memberRepository;
+private final ItemRepository itemRepository;
+	
+	//공지 리스트 불러오기
+	public List<Notice> getList(){
 	private final AdminRepository adminRepository;
 	private final MemberRepository memberRepository;
 	private final ItemRepository itemRepository;
@@ -45,29 +52,30 @@ public class AdminService {
 	public List<Notice> getList() {
 		return this.adminRepository.findAll();
 	}
-
-	// 2023.03.25 유저 리스트 불러오기 - 페이징 역순 처리
-	public Page<Member> getUserList(int page) {
+	
+	//2023.03.25 유저 리스트 불러오기 - 페이징 역순 처리
+	public Page<Member> getUserList(int page){
 		List<Sort.Order> sorts = new ArrayList<>();
-		sorts.add(Sort.Order.desc("idx"));
-		Pageable pageable = PageRequest.of(page, 3, Sort.by(sorts));
+        sorts.add(Sort.Order.desc("idx"));
+        Pageable pageable = PageRequest.of(page, 3, Sort.by(sorts));
 		return this.memberRepository.findAll(pageable);
 	}
 	
 
 
+
 	// 공지 하나 갖고 오기
 	public Notice getNotice(Integer id) {
 		Optional<Notice> notice = this.adminRepository.findById(id);
-
-		if (notice.isPresent()) {
+		
+		if(notice.isPresent()) {
 			return notice.get();
-		} else {
+		}else {
 			throw new DataNotFoundException("공지 사항을 찾을 수 없습니다");
 		}
 	}
-
-	// 공지 쓰기
+	
+	//공지 쓰기
 	public void writeNotice(String title, String content) {
 		Notice n = new Notice();
 		n.setTitle(title);
@@ -75,36 +83,38 @@ public class AdminService {
 		n.setRegTime(LocalDateTime.now());
 		this.adminRepository.save(n);
 	}
-
-	// 공지수정
+	
+	//공지수정
 	public void modifyNotice(Notice notice, String title, String content) {
 		notice.setTitle(title);
 		notice.setContent(content);
 		notice.setUpdateTime(LocalDateTime.now());
 		this.adminRepository.save(notice);
 	}
-
-	// 공지삭제
+	
+	
+	//공지삭제
 	public void deleteNotice(Notice notice) {
 		this.adminRepository.delete(notice);
 	}
-
-	// 공지 페이징 처리
-	public Page<Notice> getList(int page) {
+	
+	//공지 페이징 처리
+	public Page<Notice> getList(int page){
 		List<Sort.Order> sorts = new ArrayList<>();
 		sorts.add(Sort.Order.desc("id"));
 		Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
 		return this.adminRepository.findAll(pageable);
 	}
-
-	// 멤버 하나 갖고 오기
-	public Member getMember(Integer id) {
-		Optional<Member> member = this.memberRepository.findById((long) id);
-
-		if (member.isPresent()) {
-			return member.get();
-		} else {
-			throw new DataNotFoundException("공지 사항을 찾을 수 없습니다");
+	
+	//멤버 하나 갖고 오기
+		public Member getMember(Integer id) {
+			Optional<Member> member = this.memberRepository.findById((long)id);
+			
+			if(member.isPresent()) {
+				return member.get();
+			}else {
+				throw new DataNotFoundException("공지 사항을 찾을 수 없습니다");
+			}
 		}
 	}
 
@@ -193,6 +203,6 @@ public class AdminService {
 	    if (item != null) {
 	        this.itemRepository.delete(item);
 	    }
-	}
+
 
 }
