@@ -28,7 +28,7 @@ public class User {
     private Long userCode;
 
     @Column(name = "kakao_id")
-    private Long kakaoId;
+    private String kakaoId;
 
     @Column(name = "kakao_profile_img")
     private String kakaoProfileImg;
@@ -47,9 +47,7 @@ public class User {
     private Timestamp createTime;
 
     @Builder
-    public User(Long kakaoId, String kakaoProfileImg, String kakaoNickname,
-                String kakaoEmail, String userRole) {
-
+    public User(String kakaoId, String kakaoProfileImg, String kakaoNickname, String kakaoEmail, String userRole) {
         this.kakaoId = kakaoId;
         this.kakaoProfileImg = kakaoProfileImg;
         this.kakaoNickname = kakaoNickname;
