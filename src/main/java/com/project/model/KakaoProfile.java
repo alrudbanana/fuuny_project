@@ -1,8 +1,11 @@
 package com.project.model;
 
+import org.springframework.stereotype.Component;
+
 import lombok.Data;
 
-@Data
+@Component
+
 public class KakaoProfile {
 	  	public Long id;
 	    public String connected_at;

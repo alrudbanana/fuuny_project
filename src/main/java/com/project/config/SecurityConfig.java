@@ -13,6 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.project.model.KakaoProfile;
 import com.project.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 	
-	private final UserService userService;
+	
 	
 	 @Bean
 	    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -60,8 +61,7 @@ public class SecurityConfig {
 	        .and()
 			.oauth2Login()
 			.loginPage("/oauth/kakao")
-			.defaultSuccessUrl("/")
-			.userInfoEndpoint();
+			.defaultSuccessUrl("/");
 	        return http.build();
 	    }
 

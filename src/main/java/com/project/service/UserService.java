@@ -28,9 +28,36 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 public class UserService {
-		//카카오 로그인 서비스
+		//카카오 로그인 서비스 
 	 	@Autowired
 	    UserRepository userRepository; //(1)
+	 	
+	 	public void kakaoLogin(String authorizedCode) {
+	 	    // 카카오 OAuth2 를 통해 카카오 사용자 정보 조회
+	 	    OauthToken oauthToken = getAccessToken(authorizedCode);
+	 	    KakaoProfile userInfo = findProfile(oauthToken.getAccess_token());
+		 	String kakaoId = userInfo.getKakao_account().getEmail();
+		 	String nickname = userInfo.getProperties().getNickname();
+
+	 	    // 우리 DB 에서 회원 정보 조회
+	 	    User user = userRepository.findByKakaoEmail(kakaoId);
+
+	 	    if (user == null) {
+	 	        // 새로운 사용자면 회원가입 처리
+	 	        user = User.builder()
+	 	                .kakaoId(kakaoId)
+	 	                .kakaoProfileImg(userInfo.getKakao_account().getProfile().getProfile_image_url())
+	 	                .kakaoNickname(nickname)
+	 	                .kakaoEmail(kakaoId)
+	 	                .userRole("ROLE_USER")
+	 	                .build();
+	 	        userRepository.save(user);
+	 	    }
+
+	 	    // 로그인 처리
+	 	    Authentication authentication = new UsernamePasswordAuthenticationToken(user.getKakaoNickname(), "");
+	 	    SecurityContextHolder.getContext().setAuthentication(authentication);
+	 	}
 	    
 	    public OauthToken getAccessToken(String code) {
 

@@ -88,7 +88,12 @@ public class MemberController {
 	public String login() {
 		return "login";
 	}
-    
+    //로그아웃 
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate(); // 세션을 삭제함
+        return "redirect:/";
+    }
     //로그인 에러 
     @GetMapping(value = "/login/error")
     public String loginError(Model model){
