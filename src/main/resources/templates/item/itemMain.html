@@ -10,18 +10,13 @@
 <th:block layout:fragment="css">
     <style>
   
-        .carousel-inner > .item {
-            height: 350px;
-        }
-        .margin{
-            margin-bottom:30px;
-        }
-        .banner{
-            height: 300px;
-            position: absolute; top:0; left: 0;
-            width: 100%;
-            height: 100%;
-        }
+      * {
+			margin: 0;
+			padding: 0;
+			font-family: 'NanumSquareNeo-Variable';
+		}
+       
+       
         .card-text{
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -75,7 +70,7 @@
       dots: false, //슬라이드 아래 점 살리고 싶으면 true
       arrows: false,
       infinite: true,
-      slidesToShow: 5,
+      slidesToShow: 5.3	,
       slidesToScroll: 1
       /* 적용이 안됨
       centerMode: true,
@@ -90,16 +85,13 @@
 
 <div layout:fragment="content">
 
-<div class="site-wrap">   
     <div class="center">
  
  			<div class="mt-5">
 	    	<h3 class="mt-5">당신의 아이디어를 함께 실현합니다 <br> 지금 바로 Funny와 펀딩을 시작하세요!</h3>
 			</div>
 	    </div>
-	     <!-- 샐러일때만 보이게 / 페이지자체가 판매자메인페이지라서 안해도 될듯?
-		<div sec:authorize="hasAnyAuthority('ROLE_SEllER')"> </div> 
-		 --> 
+
 		 <div class="center mt-5 mb-5" >
 	        <a class="btn btn-primary" href="/saler/item/new" >프로젝트 등록</a>
 	        <a class="btn btn-primary" href="/saler/items">프로젝트 목록</a>
@@ -109,7 +101,7 @@
 		<div id="item-slider" class="row">
 		  <th:block th:each="item, status: ${items.getContent()}">
 		    <div class="col-md-4 margin">
-		      <div class="card" style="width: 300px; height: 450px; border-radius: 20px;">
+		      <div class="card" style="width: 280px; height: 450px; border-radius: 20px;">
 		        <a th:href="@{|/item/${item.id}|}" class="text-dark">
 		          <img th:src="${item.imgUrl}" class="card-img-top" th:alt="${item.itemNm}"  style="border-radius: 20px 20px 0 0; height: 300px;">
 		          <div class="card-body">
@@ -126,5 +118,4 @@
 	
 	</div>
 
-</div>
 </html>
