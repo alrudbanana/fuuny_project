@@ -49,11 +49,12 @@
             <tr class="table-active">
                 <td>No.</td>
                 <td>상품명</td>
-                <td>상태<td>
                 <td>등록일</td>
                 <td>수정일</td>
+                <td>상태<td>
 				<td>카테고리</td>
-				<td>재고</td>
+                <td>재고</td>
+
             </tr>
             </thead>
             
@@ -63,11 +64,12 @@
                 <td>
                     <a th:href="'/saler/item/'+${item.id}" th:text="${item.itemNm}"></a>
                 </td>
-               <!-- <td th:text="${item.ItemSellStatus == T(com.project.ItemSellStatus).SELL} ? '판매중' : '품절'"></td> -->
+             
                 <td th:text="${item.regTime}"></td>
                 <td th:text="${item.updateTime}"></td>
+               	<td th:text="${item.itemsellstatus.isSell() ? '판매중' : '품절'}"></td>
                 <td th:text="${item.itemCategory}"></td>
-                 <td th:text="${item.stockNumber}"></td>
+                <td th:text="${item.stockNumber}"></td>
             </tr>
             </tbody>
         </table>

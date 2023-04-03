@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      
+
 
 <header>
+<script type="text/javascript" th:src="@{/js/header.js}"></script>
+
 
 <div th:fragment="header">
 
+
   <nav class="navbar">
     <div class="navbar_logo">
-         <a href="/">Funny</a>
+         <a href="/"><img src="/img/header_logo.png" alt="header logo"></a>
     </div>
     <ul class="navbar_menu">
       <div class="dropdown">
@@ -26,7 +32,7 @@
             <li>음악</li>
             <li>공연</li>          
 
-          </ul>
+         </ul>
         </li>
      </div>
   
@@ -42,14 +48,31 @@
       <li sec:authorize="isAnonymous()"><a href="/members/new">회원가입</a></li>
     </ul>
 
+	  <li sec:authorize="hasAnyAuthority('SELLER')" class="sub_btn"><a href="/saler/main">프로젝트 페이지</a></li>
+      <li sec:authorize="hasAnyAuthority('ADMIN')"><a href="/admin/main">관리자 페이지</a></li>
+       
+      <!-- 로그아웃 상태시 디폴트 프로필 이미지 출력 -->
+      <li sec:authorize="isAnonymous()"><div class="profile"><img th:src="@{/img/profile/default.png}"></div></li>
+      <!-- 로그인 상태시 멤버의  imgurl 출력 // 23.04.02 member에 자꾸 null이라고 떠서 일단 디폴이미지뜨게 수정-->
+      <li sec:authorize="isAuthenticated()">
+		  <div class="profile"> <!-- mamver이 널값이 아니면 member.imgurl, 아니면 디폴트이미지 -->
+		    <img th:src="${member != null ? member.imgurl : '/img/profile/default.png'}">
+		  </div>
+	  </li>
+      
+      
+    </ul>
+
     <a href="#" class="navbar_toogleBtn">
-      <img src="/img/hamburger.png">
+      <img src="./img/hamburger.png">
     </a>
-	</nav>
+   </nav>
 
 	<script src="/js/header.js"></script>
 </div>
 
+
 </header>
 
 </html>
+

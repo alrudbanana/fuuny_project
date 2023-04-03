@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout1}">
+      layout:decorate="~{layouts/layout}">
+
 
 
 <!-- 사용자 스크립트 추가 -->
@@ -10,7 +11,6 @@
         $(document).ready(function(){
 
             calculateToalPrice();
-
             $("#count").change( function(){
                 calculateToalPrice();
             });
@@ -84,7 +84,31 @@
         .wd50{
             height:auto;
             width:50%;
+         
         }
+        .d-flex{
+           margin-top:50px;
+        }
+        .d_day{
+        	font-size:12px;
+        	color:red;        
+        }      
+        #btn_category {
+         font-size:12px;
+         padding:5px;
+         border: 1px solid rgb(216, 215, 216);    
+         outline:none;        
+        }
+        .td_2{
+        font-size:13px;
+        }
+        .btn_rew{
+        margin-top:20px;
+        }
+         .btn_good{
+        margin-top: 20px;
+        }
+        
     </style>
 </th:block>
 
@@ -97,7 +121,7 @@
             <img th:src="${item.itemImgDtoList[0].imgUrl}" class = "rounded repImg" th:alt="${item.itemNm}">
         </div>
         <div class="wd50">
-
+   <button th:text="${item.itemCategory}" type=submit id="btn_category"></button>     
             <span th:if="${item.itemSellStatus}" class="badge badge-primary mgb-15">
                 판매중
             </span>
@@ -125,25 +149,27 @@
             </div>
 
             
-            <div th:text="${item.itemSellStatus}" class="text-right">
-            
-                <button type="button" class="btn btn-light border border-primary btn-lg" onclick="addCart()">리워드 선택하기</button>
-
-            </div>
-
             <div class="text-right">
-            
-                <button type="button" class="btn btn-light border border-primary btn-lg" onclick="addCart()">리워드 선택하기</button>
-
+            	<span th:text="${item.startDate}"></span> ~ <span th:text="${item.endDate}"></span>
+            	<span>&nbsp&nbsp</span>
+            	<span th:text="${item.remainingDays}" class="text-right d_day"></span>
+            	<span class="d_day">일 남음</span>            	
             </div>
-            
+            <div class="text-right">
+            	<span class="td_2">목표금액 달성시</span> <span th:text="${item.endDate.plusDays(1)}" class="td_2"></span>
+            	<span class="td_2">에 결제 진행</span>
+            </div>
+            	<div class="btn_good">
+                <button type="button" class="btn btn-danger" onclick="addCart()">리워드 선택하기</button>
+				</div>
+                       
             
         </div>
     </div>
 
     <div class="jumbotron jumbotron-fluid mgt-30">
         <div class="container">
-            <h4 class="display-5">상품 상세 설명</h4>
+            <h6 class="display-5">| 상품 상세 설명</h6>
             <hr class="my-4">
             <p class="lead" th:text="${item.itemDetail}"></p>
         </div>

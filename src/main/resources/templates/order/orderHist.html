@@ -72,6 +72,7 @@
         .fs24{
             font-size:24px
         }
+
         
        
 		/* 상단 원형 박스 */
@@ -83,10 +84,12 @@
 	
 	 
 	
+
     </style>
 </th:block>
 
 <div layout:fragment="content" class="content-mg">
+
 
 	    <div class="top_circle_box">
         <div class="top_circle_box_1">
@@ -100,6 +103,7 @@
 
     <h2 class="mb-4">
         결제 예약
+
     </h2>
 
     <div th:each="order : ${orders.getContent()}">
@@ -137,8 +141,8 @@
                     <div class="fs18 font-weight-light">
                         <span th:text="${orderItem.orderPrice} +'원'"></span>
                         <span th:text="${orderItem.count} +'개'"></span>
-                        <span th:text="'후원금' + ${orderItem.donation} +'원'"></span> <!-- 후원금 추가 2023-03-29, kk -->
-                       	 <span th:text="'총펀딩금액' + ${orderItem.tp} +'원'"></span>
+                        <span th:text="'후원금' + ${orderItem.donation} +'원'"></span> 
+
                     </div>
                 </div>
             </div>
