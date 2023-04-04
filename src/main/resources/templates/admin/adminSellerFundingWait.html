@@ -8,29 +8,31 @@
 </head>
 <div layout:fragment="content">
 	<div class="container text-center">
+	<br>
 		<h1>판매자 프로젝트 관리</h1>
 		<br>
 
 		<div>
-			<button class="projectBtn" th:itemStatus="1"
+			<button class="btn-primary projectBtn" th:itemStatus="1"
 				onclick="loadProj(this.getAttribute('itemStatus'))">대기중인
 				프로젝트</button>
-			<button class="projectBtn" th:itemStatus="2"
+			<button class="btn-primary projectBtn" th:itemStatus="2"
 				onclick="loadProj(this.getAttribute('itemStatus'))">승인된
 				프로젝트</button>
-			<button class="projectBtn" th:itemStatus="3"
+			<button class="btn-primary projectBtn" th:itemStatus="3"
 				onclick="loadProj(this.getAttribute('itemStatus'))">판매중인
 				프로젝트</button>
-			<button class="projectBtn" th:itemStatus="4"
+			<button class="btn-primary projectBtn" th:itemStatus="4"
 				onclick="loadProj(this.getAttribute('itemStatus'))">매진된
 				프로젝트</button>
-			<button class="projectBtn" th:itemStatus="5"
+			<button class="btn-primary projectBtn" th:itemStatus="5"
 				onclick="loadProj(this.getAttribute('itemStatus'))">마감된
 				프로젝트</button>
-			<button class="projectBtn" th:itemStatus="6"
+			<button class="btn-primary projectBtn" th:itemStatus="6"
 				onclick="loadProj(this.getAttribute('itemStatus'))">거절된
 				프로젝트</button>
 		</div>
+		<br>
 
 
 		<div id="project">

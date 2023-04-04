@@ -231,7 +231,7 @@ public class AdminController {
 	public String adminSellerMain(@RequestParam(value = "value", defaultValue = "1") int param1,
 			Model model, Optional<Integer> page) {
 
-		List<ItemSellStatus> aa = new ArrayList();
+		List<ItemSellStatus> aa = new ArrayList(); 
 		if(param1 == 1) {
 			//대기
 			aa.add(ItemSellStatus.WAIT);

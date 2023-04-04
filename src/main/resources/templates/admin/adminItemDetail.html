@@ -22,19 +22,46 @@
 			프로젝트 입니다</h1>
 		<h1 th:if="${item.itemsellstatus.toString().equals('CLOSE')}">마감된
 			프로젝트 입니다</h1>
+			<br>
 
 
-		<h2 th:text="${item.itemsellstatus}"></h2>
-		<h1 th:text="${item.itemNm}"></h1>
-		<div th:text="${item.itemCategory}"></div>
-		<div th:text="${item.itemDetail}"></div>
-		<div th:text="${item.price}"></div>
-		<div th:text="${item.price2}"></div>
+		<!-- <h2 th:text="${item.itemsellstatus}"></h2> -->
+		<h1 th:text="'프로젝트 이름 : '+${item.itemNm}"></h1>
+		<h4 th:text="'카테고리 : '+${item.itemCategory}"></h4>
+		<h5 th:text="'상세설명 : '+${item.itemDetail}"></h5>
+		<h5 th:text="'프로젝트 가격 : '+${item.price}+'원'"></h5>
+		<h4 class="text-danger" th:text="'프로젝트 목표금액 : '+${item.price2}+'원'"></h4>
+		
+		<br>
+		<a class="approve btn btn-success" href="javascript:void(0);"
+			th:if="${item.itemsellstatus.toString().equals('WAIT')}"
+			th:myId="${item.id}" th:num="1"
+			onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">승인으로
+			변경</a> <a class="refuse btn btn-warning" href="javascript:void(0);"
+			th:if="${item.itemsellstatus.toString().equals('WAIT')} 
+				or ${item.itemsellstatus.toString().equals('CONFIRM')}
+	 			or ${item.itemsellstatus.toString().equals('SELL')} 
+	 			or ${item.itemsellstatus.toString().equals('SOLD_OUT')}"
+			th:myId="${item.id}" th:num="2"
+			onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">거절로
+			변경</a> <a class="wait btn btn-secondary" href="javascript:void(0);"
+			th:if="${item.itemsellstatus.toString().equals('REFUSE')} 
+				or ${item.itemsellstatus.toString().equals('CONFIRM')}
+	 			or ${item.itemsellstatus.toString().equals('SELL')} 
+	 			or ${item.itemsellstatus.toString().equals('SOLD_OUT')}"
+			th:myId="${item.id}" th:num="3"
+			onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">대기중으로
+			변경</a> <a class="delete btn btn-danger" href="javascript:void(0);"
+			th:if="${item.itemsellstatus.toString().equals('REFUSE')}"
+			th:myId="${item.id}" th:num="4"
+			onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">삭제하기</a>
+			<br><br>
 
 		<div th:each="itemImg : ${item.itemImgDtoList}" class="text-center">
 			<img th:if="${not #strings.isEmpty(itemImg.imgUrl)}"
 				th:src="${itemImg.imgUrl}" class="rounded mgb-15" width="800">
 		</div>
+		<br>
 
 
 		<a class="approve btn btn-success" href="javascript:void(0);"
