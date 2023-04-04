@@ -57,7 +57,7 @@ public class AdminService {
    
 
 
-   // 공지 하나 갖고 오기
+   // 공지 하나 갖고 오기 수정
    public Notice getNotice(Integer id) {
       Optional<Notice> notice = this.adminRepository.findById(id);
 
