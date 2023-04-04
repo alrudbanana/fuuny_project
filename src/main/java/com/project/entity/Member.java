@@ -1,7 +1,8 @@
 package com.project.entity;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
-import com.project.Role;
+
+import com.project.constant.Role;
 import com.project.dto.MemberFormDto;
 
 import jakarta.persistence.Column;

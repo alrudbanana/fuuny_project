@@ -2,7 +2,7 @@ package com.project.dto;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.project.Role;
+import com.project.constant.Role;
 import com.project.entity.Member;
 
 import jakarta.validation.constraints.NotEmpty;

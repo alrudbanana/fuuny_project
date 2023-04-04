@@ -29,7 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.DataNotFoundException;
 import com.project.FileUploadUtil;
-import com.project.Role;
+import com.project.constant.Role;
 import com.project.dto.MemberDto;
 import com.project.dto.MemberFormDto;
 import com.project.dto.MemberUpdateDto;
