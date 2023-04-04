@@ -27,46 +27,57 @@ li {
 		<button id="iamportPayment" type="button">
 			<img src="/img/Kakaopay.png">
 		</button>
-		</li>
-	</div>
-	
+	</li>
+</div>
 
-
-
-
-
-</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
-
 $(document).ready(function(){
-	$("#iamportPayment").click(function(){
-	payment();
-	 
+	$("#iamportPayment").click(function(e){
+		var data = {
+			id: '상품 ID',
+			itemNm: '상품 이름',
+			itemPrice: '상품 가격',
+			email: '구매자 이메일',
+			memName: '구매자 이름',
+			memPhone: '구매자 전화번호'
+		};
+		payment(data);
 	});
-})
+});
 
 function payment(data){
-	IMP.init('imp81752704');
-	IMP.request_pay({
-	pg: "KaKaopay.TC0ONETIME",
-	pay_method: "card",
-	merchant_uid: "iamport_test_id3",
-	name: "사람",
-	amount: 13700,
-	buyer_email : "testiamport@naver.com",
-	buyer_name : "홍길동",
-	buyer_tel : "010123456"
-	}, function (rsp) {
-		if(rsp.sucess){
-			alert("완료 -> imp_uid : "+rsp.imp_uid+" / merchant_uid(orderKey) : "+rsp.merchant_uid);
-		}else{
-		alert("실패 : 코드("+rsp.error_code+") / 메시지("+ rsp.error_msg +")");
-		
+	$.ajax({
+		type: "POST",
+		url: "/payment",
+		data: JSON.stringify(data),
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+		success: function(response){
+			IMP.init('imp81752704');
+			IMP.request_pay({
+				pg: "KaKaopay.TC0ONETIME",
+				pay_method: "card",
+				merchant_uid: response.id,
+				name: response.itemNm,
+				amount: response.itemPrice,
+				buyer_email : response.email,
+				buyer_name : response.memName,
+				buyer_tel : response.memPhone
+			}, function (rsp) {
+				if(rsp.success){
+					alert("완료 -> imp_uid : "+rsp.imp_uid+" / merchant_uid(orderKey) : "+rsp.merchant_uid);
+				}else{
+					alert("실패 : 코드("+rsp.error_code+") / 메시지("+ rsp.error_msg +")");
+				}
+			});
+		},
+		error: function(error){
+			console.log(error);
 		}
 	});
 }
 </script>
-
 </html>
 
 	
