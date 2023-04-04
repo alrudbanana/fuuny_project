@@ -13,8 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import com.project.service.CustomOAuth2MemberService;
 
+import com.project.social.CustomOAuth2MemberService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -59,11 +59,12 @@ public class SecurityConfig {
 	        //oauth2로그인
 			.and()
 			.oauth2Login()
-			.loginPage("/login")
-			.defaultSuccessUrl("/")
-			.userInfoEndpoint()
-			.userService(customOAuth2MemberService)
-			;
+				.loginPage("/login")
+				.defaultSuccessUrl("/")
+			    .failureUrl("/members/login")	
+				.userInfoEndpoint()
+				.userService(customOAuth2MemberService)
+				;
 	        
 	        return http.build();
 	        

@@ -1,7 +1,8 @@
-package com.project.entity;
+package com.project.social;
 
 import com.project.constant.Role;
 import com.project.constant.Social;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,7 +11,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,7 +18,7 @@ import lombok.ToString;
 @Entity
 @ToString
 @Getter @Setter
-public class Member extends BaseTimeEntity {
+public class SocialMember {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
    
@@ -58,5 +58,4 @@ public class Member extends BaseTimeEntity {
 	public String getRoleKey() {
 		return this.role.getKey();
 	}
-    
 }

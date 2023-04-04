@@ -1,4 +1,4 @@
-package com.project.controller;
+package com.project.social;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,6 @@ public class OAuth2Controller {
 			clientRegistrations = (Iterable<ClientRegistration>) clientRegistrationRepository;
 		}
 		System.out.println((Iterable<ClientRegistration>) clientRegistrationRepository);
-		System.out.println("login");
 		assert clientRegistrations != null;
 		clientRegistrations.forEach(registration -> oauth2AuthenticationUrls.put(registration.getClientName(),
 				authorizationRequestBaseUri + "/" + registration.getRegistrationId()));
@@ -43,14 +43,13 @@ public class OAuth2Controller {
 	
 	@GetMapping(value = "/login/{oauth2}")
 	public String login(@PathVariable String oauth2, HttpServletResponse httpServletResponse) {
-		System.out.println("response");
+		
 		return "redirect:/oauth2/authorization/" + oauth2;
 	}
 
 	@RequestMapping("/accessDenied")
 	public String accessDenied() {
-		return "login";
+		return "accessDenied";
 	}
 }
-
 

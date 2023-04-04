@@ -47,7 +47,7 @@ dependencies {
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
 	//jackson
-	implementation 'org.springframework.boot:spring-boot-starter-json:3.0.4'
+	//implementation 'org.springframework.boot:spring-boot-starter-json:3.0.4'
 	//implementation 'com.fasterxml.jackson.core:jackson-core:2.9.0'
 	//implementation "com.fasterxml.jackson.core:jackson-annotations:2.9.0"
 	//implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.0'

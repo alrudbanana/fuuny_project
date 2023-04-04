@@ -146,11 +146,7 @@ public class MemberService implements UserDetailsService {
 			System.out.println(Role.USER.getValue());
 		}
 		//수정 
-		return User.builder()
-                .username(member.getEmail())
-                .password(member.getMemPass())
-                .authorities(member.getRole().toString())
-                .build();
+		return new User(member.getEmail(),member.getMemPass(), authorities);
     }  
     
 
