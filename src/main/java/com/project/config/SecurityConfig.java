@@ -62,6 +62,8 @@ public class SecurityConfig {
 			.loginPage("/oauth/kakao")
 			.defaultSuccessUrl("/");
 	        return http.build();
+	        
+	        
 	    }
 
 	    
@@ -75,5 +77,8 @@ public class SecurityConfig {
 			throws Exception{
 				return authenticationConfiguration.getAuthenticationManager();
 			}
+<<<<<<< HEAD
 
+=======
+>>>>>>> branch 'dev/migyeong' of https://github.com/alrudbanana/fuuny_project.git
 	}

@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>User Info</title>
+</head>
+<body>
+    <h1>User Info</h1>
+    <div th:if="${userInfo}" th:text="${userInfo}"></div>
+    <div th:if="${!userInfo}">Please log in.</div>
+</body>
+</html>
