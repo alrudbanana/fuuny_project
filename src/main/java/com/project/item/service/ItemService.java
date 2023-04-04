@@ -17,6 +17,7 @@ import com.project.item.entity.Item;
 import com.project.item.entity.ItemImg;
 import com.project.item.repository.ItemImgRepository;
 import com.project.item.repository.ItemRepository;
+
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -106,6 +107,13 @@ public class ItemService {
 		public List<Item> getList() {
 			return this.itemRepository.findAll();
 		}
+
 		
+	//카테고리별 리스트
+
+	public List<Item> getItemByCategory(String itemCategory) {
+		return itemRepository.findByItemCategory(itemCategory);
+	}
 		
+
 }
