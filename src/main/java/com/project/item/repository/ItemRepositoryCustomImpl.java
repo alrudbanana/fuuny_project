@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.thymeleaf.util.StringUtils;
 
 import com.project.constant.ItemSellStatus;
+import com.project.dto.AdminItemDto;
+import com.project.dto.QAdminItemDto;
 import com.project.item.dto.ItemSearchDto;
 import com.project.item.dto.MainItemDto;
 import com.project.item.dto.QMainItemDto;
@@ -23,7 +25,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 
 public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
-
 
     private JPAQueryFactory queryFactory; //JPA 쿼리 생성 
 
@@ -196,7 +197,4 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
           
        }
 
-
-
 }
-

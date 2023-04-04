@@ -11,6 +11,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -19,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.oauth2.sdk.Response;
+import com.project.config.JwtTokenUtils;
 import com.project.model.KakaoProfile;
 import com.project.model.User;
 import com.project.repository.UserRepository;
@@ -28,12 +33,55 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 public class UserService {
-		//카카오 로그인 서비스
+		//카카오 로그인 서비스 
 	 	@Autowired
 	    UserRepository userRepository; //(1)
-	    
-	    public OauthToken getAccessToken(String code) {
+	 	@Autowired
+	 	MemberService memberService;
+	 	
+	 	public void kakaoLogin(String authorizedCode) {
+	 	    // 카카오 OAuth2 를 통해 카카오 사용자 정보 조회
+	 	    OauthToken oauthToken = getAccessToken(authorizedCode);
+	 	    KakaoProfile userInfo = findProfile(oauthToken.getAccess_token());
+		 	String kakaoId = userInfo.getKakao_account().getEmail();
+		 	String nickname = userInfo.getProperties().getNickname();
 
+	 	    // 우리 DB 에서 회원 정보 조회
+	 	    User user = userRepository.findByKakaoEmail(kakaoId);
+
+	 	    if (user == null) {
+	 	        // 새로운 사용자면 회원가입 처리
+	 	        user = User.builder()
+	 	                .kakaoId(kakaoId)
+	 	                .kakaoProfileImg(userInfo.getKakao_account().getProfile().getProfile_image_url())
+	 	                .kakaoNickname(nickname)
+	 	                .kakaoEmail(kakaoId)
+	 	                .userRole("ROLE_USER")
+	 	                .build();
+	 	        userRepository.save(user);
+	 	    }
+
+	 	    // 로그인 처리
+	 	    Authentication authentication = new UsernamePasswordAuthenticationToken(user.getKakaoNickname(), "");
+	 	    SecurityContextHolder.getContext().setAuthentication(authentication);
+	 	}
+	 	
+	 	//강제로 로그인처리 
+	 	private Authentication forceLogin(User kakaoUser) {
+	 		UserDetails userDetails = memberService.loadUserByUsername(kakaoUser.getKakaoEmail());
+	        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+	        SecurityContextHolder.getContext().setAuthentication(authentication);
+	        return authentication;
+	    }
+	 	
+	 	 // 5. response Header에 JWT 토큰 추가
+	 	private void kakaoUsersAuthorizationInput(Authentication authentication, HttpServletResponse response) {
+	 	    User user = (User) authentication.getPrincipal();
+	 	    String token = JwtTokenUtils.generateJwtToken((UserDetails) user);
+	 	    response.addHeader("Authorization", "BEARER" + " " + token);
+	 	}
+	 	
+	    public OauthToken getAccessToken(String code) {
 	        //(2)RsTemplate이용해 URL형식으로 PSOT
 	        RestTemplate rt = new RestTemplate();
 
@@ -84,7 +132,7 @@ public class UserService {
 	        //(3)회원가입처리 
 	        if(user == null) {
 	            user = User.builder()
-	                    .kakaoId(profile.getId())
+	            		.kakaoId(String.valueOf(profile.getId()))
 	                     //(4)
 	                    .kakaoProfileImg(profile.getKakao_account().getProfile().getProfile_image_url())
 	                    .kakaoNickname(profile.getKakao_account().getProfile().getNickname())
@@ -99,7 +147,7 @@ public class UserService {
 	    }
 	    
 	    
-	    //(1-1)동의항목 가져오기 
+	    //(1-1)카카오 프로필 정보를 가져오는 메소드  
 	    public KakaoProfile findProfile(String token) {
 	        
 	        System.out.println("");
@@ -164,7 +212,6 @@ public class UserService {
 	        }
 	    }
 	    
+	   
 	    
-	    
-	    
-}
+	}

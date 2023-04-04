@@ -2,6 +2,7 @@ package com.project.cart;
 
 import com.project.entity.BaseEntity;
 import com.project.entity.Member;
+import com.project.item.entity.Item;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,15 +23,18 @@ import lombok.ToString;
 @Getter @Setter
 @ToString
 public class Cart extends BaseEntity {
-
+	//cart 는 여라개의 상품을 담음 
     @Id
     @Column(name = "cart_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @JoinColumn(name="member_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Item item;
 
     public static Cart createCart(Member member){
         Cart cart = new Cart();

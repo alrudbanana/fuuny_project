@@ -28,6 +28,11 @@ public class EmailService {
 	//인증메일 발송
 	private final JavaMailSender javaMailSender;
 	
+
+
+ // 메일 내용을 생성하고 임시 비밀번호로 회원 비밀번호를 변경
+
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	

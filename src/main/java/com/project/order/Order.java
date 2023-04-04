@@ -26,7 +26,7 @@ import lombok.Setter;
 @Table(name = "orders")
 @Getter @Setter
 public class Order extends BaseEntity {
-
+	//oder 엔티티와 orderItem 엔티티를 분리하여 관리, 주문과 주문 상품을 나타냄 
     @Id @GeneratedValue
     @Column(name = "order_id")
     private Long id;

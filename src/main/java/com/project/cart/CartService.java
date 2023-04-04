@@ -29,8 +29,9 @@ public class CartService {
     private final MemberEmailRepository mmr;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
+  //  private final OrderService orderService;
     private final OrderService orderService;
-
+    @Transactional
     public Long addCart(CartItemDto cartItemDto, String email){
 
         Item item = itemRepository.findById(cartItemDto.getItemId()).orElseThrow(EntityNotFoundException::new);
@@ -59,7 +60,7 @@ public class CartService {
     }
 
     @Transactional(readOnly = true)
-    public List<CartDetailDto> getCartList(String email){
+    public List<CartDetailDto> getCartList(String email){ // 회원 이메일 정보를 이용하여 해당 회원의 장바구니 정보를 조회
 
         List<CartDetailDto> cartDetailDtoList = new ArrayList<>();
 
@@ -70,18 +71,21 @@ public class CartService {
             return cartDetailDtoList;
         }
 
-        cartDetailDtoList = cartItemRepository.findCartDetailDtoList(cart.getId());
-        return cartDetailDtoList;
+        cartDetailDtoList = cartItemRepository.findCartDetailDtoList(cart.getId()); 
+        				//findCartDetailDtoList 메소드를 호출해서 장바구니에 담긴 상품들의 상세정보를 가져옴
+        return cartDetailDtoList; //List 형태로 변환해 전달
     }
-
+    
+    
+    //삭제 수정 전 해당상품이 로그인한 사용자의 장바구니에 속한 상품인지 확인 하는 기능 
     @Transactional(readOnly = true)
     public boolean validateCartItem(Long cartItemId, String email){
         Member curMember = mmr.findByEmail(email);
-        CartItem cartItem = cartItemRepository.findById(cartItemId)
+        CartItem cartItem = cartItemRepository.findById(cartItemId) //cartItemRepository 에서 해당 CartItemId에 해당하는 장바구니 상품 정보를 가져옴 
                 .orElseThrow(EntityNotFoundException::new);
-        Member savedMember = cartItem.getCart().getMember();
+        Member savedMember = cartItem.getCart().getMember(); // 특정 CartItme 의 정보를 가져오고 그 카트가 소유한 회원정보를 조회 
 
-        // curMember.getEmail() : 뷰에서  로그인한 계정을 DB에서 가져옴 
+        // curMember.getEmail() : 뷰에서 로그인한 계정을 DB에서 가져옴 
         // savedMember.getEmail() : cartItemID를 조회해서 cart 테이블의 Member의 ID 값 
         if(!StringUtils.equals(curMember.getEmail(), savedMember.getEmail())){
             return false;
@@ -89,14 +93,16 @@ public class CartService {
 
         return true;
     }
-
+    
+    //장바구니에 있는 상품의 수량을 업데이트 하는 메소드  
     public void updateCartItemCount(Long cartItemId, int count){
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(EntityNotFoundException::new);
-
         cartItem.updateCount(count);
     }
-
+    
+    
+    //상품 아이템 삭제
     public void deleteCartItem(Long cartItemId) {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(EntityNotFoundException::new);
@@ -141,6 +147,5 @@ public class CartService {
         return orderId;
     }
 
-    
 
 }

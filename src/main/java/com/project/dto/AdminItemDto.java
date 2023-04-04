@@ -26,7 +26,6 @@ public class AdminItemDto {
 	private String itemCategory;
 	private LocalDateTime regTime;
 	
-	
 	@QueryProjection
 	public AdminItemDto(Long id, String itemNm, String itemDetail, String imgUrl,Integer price,String itemCategory,
 			ItemSellStatus itemSellStatus,LocalDateTime regTime) {
