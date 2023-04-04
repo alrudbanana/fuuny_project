@@ -29,23 +29,27 @@ public class EmailService {
 	private final JavaMailSender javaMailSender;
 	
 
+
  // 메일 내용을 생성하고 임시 비밀번호로 회원 비밀번호를 변경
 
+
 	@Autowired
-	   private PasswordEncoder passwordEncoder;
-	   
-	 // 메일 내용을 생성하고 임시 비밀번호로 회원 비밀번호를 변경
-	   public MailDto createMailAndChangePassword(String memberEmail) {
-	       String tempPassword = getTempPassword();
-	       String encodedPassword = passwordEncoder.encode(tempPassword); // 임시 비밀번호를 암호화합니다.
-	       MailDto dto = new MailDto();
-	       dto.setAddress(memberEmail);
-	       dto.setTitle("Funny 임시비밀번호 안내 이메일 입니다.");
-	       dto.setMessage("안녕하세요. Funny 임시비밀번호 안내 관련 이메일 입니다." + " 회원님의 임시 비밀번호는 "
-	               + tempPassword + " 입니다." + "로그인 후에 비밀번호를 변경을 해주세요");
-	       updatePassword(encodedPassword,memberEmail); // 암호화된 비밀번호를 DB에 저장합니다.
-	       return dto;
-	   }
+	private PasswordEncoder passwordEncoder;
+	
+ // 메일 내용을 생성하고 임시 비밀번호로 회원 비밀번호를 변경
+
+	public MailDto createMailAndChangePassword(String memberEmail) {
+	    String tempPassword = getTempPassword();
+	    String encodedPassword = passwordEncoder.encode(tempPassword); // 임시 비밀번호를 암호화합니다.
+	    MailDto dto = new MailDto();
+	    dto.setAddress(memberEmail);
+	    dto.setTitle("Funny 임시비밀번호 안내 이메일 입니다.");
+	    dto.setMessage("안녕하세요. Funny 임시비밀번호 안내 관련 이메일 입니다." + " 회원님의 임시 비밀번호는 "
+	            + tempPassword + " 입니다." + "로그인 후에 비밀번호를 변경을 해주세요");
+	    updatePassword(encodedPassword,memberEmail); // 암호화된 비밀번호를 DB에 저장합니다.
+	    return dto;
+	}
+
 
     //임시 비밀번호로 업데이트
     public void updatePassword(String str, String userEmail){

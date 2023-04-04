@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/adminSellerLayout}">
+<head>
+<meta charset="UTF-8">
+<title>관리자 펀딩 상세</title>
+</head>
+<div layout:fragment="content">
+
+	<div class="container text-center">
+
+		<h1 th:if="${item.itemsellstatus.toString().equals('WAIT')}">대기중
+			프로젝트 입니다</h1>
+		<h1 th:if="${item.itemsellstatus.toString().equals('CONFIRM')}">승인된
+			프로젝트 입니다</h1>
+		<h1 th:if="${item.itemsellstatus.toString().equals('SELL')}">판매중인
+			프로젝트 입니다</h1>
+		<h1 th:if="${item.itemsellstatus.toString().equals('SOLD_OUT')}">매진된
+			프로젝트 입니다</h1>
+		<h1 th:if="${item.itemsellstatus.toString().equals('REFUSE')}">거절된
+			프로젝트 입니다</h1>
+		<h1 th:if="${item.itemsellstatus.toString().equals('CLOSE')}">마감된
+			프로젝트 입니다</h1>
+			
+
+
+		<!-- <h2 th:text="${item.itemsellstatus}"></h2> -->
+		<h1 th:text="'프로젝트 이름 : '+${item.itemNm}"></h1>
+		<h4 th:text="'카테고리 : '+${item.itemCategory}"></h4>
+		<h5 th:text="'상세설명 : '+${item.itemDetail}"></h5>
+		<h5 th:text="'프로젝트 가격 : '+${item.price}+'원'"></h5>
+		<h4 class="text-danger" th:text="'프로젝트 목표금액 : '+${item.price2}+'원'"></h4>
+		
+		<br>
+		<a class="approve btn btn-success" href="javascript:void(0);"
+				th:if="${item.itemsellstatus.toString().equals('SELL')}"
+				th:myId="${item.id}" th:num="1"
+				onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">판매를 중지하고 승인으로 변경</a>
+			
+		<a class="refuse btn btn-warning" href="javascript:void(0);"
+				th:if="${item.itemsellstatus.toString().equals('CONFIRM')}"
+				th:myId="${item.id}" th:num="5"
+				onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">판매로 변경</a> 
+			
+			
+		<a class="delete btn btn-danger" href="javascript:void(0);" 
+				th:if="${item.itemsellstatus.toString().equals('CONFIRM')}"
+				th:myId="${item.id}" th:num="4"
+				onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">삭제하기</a>
+		<br>
+		
+		<div th:each="itemImg : ${item.itemImgDtoList}" class="text-center">
+			<img th:if="${not #strings.isEmpty(itemImg.imgUrl)}"
+				th:src="${itemImg.imgUrl}" class="rounded mgb-15" width="800">
+		</div>
+		<br>
+
+		<a class="approve btn btn-success" href="javascript:void(0);"
+				th:if="${item.itemsellstatus.toString().equals('SELL')}"
+				th:myId="${item.id}" th:num="1"
+				onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">판매를 중지하고 승인으로 변경</a>
+			
+		<a class="refuse btn btn-warning" href="javascript:void(0);"
+				th:if="${item.itemsellstatus.toString().equals('CONFIRM')}"
+				th:myId="${item.id}" th:num="5"
+				onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">판매로 변경</a> 
+			
+			
+		<a class="delete btn btn-danger" href="javascript:void(0);" 
+				th:if="${item.itemsellstatus.toString().equals('CONFIRM')}"
+				th:myId="${item.id}" th:num="4"
+				onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">삭제하기</a>
+
+
+	</div>
+	
+	<script type="text/javascript" th:inline="javascript">
+		//2023.03.29 아이템 권한 수정
+		function modifyRole(id,num) {
+			const val1 = id;
+			const val2 = num;
+			let firstAlert = null;
+			let secondAlert = null;
+			
+			console.log(val1, val2);
+			
+			if(num == 1){
+				firstAlert = "승인으로 변경되면 판매페이지에서 내려갑니다 그래도 변경하시겠습니까?";
+				secondAlert = "변경 되었습니다";
+			}else if(num == 5){
+				firstAlert = "판매를 시작하시겠습니까?";
+				secondAlert = "판매를 시작하였습니다";
+			}else if(num == 4){
+				ffirstAlert = "삭제하시겠습니까?";
+				secondAlert = "삭제되었습니다";
+			}
+			
+			if(confirm(firstAlert)){
+
+			alert(secondAlert);
+
+			const params = {
+				"param1" : val1,
+				"param2" : val2
+			}
+
+			//var select = document.getElementById(idx).value();
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+
+			$.ajax({
+				type : "post",
+				url : "http://localhost:9404/admin/item/seller/role/modify",
+				//beforeSend : function(xhr) {
+				//	xhr.setRequestHeader(header, token);
+				//},
+
+				data : params,
+
+				success : function(res) {
+					console.log("성공", res);
+					location.href = "http://localhost:9404"+res;
+				},
+
+				error : function() {
+					console.log("실패 ")
+				}
+			})
+		}}
+		
+		
+	</script>
+
+</div>
+</html>

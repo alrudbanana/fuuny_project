@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+	<!-- 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}"
+       -->
  
 
 <!-- 캘린더관련 js/css 추가 -->
@@ -92,6 +96,7 @@ $(function () {
 
 <div layout:fragment="content"> 
 
+
     
 <div class="container" style="width: 1700px;">
 <!--  html 전체 영역을 지정하는 container -->
@@ -106,14 +111,11 @@ $(function () {
             
 	            <input type="hidden" th:field="*{id}">
 	            
-	            <div class="form-group mb-4">
-	                <label class="text-black">프로젝트 상태 <span class="text-danger">*</span></label>
-	                <br>
-	                <select th:field="*{ItemSellStatus}" class="custom-select">
-	                  <option value="SELL"> 진행 중 </option>
-	                  <option value="SOLD_OUT"> 종료 </option>    
-	                </select>
-	              </div>
+	            <div class="form-group">
+         <select th:field="*{Itemsellstatus}" class="custom-select">
+            <option value="WAIT"> 등록을 하게 되면 승인을 기다려야 합니다 </option>
+         </select>
+      			</div>
 	
 	              <div class="form-group row mb-4">
 	                <div class="col-md-12">

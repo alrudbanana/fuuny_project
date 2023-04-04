@@ -37,7 +37,6 @@ public class SecurityConfig {
 	        .and()
 	        .csrf().ignoringRequestMatchers(
 	                new AntPathRequestMatcher("/h2-console/**"))
-	        
 	        .and()
 	        .csrf().disable()
 	        .headers()
@@ -76,5 +75,5 @@ public class SecurityConfig {
 			throws Exception{
 				return authenticationConfiguration.getAuthenticationManager();
 			}
-		
+
 	}

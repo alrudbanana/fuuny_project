@@ -4,7 +4,10 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
       
 
+
+<header>
 <script type="text/javascript" th:src="@{/js/header.js}"></script>
+
 
 <div th:fragment="header">
 
@@ -35,13 +38,15 @@
   
       <li><a href="">공지사항</a></li>
       <li><a href="/question/list">문의사항</a></li>  
+      <li sec:authorize="isAuthenticated()"><a href="/cart">장바구니</a>
+      <li sec:authorize="isAuthenticated()"><a href="/">구매내역</a>
     </ul>
     <ul class="navbar_login">
-     <li sec:authorize="isAnonymous()" class="sub_btn"><a href="/members/login">로그인</a></li>
-      <li sec:authorize="isAuthenticated()" class="sub_btn"><a href = "/members/logout">로그아웃</a></li>
-      <li sec:authorize="isAuthenticated()" class="sub_btn"><a href="/members/detail">마이페이지</a></li>
-      
-      <li sec:authorize="isAnonymous()" class="sub_btn"><a href="/members/new">회원가입</a></li>
+      <li sec:authorize="isAnonymous()"><a href="/members/login">로그인</a></li>
+      <li sec:authorize="isAuthenticated()"><a href = "/members/logout">로그아웃</a></li>
+      <li sec:authorize="isAuthenticated()" ><a th:href="@{/members/detail}">마이페이지</a></li>
+      <li sec:authorize="isAnonymous()"><a href="/members/new">회원가입</a></li>
+    </ul>
 
 	  <li sec:authorize="hasAnyAuthority('SELLER')" class="sub_btn"><a href="/saler/main">프로젝트 페이지</a></li>
       <li sec:authorize="hasAnyAuthority('ADMIN')"><a href="/admin/main">관리자 페이지</a></li>
@@ -66,4 +71,8 @@
 	<script src="/js/header.js"></script>
 </div>
 
+
+</header>
+
 </html>
+
