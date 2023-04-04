@@ -81,7 +81,6 @@ public class AdminController {
 		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9, Sort.by(sorts));
 
 		Page<AdminItemDto> itemCondition = this.adminService.getAdminItemPageNew(aa, pageable);
-
 		model.addAttribute("items", itemCondition);
 		model.addAttribute("maxPage", 5);
 		return "admin/adminfunding";

@@ -108,6 +108,7 @@ public class AdminService {
 		}
 	}
 
+
 	// 2023.03.27 유저 권한 수정 완료
 	public void modifyMemberRole(Long idx, Role role) {
 
