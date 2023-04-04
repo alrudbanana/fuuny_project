@@ -71,6 +71,7 @@ public class AdminController {
 		return "admin/adminMain";
 	}
 
+	
 	@GetMapping(value = "/funding")
 	public String adminFunding(Model model, Optional<Integer> page) {
 		List<ItemSellStatus> aa = new ArrayList();
