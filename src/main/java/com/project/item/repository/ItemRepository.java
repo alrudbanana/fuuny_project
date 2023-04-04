@@ -45,4 +45,8 @@ public interface ItemRepository extends JpaRepository<Item, Long>,
 	
 	//카테고리
 	List<Item> findByItemCategory(String itemCategory);
+	
+	
+	
+	
 }

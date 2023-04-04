@@ -135,20 +135,38 @@ public class ItemController {
 	 //메인페이지에 상품데이터 가져오기
 	 @GetMapping(value = "/")
 	 public String main(ItemSearchDto itemSearchDto, Optional<Integer> page, Model model) {
-		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0,6);
+		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 50);
+		 
+		 System.out.println("itemSerchDto By ===>  : " + itemSearchDto.getSearchBy());
+		 System.out.println("itemSerchDto DateType===>  : " + itemSearchDto.getSearchDateType());
+		 System.out.println("itemSerchDto SearchQurey===>  : " + itemSearchDto.getSearchQuery());
+		 System.out.println("itemSerchDto SearchSellStatus===>  : " + itemSearchDto.getSearchSellStatus());
+
+		 
+		 
 		 Page<MainItemDto> items =
 				 itemService.getMainItemPage(itemSearchDto, pageable);
+		 
+		 
+		  model.addAttribute("items", items);
+		  
+		  
 		 List<Item> itemList = this.itemRepository.findAll();
 		 
 		 /* 출력 정보 확인 */ 
+		 System.out.println("==========Page 에 저장된 dto 출력됨 <시작> ==================");
 		 List<MainItemDto> item = items.getContent(); 
 		 for (int i = 0 ; i < item.size() ; i++) {
 			 
 			 MainItemDto dto = item.get(i); 
+			 
+			
+			 System.out.println(dto.getPrice());
 			 System.out.println(dto.getItemCategory());
 			 System.out.println(dto.getImgUrl());
+			 
 		 }
-		 
+		 System.out.println("==========Page 에 저장된 dto 출력됨 <끝> ==================");
 		
 		 model.addAttribute("items", items);
 		 model.addAttribute("itemSearchDto", itemSearchDto);		
@@ -174,16 +192,16 @@ public class ItemController {
 			return "item/itemDtl";
 		}
 		
-		
-		
-		
+		//카테고리
+		@GetMapping("/category/{itemCategory}")
+		public String categoryItemList(@RequestParam("itemCategory") String itemCategory, Model model) {
+			List<Item> itemList = itemService.getCategoryItems(itemCategory);
+			model.addAttribute("itemList", itemList);
+			model.addAttribute("itemCategory", itemCategory);
+			return "categoryItemList";
+		}
 		
 		
 	 
-
-	 
-	 
-
-		
 	    
 }

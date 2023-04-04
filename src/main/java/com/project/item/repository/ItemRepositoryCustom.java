@@ -14,6 +14,8 @@ import com.project.item.entity.Item;
 
 public interface ItemRepositoryCustom {
 	Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable); //상품 조회 조건을 담고 메소드 
+	
+	
 	Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable); //메인아이템 
 	
 	Page<AdminItemDto> getAdminItemPageNew(List<ItemSellStatus> cond,Pageable pageable);

@@ -14,17 +14,23 @@
       <div class="dropdown">
         <li><a href="" class="dropbtn">카테고리</a>
           <ul class="sub_menu dropdown-content">
-            <li>문구</li>
-            <li>푸드</li>
-            <li>출판</li>
-            <li>영화</li>
-            <li>여행</li>
-            <li>웹툰</li>
-            <li>의류</li>
-            <li>예술</li>
-            <li>사진</li>
-            <li>음악</li>
-            <li>공연</li>          
+             <li><a th:href="@{/category/itemList(itemCategory='문구')}">문구</a></li>
+             <li><a th:href="@{/category/itemList(itemCategory='푸드')}">푸드</a></li>
+             <li><a th:href="@{/category/itemList(itemCategory='영화')}">영화</a></li>
+             <li><a th:href="@{/category/itemList(itemCategory='굿즈')}">굿즈</a></li>
+             <li><a th:href="@{/category/itemList(itemCategory='뷰티')}">뷰티</a></li>   
+             <li><a th:href="@{/category/itemList(itemCategory='공연')}">공연</a></li>
+             <li><a th:href="@{/category/itemList(itemCategory='게임')}">게임</a></li>
+             <li><a th:href="@{/category/itemList(itemCategory='리빙')}">리빙</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='문구')}">문구</a></li>      
+            <li><a th:href="@{/category/itemList(itemCategory='의류')}">의류</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='예술')}">예술</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='웹툰')}">웹툰</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='테크')}">테크</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='잡화')}">잡화</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='사진')}">사진</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='반려')}">반려</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='음악')}">음악</a></li>   
 
          </ul>
         </li>
@@ -39,15 +45,15 @@
       <li sec:authorize="isAuthenticated()" class="sub_btn"><a href="/members/detail">마이페이지</a></li>
       
       <li sec:authorize="isAnonymous()" class="sub_btn"><a href="/members/new">회원가입</a></li>
-      	<li sec:authorize="hasAnyAuthority('ADMIN')"><a href="/admin/main">관리자 페이지</a></li>
-      	<li><div class="profile"><img src=" "></div></li>
+         <li sec:authorize="hasAnyAuthority('ADMIN')"><a href="/admin/main">관리자 페이지</a></li>
+         <li><div class="profile"><img src=" "></div></li>
     </ul>
 
     <a href="#" class="navbar_toogleBtn">
-      <img src="./img/hamburger.png">
+      <img src="/img/hamburger.png">
     </a>
    </nav>
-	<script src="/js/header.js"></script>
+   <script src="/js/header.js"></script>
 
 </div>
 

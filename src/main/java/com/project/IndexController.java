@@ -34,15 +34,15 @@ public class IndexController {
 	*/
 	
 	//홈
-		@RequestMapping(value = "/")
-		public String main(Model model) {
-			List<Item> itemList = this.itemRepository.findAll();
-			model.addAttribute("itemList", itemList);
-			
-			System.out.println("루트 컨트롤러 호출 : ");
-			return "main";
-		}
-	
+//		@RequestMapping(value = "/")
+//		public String main(Model model) {
+//			List<Item> itemList = this.itemRepository.findAll();
+//			model.addAttribute("itemList", itemList);
+//			
+//			System.out.println("루트 컨트롤러 호출 : ");
+//			return "main";
+//		}
+//	
 
    
 
