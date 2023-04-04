@@ -11,8 +11,8 @@ import com.project.entity.Member;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
 
-		Optional<Member> findByEmail(String email); 	
-
+		Optional<Member> findByEmail(String email);
+		
 		
 		//2023.03.25 유저관리 페이징 처리
 		Page<Member> findAll(Pageable pageable);

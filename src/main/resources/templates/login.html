@@ -95,6 +95,13 @@
 						<div sec:authorize="isAnonymous()">
 							<button type="submit" class="btn btn-primary">로그인</button>
 						</div>
+						
+						
+						
+							   <a th:href="@{/login/google}">구글 로그인</a><br>
+							    <a th:href="@{/login/naver}">네이버로 로그인</a><br>
+						
+						
 
 						<div sec:authorize="isAuthenticated()">
 							<a href="/members/logout" class="btn btn-primary">로그아웃</a>

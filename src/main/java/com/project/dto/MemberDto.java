@@ -2,7 +2,8 @@ package com.project.dto;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.project.Role;
+import com.project.constant.Role;
+import com.project.constant.Social;
 import com.project.entity.Member;
 
 import jakarta.validation.constraints.NotEmpty;
@@ -40,6 +41,10 @@ public class MemberDto {
 	    
 	    //3.30 프로필 이미지
 	    private String imgurl;
+	    
+	    //04.04 구글 로그인 
+	    private Social social;
+	    private String token;
 	    
 	    public Member saveMemberProfile(MemberDto memberProfile) {
 	    	

@@ -1,5 +1,6 @@
 package com.project.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,9 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import com.project.service.CustomOAuth2MemberService;
 
-import com.project.model.KakaoProfile;
-import com.project.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,9 +26,9 @@ import lombok.RequiredArgsConstructor;
 @EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
-	
-	
-	
+	 @Autowired
+	 private CustomOAuth2MemberService customOAuth2MemberService;
+	 
 	 @Bean
 	    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 	        http.authorizeHttpRequests().requestMatchers(
@@ -57,14 +57,19 @@ public class SecurityConfig {
 			.invalidateHttpSession(true)
 			
 	        //oauth2로그인
-	        .and()
+			.and()
 			.oauth2Login()
-			.loginPage("/oauth/kakao")
-			.defaultSuccessUrl("/");
+			.loginPage("/login")
+			.defaultSuccessUrl("/")
+			.userInfoEndpoint()
+			.userService(customOAuth2MemberService)
+			;
+	        
 	        return http.build();
 	        
 	        
 	    }
+	
 
 	    
 		 @Bean
@@ -77,8 +82,4 @@ public class SecurityConfig {
 			throws Exception{
 				return authenticationConfiguration.getAuthenticationManager();
 			}
-<<<<<<< HEAD
-
-=======
->>>>>>> branch 'dev/migyeong' of https://github.com/alrudbanana/fuuny_project.git
 	}
