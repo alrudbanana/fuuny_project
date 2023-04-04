@@ -174,7 +174,7 @@ public class AdminService {
         return itemRepository.getAdminItemPageNew(cond,pageable);
     }
 
-	//2023.03.29 프로젝트 권한 수정 완료
+	//2023.03.29 프로젝트 권한 수정 완료 
 	public void modifyItemRole(Long id, ItemSellStatus role) {
 
 		Item item = this.itemRepository.findById(id).get();
@@ -182,7 +182,7 @@ public class AdminService {
 		this.itemRepository.save(item);
 	}
 
-	//2023.03.29 프로젝트 삭제
+	//2023.03.29 프로젝트 삭제 
 	//2023.04.01 연관된 이미지까지 삭제
 	public void deleteItem(Long id) {
 		List<ItemImg> itemImgs = this.itemImgRepository.findByItemId(id);
