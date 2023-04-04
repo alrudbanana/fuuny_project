@@ -1,4 +1,4 @@
-package com.project;
+package com.project.constant;
 
 import lombok.Getter;
 
