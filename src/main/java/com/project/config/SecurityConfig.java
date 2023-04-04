@@ -14,7 +14,6 @@ import org.springframework.security.web.header.writers.frameoptions.XFrameOption
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.project.model.KakaoProfile;
-import com.project.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
