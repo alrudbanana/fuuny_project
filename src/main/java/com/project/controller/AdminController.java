@@ -46,16 +46,17 @@ public class AdminController {
 	@GetMapping(value = "/funding")
 	public String adminFunding(Model model) {
 		List<ItemSellStatus> aa = new ArrayList();
-		aa.add(ItemSellStatus.SELL);
-		aa.add(ItemSellStatus.SOLD_OUT);
-		
-		System.out.println("메소드 호출전 ");
-		List<Item> itemCondition = this.adminService.getItemCondition(aa);
-		
-		System.out.println("값 잘받아와서 리턴됨 ");
-		
-		
-		model.addAttribute("itemCondition", itemCondition);
+
+		aa.add(ItemSellStatus.WAIT);
+
+		List<Sort.Order> sorts = new ArrayList<>();
+		sorts.add(Sort.Order.desc("id"));
+		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9, Sort.by(sorts));
+
+		Page<AdminItemDto> itemCondition = this.adminService.getAdminItemPageNew(aa, pageable);
+		model.addAttribute("items", itemCondition);
+		model.addAttribute("maxPage", 5);
+
 		return "admin/adminfunding";
 	}
 	
