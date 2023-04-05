@@ -35,67 +35,72 @@ public class CustomOAuth2MemberService implements OAuth2UserService<OAuth2UserRe
 	
 		@Override
 		public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-			OAuth2UserService delegate = new DefaultOAuth2UserService();
-		    OAuth2User oAuth2User = delegate.loadUser(userRequest);
+			 OAuth2UserService delegate = new DefaultOAuth2UserService();
+		        OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
-		    String registration = userRequest.getClientRegistration().getRegistrationId();
-		   
-		    
-		    String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
-		    
-		    String email;
-		    String name;
-		    String token;
+		        String registrationId = userRequest.getClientRegistration().getRegistrationId();
+		        String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
+		                .getUserInfoEndpoint().getUserNameAttributeName();
+		        
+		        String email = null;
+		        String name = null;
+		        String token = null;
 
-		    Map<String, Object>response = oAuth2User.getAttributes();
+		        Map<String, Object> attributes = oAuth2User.getAttributes();
+		        
+		        
+		        if(registrationId.equals("naver")) {
+			        Map<String, Object> hash = (Map<String, Object>)attributes.get("response");
+			        
+			        email = (String) hash.get("email");
+			        name = (String) hash.get("name");
+			        token = (String) hash.toString();
+		        } else if(registrationId.equals("google")) {
+			        email = (String) attributes.get("email");
+			        name = (String) attributes.get("name");
+			       	token = (String) attributes.get("sub");
+			    }
 
-		    if(registration.equals("naver")) {
-		        Map<String, Object> hash = (Map<String, Object>)response.get("response");
-		        email = (String) hash.get("email");
-		        name = (String) hash.get("name");
-		        token =(String) hash.toString();
-		    } else if(registration.equals("google")) {
-		        email = (String) response.get("email");
-		        name = (String) response.get("name");
-		       	token = (String) response.get("sub");
-		    } else {
-		        throw new OAuth2AuthenticationException("허용되지 않는 인증입니다.");
-		    }
-		    
-		    Member member = null;
-		    
-		    Optional<Member> optionalMember = memberRepository.findByEmail(email);
-		    if(optionalMember.isPresent()) {
-		        member = optionalMember.get();
-		        member.setToken(token);
-		        this.memberRepository.save(member);
-		    } else {
-		    	member = new Member();
-	            member.setMemName(name);
-	            member.setEmail(email);
-	            member.setToken(token);
-	            member.setRole(Role.USER);
-		        if(registration.equals("naver")) {
-		            member.setSocial(Social.NAVER);
+		        Member member = null;
+		        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+		        
+		        
+		        
+		        if(optionalMember.isPresent()) {
+		            member = optionalMember.get();
+		            member.setToken(token);
+		            
 		            this.memberRepository.save(member);
-		        } else if(registration.equals("google")) {
-		            member.setSocial(Social.GOOGLE);
-		            this.memberRepository.save(member);
+		          
+		        } else {
+		            member = new Member();
+		            member.setEmail(email);
+		            member.setToken(token);
+		            member.setRole(Role.USER);
+		            
+		            if(registrationId.equals("naver")) {
+		                member.setSocial(Social.NAVER);
+		                this.memberRepository.save(member);
+		                System.out.println("저장완료");
+		            } else if(registrationId.equals("google")) {
+		                member.setSocial(Social.GOOGLE);
+		                this.memberRepository.save(member);
+		            }
 		        }
-		    }
-		    httpSession.setAttribute("member", new MemberDto(member));
-		    
-		    
-		    return new DefaultOAuth2User(Collections.singleton
-		    		(new SimpleGrantedAuthority(member.getRole().toString())),
-		            oAuth2User.getAttributes(),
-		            userNameAttributeName);
-		}
-		 // 소셜 로그인 시, 소셜 로그인에 등록된 실명과 이메일로 가입한 회원이 존재하지 않을 경우 null
-	    private Member check(MemberDto memberDto) {
-	    	Member member = memberRepository.findByEmail(memberDto.getEmail())
-	                .orElseThrow(() -> new OAuth2AuthenticationException("가입된 회원이 아닙니다."));
 
-	        return member;
-	    }
+		        return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(member.getRole().toString())), 
+		                attributes, userNameAttributeName);
+		    }
+		
+		private Member check(MemberDto memberDto, Optional<Member> optionalMember) {
+		    Member member = optionalMember.orElseGet(() -> {
+		        Member newMember = new Member();
+		        newMember.setEmail(memberDto.getEmail());
+		        newMember.setMemName(memberDto.getMemName());
+		        newMember.setRole(Role.USER);
+		        return memberRepository.save(newMember);
+		    });
+
+		    return member;
+		}
 	}

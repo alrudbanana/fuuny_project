@@ -38,7 +38,7 @@ public class ItemMainController {
 		model.addAttribute("maxPage", 5);
 		
 		if (!(principal == null)) { 
-            Member member = memberService.getMember1(principal.getName());
+            Member member = memberService.getMember(principal.getName());
             model.addAttribute("member", member);   
         }
 		

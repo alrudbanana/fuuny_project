@@ -107,7 +107,7 @@ private final ItemRepository itemRepository;
 	        }
 	        
 	        if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
-	             Member member = memberService.getMember1(principal.getName());
+	             Member member = memberService.getMember(principal.getName());
 	             model.addAttribute("member", member);   
 	         }
 
@@ -127,16 +127,20 @@ private final ItemRepository itemRepository;
 	        model.addAttribute("maxPage", 5); //페이지 번호의 최대 갯수 5 개의 이동할 페이지번호만 보여줌 0~4 
 	        
 	        if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
-	             Member member = memberService.getMember1(principal.getName());
+	             Member member = memberService.getMember(principal.getName());
 	             model.addAttribute("member", member);   
 	         }
 
 	        return "item/itemlist";
 	    }
-	 
+	 //index컨트롤러 
+	 @GetMapping("/")
+	 public String index() {
+		 return "index";
+	 }
 
-	 //메인페이지에 상품데이터 가져오기 //23.04.03 프로필 이미지 관련 변수 추가
-	 @GetMapping(value = "/")
+	 //메인페이지에 상품데이터 가져오기 //23.04.03 프로필 이미지 관련 변수 추가 //메인 컨트롤러
+	 @GetMapping(value = "/main")
 	 public String main(ItemSearchDto itemSearchDto, Optional<Integer> page, Model model, Principal principal) {
 		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0,6);
 		 Page<MainItemDto> items =
@@ -159,7 +163,7 @@ private final ItemRepository itemRepository;
 		 
 
 		 if (!(principal == null)) {
-	          Member member = memberService.getMember1(principal.getName());
+	          Member member = memberService.getMember(principal.getName());
 	          model.addAttribute("member", member);   
 	      }
 	    

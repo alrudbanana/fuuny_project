@@ -136,7 +136,7 @@ public class MemberController {
    
     }
 
-    //마이페이지 조회
+    /*마이페이지 조회
     @GetMapping("/detail")
 	public String detail(Model model, Principal principal) {
 
@@ -147,7 +147,7 @@ public class MemberController {
 
 		return "mypage"; 
 	}
-	
+	*/
 	
 	
 	//회원정보 수정
@@ -194,7 +194,7 @@ public class MemberController {
 		}
 		
 		
-		this.memberService.modify(member, memberDto);
+		this.memberService.modify(member, memberDto, email, memberDto.getMemName(), memberDto.getMemPhone(), memberDto.getZipcode(), memberDto.getStreetAdr(), memberDto.getDetailAdr());
 		return String.format("redirect:/members/detail");
 	}
 	

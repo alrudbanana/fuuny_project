@@ -1,11 +1,14 @@
 package com.project.social;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.core.ResolvableType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mysql.cj.Session;
 import com.project.dto.MemberDto;
+import com.project.entity.Member;
+import com.project.service.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,6 +29,8 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class OAuth2Controller {
+	private final MemberService memberService;
+	
 	private static final String authorizationRequestBaseUri = "oauth2/authorization";
 
 	Map<String, String> oauth2AuthenticationUrls = new HashMap<>();
@@ -43,6 +50,7 @@ public class OAuth2Controller {
 		clientRegistrations.forEach(registration -> oauth2AuthenticationUrls.put(registration.getClientName(),
 				authorizationRequestBaseUri + "/" + registration.getRegistrationId()));
 		model.addAttribute("urls", oauth2AuthenticationUrls);
+			
 		return "login";
 	}
 	
@@ -54,12 +62,33 @@ public class OAuth2Controller {
 		
 		 HttpSession httpSession = request.getSession();
 		 MemberDto member = (MemberDto) httpSession.getAttribute("member");
-		
+		 System.out.println(member);
 		
 		
 		return "redirect:/oauth2/authorization/" + oauth2;
 	}
 
+	
+	@GetMapping("members/detail")
+	public String detail(Model model, @AuthenticationPrincipal OAuth2User principal) {
+	    Member member = (Member) model.getAttribute("member");
+	    System.out.println(member);
+	    String email = member.getEmail();
+	    String registrationId = principal.getAttribute("sub");
+
+	    if (registrationId.startsWith("naver")) {
+	        Map<String, Object> attributes = principal.getAttribute("response");
+	        email = (String) attributes.get("email");
+	    } else if (registrationId.startsWith("google")) {
+	        email = principal.getAttribute("email");
+	    }
+
+	     member = this.memberService.getMember1(email);
+	    model.addAttribute("member", member);
+
+	    return "mypage"; 
+	}
+	
 	@RequestMapping("/accessDenied")
 	public String accessDenied() {
 		return "accessDenied";

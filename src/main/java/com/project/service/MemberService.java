@@ -10,8 +10,9 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
-
+import java.util.Map;
 
 import org.springframework.aot.hint.MemberCategory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.DataNotFoundException;
 import com.project.FileUploadUtil;
 import com.project.constant.Role;
+import com.project.constant.Social;
 import com.project.dto.MemberDto;
 import com.project.dto.MemberFormDto;
 import com.project.dto.MemberUpdateDto;
@@ -90,23 +94,33 @@ public class MemberService implements UserDetailsService {
 		}
 	
 	}
-	
-
-	
 	//정보수정
-	 public void modify( Member member , MemberDto memberDto) {
-	 	 
-		 member.setEmail(memberDto.getEmail());
-		 member.setMemPass(this.passwordEncoder.encode(memberDto.getMemPass()));
-		 member.setMemName(memberDto.getMemName());
-		 member.setMemPhone(memberDto.getMemPhone());
-		 member.setZipcode(memberDto.getZipcode());
-		 member.setStreetAdr(memberDto.getStreetAdr());
-		 member.setDetailAdr(memberDto.getDetailAdr());
-		 this.memberRepository.save(member); 
+	 public void modify( Member member , MemberDto memberDto , String email , String memName, String memPhone, String zipcode, String streeAdr, String detailAdr) {
+		 	 
+		 member.setEmail(email);
+		 member.setMemPass(this.passwordEncoder.encode(member.getMemPass()));
+		 member.setMemName(memName);
+		 member.setMemPhone(memPhone);
+		 member.setZipcode(zipcode);
+		 member.setStreetAdr(streeAdr);
+		 member.setDetailAdr(detailAdr);
+		 this.memberRepository.save(member);
+		 
 	 }
+	 
+	 
+	 //2.비밀번호 수정
+	 public void modifyPw(Member member) throws Exception {
+		 
+		 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 	
-
+		 String securePw = encoder.encode(member.getMemPass());
+		 member.setMemPass(securePw);
+		 
+		 this.memberRepository.save(member);
+	 }
+	 
+	 
 	 public void delete(Member member) {
 		 this.memberRepository.delete(member);
 		 }
@@ -139,32 +153,37 @@ public class MemberService implements UserDetailsService {
 		}else if("SELLER".equals(member.getRole().toString())){
 			authorities.add(new SimpleGrantedAuthority(Role.SELLER.getValue()));
 			System.out.println("SELLER Role 호출됨");
-			System.out.println(Role.SELLER.getValue());
+			System.out.println(Role.ADMIN.getValue());
 		}else if("USER".equals(member.getRole().toString())){
 			authorities.add(new SimpleGrantedAuthority(Role.USER.getValue()));
 			System.out.println("USER Role 호출됨");
-			System.out.println(Role.USER.getValue());
+			System.out.println(Role.ADMIN.getValue());
 		}
-		//수정 
+
 		return new User(member.getEmail(),member.getMemPass(), authorities);
     }  
     
 
 
-    
-    
+    //getMember1
     public Member getMember1(String email) {
-    	Optional<Member> member = this.memberRepository.findByEmail(email);
-    	return member.get();
-    }
+        Optional<Member> member = this.memberRepository.findByEmail(email);
+        if(member.isPresent()) {
+           System.out.println(member.get());
+           return member.get();
+        }else {
+        	System.out.println(email);
+           throw new DataNotFoundException("siteuser not found");
+        }
+     }
 
-
+   
 
   //사용자 조회 
-    public Member getMember(String memName) {
+    public Member getMember(String email) {
     	
     	  	
-    	 Optional<Member> member = this.memberRepository.findByEmail(memName);
+    	 Optional<Member> member = this.memberRepository.findByEmail(email);
     	 if (member.isPresent()) {
     		
     		 return member.get();
@@ -174,6 +193,13 @@ public class MemberService implements UserDetailsService {
     	 }
     }
 
+    public boolean checkPassword(Long member_id, String checkPassword) {
+        Member member = memberRepository.findById(member_id).orElseThrow(() ->
+                new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
+        String realPassword = member.getMemPass();
+        boolean matches = passwordEncoder.matches(checkPassword, realPassword);
+        return matches;
+    }
     
     //비밀번호 수정
 	 public void modifyPw(pwdDto pwdDto , Member member) {
@@ -183,7 +209,7 @@ public class MemberService implements UserDetailsService {
 		 this.memberRepository.save(member);
 	 }
 	 
-
+	 private final MemberUpdateDto memberUpdateDto;
 
 	 //임시비밀번호로 비밀번호 수정 
 	 public void updatePassword(Long memberId, String memberPassword) {
@@ -208,6 +234,6 @@ public class MemberService implements UserDetailsService {
 	        FileUploadUtil.saveFile(uploadDir, oriImgName, file);
 	  }
 	 
+	
 	 
 }
-

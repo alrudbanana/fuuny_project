@@ -56,12 +56,6 @@ public class MemberDto {
 	    	return member;
 	    }
 	    
-	    public MemberDto(Member member) {
-	    	this.email = member.getEmail();
-	    	this.memName = member.getMemName();
-	    	this.role = member.getRole();
-	    	this.social = member.getSocial();
-	    	this.token = member.getToken();
-	    }
+	   
 	    
 	}
