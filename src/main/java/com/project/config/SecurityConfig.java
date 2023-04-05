@@ -61,7 +61,6 @@ public class SecurityConfig {
 			.oauth2Login()
 				.loginPage("/login")
 				.defaultSuccessUrl("/")
-			    .failureUrl("/members/login")	
 				.userInfoEndpoint()
 				.userService(customOAuth2MemberService)
 				;

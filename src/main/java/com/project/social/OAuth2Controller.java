@@ -13,7 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mysql.cj.Session;
+import com.project.dto.MemberDto;
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -42,7 +47,15 @@ public class OAuth2Controller {
 	}
 	
 	@GetMapping(value = "/login/{oauth2}")
-	public String login(@PathVariable String oauth2, HttpServletResponse httpServletResponse) {
+	public String login(@PathVariable String oauth2, HttpServletResponse httpServletResponse, HttpServletRequest request) {
+		
+		System.out.println("로그인 호출");
+		System.out.println("auth2 출력됨 : ==> " + oauth2);
+		
+		 HttpSession httpSession = request.getSession();
+		 MemberDto member = (MemberDto) httpSession.getAttribute("member");
+		
+		
 		
 		return "redirect:/oauth2/authorization/" + oauth2;
 	}

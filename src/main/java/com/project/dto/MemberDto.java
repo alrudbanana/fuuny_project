@@ -1,7 +1,9 @@
 package com.project.dto;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.aot.hint.MemberCategory;
 
+import com.mysql.cj.Session;
 import com.project.constant.Role;
 import com.project.constant.Social;
 import com.project.entity.Member;
@@ -52,6 +54,14 @@ public class MemberDto {
 	    	member.setImgurl(memberProfile.getImgurl());
 	    	
 	    	return member;
+	    }
+	    
+	    public MemberDto(Member member) {
+	    	this.email = member.getEmail();
+	    	this.memName = member.getMemName();
+	    	this.role = member.getRole();
+	    	this.social = member.getSocial();
+	    	this.token = member.getToken();
 	    }
 	    
 	}
