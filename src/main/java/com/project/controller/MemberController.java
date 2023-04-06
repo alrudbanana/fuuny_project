@@ -313,19 +313,25 @@ public class MemberController {
     }
     
 
-	//마이페이지에서 문의내역조회
+    //마이페이지에서 문의내역조회
     @GetMapping("/question/list/{idx}")
     
-    public String list (Model model , Member member ,  @PathVariable("idx") Long idx , @RequestParam(value="page", defaultValue="0") int page) {
-		
-		Page<Question> paging = questionService.myquestionlist( page , idx);
-		
-		model.addAttribute("paging", paging);
-		
-		return "mypagequestionlist";
+    public String list (Model model ,   @PathVariable("idx") Long idx , @RequestParam(value="page", defaultValue="0") int page , Principal principal) {
+      
+       
+      String email = principal.getName();
+      
+      Member member = this.memberService.getMember1(email);
+      
+       
+      Page<Question> paging = questionService.myquestionlist( page , idx);
+      
+      model.addAttribute("paging", paging);
+      model.addAttribute("member",member);
+      
+      return "mypagequestionlist";
     
 }
-    
 
 }
 

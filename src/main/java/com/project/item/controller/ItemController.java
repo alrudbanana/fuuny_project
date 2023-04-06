@@ -1,12 +1,14 @@
 package com.project.item.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,16 +18,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.project.constant.ItemSellStatus;
+import com.project.dto.AdminItemDto;
 import com.project.entity.Member;
 import com.project.item.dto.ItemFormDto;
 import com.project.item.dto.ItemSearchDto;
-import com.project.item.dto.MainItemDto;
 import com.project.item.entity.Item;
 import com.project.item.repository.ItemRepository;
 import com.project.item.service.ItemService;
-
+import com.project.service.AdminService;
 import com.project.service.MemberService;
-
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -38,19 +40,27 @@ public class ItemController {
 private final ItemService itemService;
 private final MemberService memberService;
 private final ItemRepository itemRepository;
+private final AdminService adminService;
 
 	
 	//상품등록 폼 전달 
 	@GetMapping(value = "/saler/item/new")
-    public String itemForm(Model model){
+    public String itemForm(Model model, Principal principal){
         model.addAttribute("itemFormDto", new ItemFormDto());
+        
+        if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
+            Member member = memberService.getMember1(principal.getName());
+            model.addAttribute("member", member);   
+        }
+        
+        
         return "item/itemForm";
 	}
 	
 	//상품 등록 처리 
 	 @PostMapping(value = "/saler/item/new")
 	    public String itemNew(@Valid ItemFormDto itemFormDto, BindingResult bindingResult,
-	                          Model model, @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList){
+	                          Model model, @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList, Principal principal){
 
 	        if(bindingResult.hasErrors()){
 	            return "item/ItemForm";
@@ -62,18 +72,24 @@ private final ItemRepository itemRepository;
 	        }
 
 	        try {
+	        	itemFormDto.setItemsellstatus(ItemSellStatus.WAIT);
 	            itemService.saveItem(itemFormDto, itemImgFileList);
 	        } catch (Exception e){
 	            model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
 	            return "item/ItemForm";
 	        }
+	        
+	        if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
+	             Member member = memberService.getMember1(principal.getName());
+	             model.addAttribute("member", member);   
+	         }
 
 	        return "redirect:/";
 	    }
 	 
 	//상품 수정 -> 정보 출력
 	  @GetMapping(value = "/saler/item/{itemId}")
-	    public String itemDtl(@PathVariable("itemId") Long itemId, Model model){
+	    public String itemDtl(@PathVariable("itemId") Long itemId, Model model, Principal principal){
 
 	        try {
 	            ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
@@ -83,6 +99,11 @@ private final ItemRepository itemRepository;
 	            model.addAttribute("itemFormDto", new ItemFormDto());
 	            return "item/ItemForm";
 	        }
+	        
+	        if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
+	             Member member = memberService.getMember1(principal.getName());
+	             model.addAttribute("member", member);   
+	         }
 
 	        return "item/ItemForm";
 	    }
@@ -138,22 +159,17 @@ private final ItemRepository itemRepository;
 	 //메인페이지에 상품데이터 가져오기 //23.04.03 프로필 이미지 관련 변수 추가
 	 @GetMapping(value = "/")
 	 public String main(ItemSearchDto itemSearchDto, Optional<Integer> page, Model model, Principal principal) {
-		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0,6);
-		 Page<MainItemDto> items =
-				 itemService.getMainItemPage(itemSearchDto, pageable);
-		 List<Item> itemList = this.itemRepository.findAll();
-		 
-		 /* 출력 정보 확인 */ 
-		 List<MainItemDto> item = items.getContent(); 
-		 for (int i = 0 ; i < item.size() ; i++) {
-			 
-			 MainItemDto dto = item.get(i); 
-			 System.out.println(dto.getItemCategory());
-			 System.out.println(dto.getImgUrl());
-		 }
-		 
+		 List<ItemSellStatus> aa = new ArrayList();
+	      aa.add(ItemSellStatus.SELL);
+	      aa.add(ItemSellStatus.SOLD_OUT);
+
+	      List<Sort.Order> sorts = new ArrayList<>();
+	      sorts.add(Sort.Order.desc("id"));
+	      Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 20, Sort.by(sorts));
+
+	      Page<AdminItemDto> itemCondition = this.adminService.getAdminItemPageNew(aa, pageable);
 		
-		 model.addAttribute("items", items);
+		 model.addAttribute("items", itemCondition);
 		 model.addAttribute("itemSearchDto", itemSearchDto);		
 		 model.addAttribute("maxPage" , 5);
 		 
@@ -172,7 +188,7 @@ private final ItemRepository itemRepository;
 		//상세페이지
 		@GetMapping(value = "/item/{id}")
 		
-		public String itemDtl(Model model, @PathVariable("id") Long id) {
+		public String itemDtl(Model model, @PathVariable("id") Long id, Principal principal) {
 		
 			ItemFormDto itemFormDto = itemService.getItemDtl(id);
 			long remainingDays = itemFormDto.getRemainingDays();
@@ -180,10 +196,30 @@ private final ItemRepository itemRepository;
 		//	List<Item> itemList = this.itemService.getList();
 			model.addAttribute("item", itemFormDto);
 			model.addAttribute("remainingDays", remainingDays);
+			
+			if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
+	             Member member = memberService.getMember1(principal.getName());
+	             model.addAttribute("member", member);   
+	         }
+			
 			return "item/itemDtl";
 		}
 		
-
+		
+		//카테고리
+		@GetMapping("/category/{itemCategory}")
+		public String categoryItemList(@RequestParam("itemCategory") String itemCategory, Model model, Principal principal) {
+			List<Item> itemList = itemService.getItemByCategory(itemCategory);
+			model.addAttribute("itemList", itemList);
+			model.addAttribute("itemCategory", itemCategory);
+			
+			if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
+	             Member member = memberService.getMember1(principal.getName());
+	             model.addAttribute("member", member);   
+	         }
+			
+			return "categoryItemList";
+				}
 	 
 
 		

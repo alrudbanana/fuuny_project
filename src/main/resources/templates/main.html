@@ -8,7 +8,6 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <th:block layout:fragment="script">
-	<script src="./js/header.js"></script>
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script
@@ -115,9 +114,8 @@ h3 {
 
 }
 
-/* 푸터 */
-footer {
-	
+.btn_pg{
+margin : 20px 0;
 }
 
 #foot {
@@ -205,6 +203,30 @@ footer {
 				</div>
 
 
+			<!-- 페이징 처리 -->
+			<div th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 : (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})" >
+        <ul class="pagination justify-content-center btn_pg">
+
+            <li class="page-item" th:classappend="${items.number eq 0}?'disabled':''">
+                <a th:href="@{'/' + '?searchQuery=' + ${itemSearchDto.searchQuery} + '&page=' + ${items.number-1}}" aria-label='Previous' class="page-link">
+                    <span aria-hidden='true'>Previous</span>
+                </a>
+            </li>
+
+            <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${items.number eq page-1}?'active':''">
+                <a th:href="@{'/' +'?searchQuery=' + ${itemSearchDto.searchQuery} + '&page=' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
+            </li>
+
+            <li class="page-item" th:classappend="${items.number+1 ge items.totalPages}?'disabled':''">
+                <a th:href="@{'/' +'?searchQuery=' + ${itemSearchDto.searchQuery} + '&page=' + ${items.number+1}}" aria-label='Next' class="page-link">
+                    <span aria-hidden='true'>Next</span>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+    <!--  페이징처리 끝 -->
+
 
 			</div>
 		</section>
@@ -220,10 +242,7 @@ footer {
 		<!--푸터시작-->
 		<footer> </footer>
 		<!--푸터 끝-->
-	</div>
-	<script src="./js/header.js"></script>
 
-</div>
 
 
 </html>

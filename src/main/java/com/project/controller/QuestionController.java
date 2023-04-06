@@ -33,102 +33,136 @@ import lombok.RequiredArgsConstructor;
 @Controller
 public class QuestionController {
 
-	private final QuestionService questionService;
-	private final MemberService memberService;
+   private final QuestionService questionService;
+   private final MemberService memberService;
 
-	@GetMapping("/question/list")
-	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "kw", defaultValue = "") String kw) {
-		Page<Question> paging = this.questionService.getList(page, kw);
-		model.addAttribute("paging", paging);
-		model.addAttribute("kw", kw);
-		return "question_list";
-	}
-	
+   @GetMapping("/question/list")
+   public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+         @RequestParam(value = "kw", defaultValue = "") String kw, Principal principal) {
+      Page<Question> paging = this.questionService.getList(page, kw);
+      model.addAttribute("paging", paging);
+      model.addAttribute("kw", kw);
+      
+      if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
+          Member member = memberService.getMember1(principal.getName());
+          model.addAttribute("member", member);   
+      }
+      
+      return "question_list";
+   }
 
-	@GetMapping(value = "/question/detail/{id}")
-	public String detail(Model model, @PathVariable("id") Long id, AnswerForm answerForm) {
+   @GetMapping(value = "/question/detail/{id}")
+   public String detail(Model model, @PathVariable("id") Long id, AnswerForm answerForm, Principal principal) {
 
-		Question question = this.questionService.getQustion(id);
-		model.addAttribute("question", question);
+      Question question = this.questionService.getQustion(id);
+      model.addAttribute("question", question);
+      
+      if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
+          Member member = memberService.getMember1(principal.getName());
+          model.addAttribute("member", member);   
+      }
+      
 
-		return "question_detail";
-	}
+      return "question_detail";
+   }
 
-	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/question/create")
-	public String questionCreate(QuestionForm questionForm) {
+   @PreAuthorize("isAuthenticated()")
+   @GetMapping("/question/create")
+   public String questionCreate(QuestionForm questionForm, Principal principal, Model model) {
 
-		return "question_form";
-	}
+	   if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
+           Member member = memberService.getMember1(principal.getName());
+           model.addAttribute("member", member);   
+       }
+	   
+      return "question_form";
+   }
 
-	@PreAuthorize("isAuthenticated()")
-	@PostMapping("/question/create")
-	public String questionCreate(@Valid QuestionForm questionForm, BindingResult bindingResult, Principal principal) {
+   @PreAuthorize("isAuthenticated()")
+   @PostMapping("/question/create")
+   public String questionCreate(@Valid QuestionForm questionForm, BindingResult bindingResult, Principal principal) {
 
-		if (bindingResult.hasErrors()) {
+      if (bindingResult.hasErrors()) {
 
-			return "question_form";
-		}
+         return "question_form";
+      }
 
-		Member member = this.memberService.getMember(principal.getName());
-		this.questionService.create(questionForm.getTitle(), questionForm.getContent(), member , questionForm.getBoardCategory());
+      Member member = this.memberService.getMember(principal.getName());
+      this.questionService.create(questionForm.getTitle(), questionForm.getContent(), member , questionForm.getBoardCategory());
 
-		return "redirect:/question/list";
-	}
+      return "redirect:/question/list";
+   }
 
-	// 수정
-	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/question/modify/{id}")
-	public String questionModify(QuestionForm questionForm, @PathVariable("id") Long id, Principal principal) {
+   // 수정
+   @PreAuthorize("isAuthenticated()")
+   @GetMapping("/question/modify/{id}")
+   public String questionModify(QuestionForm questionForm, @PathVariable("id") Long id, Principal principal, Model model) {
 
-		Question question = this.questionService.getQustion(id);
-		if (!question.getMember().getEmail().equals(principal.getName())) {
+      Question question = this.questionService.getQustion(id);
+      if (!question.getMember().getEmail().equals(principal.getName())) {
 
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
-		}
+         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+      }
+      
+      if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
+          Member member = memberService.getMember1(principal.getName());
+          model.addAttribute("member", member);   
+      }
 
-		questionForm.setTitle(question.getTitle());
-		questionForm.setContent(question.getContent());
-		return "question_form";
-	}
+      questionForm.setTitle(question.getTitle());
+      questionForm.setContent(question.getContent());
+      
+      
+      return "question_form";
+   }
 
-	@PreAuthorize("isAuthenticated()")
-	@PostMapping("/question/modify/{id}")
-	public String questionModify(@Valid QuestionForm questionForm, BindingResult bindingResult, Principal principal,
-			@PathVariable("id") Long id) {
+   @PreAuthorize("isAuthenticated()")
+   @PostMapping("/question/modify/{id}")
+   public String questionModify(@Valid QuestionForm questionForm, BindingResult bindingResult, Principal principal,
+         @PathVariable("id") Long id, Model model) {
 
-		if (bindingResult.hasErrors()) {
-			return "question_form";
-		}
-		Question question = this.questionService.getQustion(id);
-		if (!question.getMember().getEmail().equals(principal.getName())) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
-		}
-		this.questionService.modify(question, questionForm.getTitle(), questionForm.getContent());
-		return String.format("redirect:/question/detail/%s", id);
-	}
+      if (bindingResult.hasErrors()) {
+         return "question_form";
+      }
+      Question question = this.questionService.getQustion(id);
+      if (!question.getMember().getEmail().equals(principal.getName())) {
+         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+      }
+      this.questionService.modify(question, questionForm.getTitle(), questionForm.getContent());
+      
+      if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
+          Member member = memberService.getMember1(principal.getName());
+          model.addAttribute("member", member);   
+      }
+      
+      return String.format("redirect:/question/detail/%s", id);
+   }
 
-	// 삭제
+   // 삭제
 
-	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/question/delete/{id}")
-	public String questionDelete(Principal principal, @PathVariable("id") Long
-			id) {
-			 Question question = this.questionService.getQustion(id);
-			 if (!question.getMember().getEmail().equals(principal.getName())) {
-			 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
-			 }
-			 this.questionService.delete(question);
-			 return "redirect:/question/list";
-			 }
+   @PreAuthorize("isAuthenticated()")
+   @GetMapping("/question/delete/{id}")
+   public String questionDelete(Principal principal, @PathVariable("id") Long
+         id) {
+          Question question = this.questionService.getQustion(id);
+          if (!question.getMember().getEmail().equals(principal.getName())) {
+          throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+          }
+          this.questionService.delete(question);
+          return "redirect:/question/list";
+          }
 
-	
-	@GetMapping("/item/kakaopay")
-	public String kakao() {
-		return "kakaopay";
-	}
-	
-	
-	
+   
+   @GetMapping("/item/kakaopay")
+   public String kakao() {
+      return "kakaopay";
+   }
+   
+   @GetMapping("/item/cancel")
+   public String Cancel() {
+      return "cancel";
+   }
+   
+   
+   
 }

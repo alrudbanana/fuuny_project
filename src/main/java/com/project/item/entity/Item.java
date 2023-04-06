@@ -2,13 +2,15 @@ package com.project.item.entity;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.project.constant.ItemSellStatus;
 import com.project.entity.BaseEntity;
 import com.project.exception.OutOfStockException;
 import com.project.item.dto.ItemFormDto;
 
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,6 +19,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -89,6 +92,19 @@ public class Item extends BaseEntity{
 	    public long getRemainingDays() {
 	    	LocalDate today = LocalDate.now();
 	    	return ChronoUnit.DAYS.between(today, endDate);
+	    }
+	    
+	    //카테고리 리스트에 이미지 출력 메소드
+	    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+	    private List<ItemImg> itemImgs = new ArrayList<>();
+
+	    public String getMainItemImgUrl() {
+	    	for(ItemImg itemImg : itemImgs) {
+	    		if(itemImg.getRepimgYn().equals("Y")) {
+					return itemImg.getImgUrl();
+	    		}
+	    	}
+	    	return null;
 	    }
 	    
 	    

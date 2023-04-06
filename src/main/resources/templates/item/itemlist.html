@@ -12,9 +12,9 @@
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
-	table, tr,td,th{
-	text-align:center;
-	}
+   table, tr,td,th{
+   text-align:center;
+   }
     </style>
 </th:block>
 <title>상품 관리 화면 페이지</title>
@@ -24,7 +24,7 @@
     <script th:inline="javascript">
     $(document).ready(function(){
         $("#searchBtn").on("click",function(e) {
-        	consol.log("클릭")
+           consol.log("클릭")
             e.preventDefault();
             page(0);
         });
@@ -56,7 +56,7 @@
                 <td>등록일</td>
                 <td>수정일</td>
                 <td>상태</td>
-				<td>카테고리</td>
+            <td>카테고리</td>
                 <td>재고</td>
 
             </tr>
@@ -71,13 +71,13 @@
              
                 <td th:text="${item.regTime}"></td>
                 <td th:text="${item.updateTime}"></td>
-               	<td th:text="${item.itemsellstatus.isSell() ? '판매중' : '품절'}"></td>
+                  <td th:text="${item.itemsellstatus.isSell() ? '판매중' : '품절'}"></td>
                 <td th:text="${item.itemCategory}"></td>
                 <td th:text="${item.stockNumber}"></td>
             </tr>
             </tbody>
         </table>
-	<!-- 페이징처리 -->
+   <!-- 페이징처리 -->
         <div th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 : (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})" >
             <ul class="pagination justify-content-center">
 
@@ -99,8 +99,8 @@
 
             </ul>
         </div>
-	<!-- 페이징처리 끝 -->	
-	<!-- 검색 -->
+   <!-- 페이징처리 끝 -->   
+   <!-- 검색 -->
         <div class="form-inline justify-content-center" th:object="${itemSearchDto}">
             <select th:field="*{searchDateType}" class="form-select" id="exampleSelect1" style="width:auto;">
                 <option value="all">전체기간</option>
@@ -110,14 +110,14 @@
                 <option value="6m">6개월</option>
             </select>
             <select th:field="*{searchSellStatus}" class="form-select" id="exampleSelect1" style="width:auto;">
-			   		<option value="">판매상태(전체)</option>
-				    <option value="SELL">판매중</option>
-				    <option value="SOLD_OUT">품절</option>
-				    <option value="WAIT">대기</option>
-				    <option value="CONFIRM">승인</option>
-				    <option value="REFUSE">반려</option>
-				    <option value="CLOSE">종료</option>
-			</select>	
+                  <option value="">판매상태(전체)</option>
+                <option value="SELL">판매중</option>
+                <option value="SOLD_OUT">품절</option>
+                <option value="WAIT">대기</option>
+                <option value="CONFIRM">승인</option>
+                <option value="REFUSE">반려</option>
+                <option value="CLOSE">종료</option>
+         </select>   
             <select th:field="*{searchBy}" class="form-select" id="exampleSelect1" style="width:auto;">
                 <option value="itemNm">상품명</option>
                 <option value="itemCategory">카테고리</option>

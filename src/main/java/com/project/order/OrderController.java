@@ -1,7 +1,9 @@
 package com.project.order;
 
+import com.project.entity.Member;
 import com.project.order.OrderDto;
 import com.project.order.OrderService;
+import com.project.service.MemberService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,10 +34,12 @@ import java.util.Optional;
 public class OrderController {
 
     private final OrderService orderService;
+    private final MemberService memberService;
+
 
     @PostMapping(value = "/order")
     public @ResponseBody ResponseEntity order(@RequestBody @Valid OrderDto orderDto
-            , BindingResult bindingResult, Principal principal){
+            , BindingResult bindingResult, Principal principal, Model model){
 
         if(bindingResult.hasErrors()){
             StringBuilder sb = new StringBuilder();
@@ -56,6 +60,11 @@ public class OrderController {
         } catch(Exception e){
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+        
+        if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
+            Member member = memberService.getMember1(principal.getName());
+            model.addAttribute("member", member);   
+        }
 
         return new ResponseEntity<Long>(orderId, HttpStatus.OK);
     }
@@ -69,6 +78,11 @@ public class OrderController {
         model.addAttribute("orders", ordersHistDtoList);
         model.addAttribute("page", pageable.getPageNumber());
         model.addAttribute("maxPage", 5);
+        
+        if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
+            Member member = memberService.getMember1(principal.getName());
+            model.addAttribute("member", member);   
+        }
 
         return "order/orderHist";
     }

@@ -39,18 +39,18 @@ public class IndexController {
    
 
    	  //홈 /23.04.01 프로필이미지 관련 principal추가
-	   @RequestMapping(value = "/")
-	   public String main(Principal principal, Model model) {
-	      List<Item> itemList = this.itemRepository.findAll();
-	      model.addAttribute("itemList", itemList);
-	      
-	      if (!(principal == null)) {
-	          Member member = memberService.getMember1(principal.getName());
-	          model.addAttribute("member", member);   
-	      }
-	    
-	      return "main";
-	   }
+//	   @RequestMapping(value = "/")
+//	   public String main(Principal principal, Model model) {
+//	      List<Item> itemList = this.itemRepository.findAll();
+//	      model.addAttribute("itemList", itemList);
+//	      
+//	      if (!(principal == null)) {
+//	          Member member = memberService.getMember1(principal.getName());
+//	          model.addAttribute("member", member);   
+//	      }
+//	    
+//	      return "main";
+//	   }
    
 
 

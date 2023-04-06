@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
+import com.project.entity.Member;
+import com.project.service.MemberService;
 
 import jakarta.validation.Valid;
 
@@ -27,9 +28,10 @@ import lombok.RequiredArgsConstructor;
 public class CartController {
 
     private final CartService cartService;
+    private final MemberService memberService;
 
     @PostMapping(value = "/cart")
-    public @ResponseBody ResponseEntity order(@RequestBody @Valid CartItemDto cartItemDto, BindingResult bindingResult, Principal principal){
+    public @ResponseBody ResponseEntity order(@RequestBody @Valid CartItemDto cartItemDto, BindingResult bindingResult, Principal principal, Model model){
 
         if(bindingResult.hasErrors()){
             StringBuilder sb = new StringBuilder();
@@ -50,6 +52,11 @@ public class CartController {
         } catch(Exception e){
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+        
+        if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
+            Member member = memberService.getMember1(principal.getName());
+            model.addAttribute("member", member);   
+        }
 
         return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
     }
@@ -61,6 +68,12 @@ public class CartController {
     	
         List<CartDetailDto> cartDetailList = cartService.getCartList(principal.getName());
         model.addAttribute("cartItems", cartDetailList);
+        
+        if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
+            Member member = memberService.getMember1(principal.getName());
+            model.addAttribute("member", member);   
+        }
+        
         return "cart/cartList";
     }
 

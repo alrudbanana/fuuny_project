@@ -31,6 +31,7 @@ import com.project.entity.Notice;
 import com.project.item.dto.ItemFormDto;
 import com.project.item.entity.Item;
 import com.project.service.AdminService;
+import com.project.service.MemberService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,8 @@ import lombok.RequiredArgsConstructor;
 public class AdminController {
 
    private final AdminService adminService;
+   private final MemberService memberService;
+
 
    @GetMapping(value = "/main")
    public String adminMain(Model model, Optional<Integer> page) {
@@ -294,7 +297,7 @@ public class AdminController {
    // 2023.03.31 판매자의 프로젝트 관리 페이지
    @GetMapping(value = "/seller/main")
    public String adminSellerMain(@RequestParam(value = "value", defaultValue = "1") int param1,
-         Model model, Optional<Integer> page) {
+         Model model, Optional<Integer> page, Principal principal) {
 
       List<ItemSellStatus> aa = new ArrayList(); 
       if(param1 == 1) {
@@ -328,6 +331,11 @@ public class AdminController {
       model.addAttribute("maxPage", 5);
       
       System.out.println("param1 : " + param1);
+      
+      if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
+          Member member = memberService.getMember1(principal.getName());
+          model.addAttribute("member", member);   
+      }
 
       return "admin/adminSellerFundingWait";
    }
@@ -335,13 +343,19 @@ public class AdminController {
    
    //2023.04.01 판매자 프로젝트 관리 상세 페이지 + 이미지 포함
    @GetMapping(value = "/item/detail/seller/{id}")
-   public String detailSeller(Model model, @PathVariable("id") Long id) {
+   public String detailSeller(Model model, @PathVariable("id") Long id, Principal principal) {
       //이미지 빼고 불러오기
 //      Item item = this.adminService.getItemDetail(id);
 //      model.addAttribute("item", item);
       
       ItemFormDto itemFormDto = adminService.getItemDetailNew(id);
         model.addAttribute("item", itemFormDto);
+        
+        if (!(principal == null)) { //principal에 값이 있으면(로그인상태면)
+            Member member = memberService.getMember1(principal.getName());
+            model.addAttribute("member", member);   
+        }
+        
       return "admin/adminSellerFundingDetail";
    }
    

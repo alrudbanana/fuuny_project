@@ -2,6 +2,9 @@ body {
   margin: 0;
   font-family: 'NanumSquareNeo-Variable';
 }
+li{
+	list-style-type: none;
+}
 
 a {
   text-decoration: none;
@@ -13,6 +16,15 @@ a:hover{
 
 nav {
   font-size: 16px;
+}
+
+@font-face {
+   font-family: 'NanumSquareNeo-Variable';
+   src:
+      url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2')
+      format('woff2');
+   font-weight: normal;
+   font-style: normal;
 }
 
 .navbar {
@@ -50,10 +62,14 @@ nav {
   color: black;
   display: flex;
   padding-left: 0;
+  display: inline-block;
+   vertical-align: middle !important;
 }
 
 .navbar_login li {
   padding: 8px 12px;
+  display: inline-block;
+  vertical-align: middle !important;
 }
 
 .navbar_login li:hover {
@@ -72,8 +88,9 @@ nav {
 }
 
 .profile {
+  display : flex;
   background-color: white;
-  width: 50px;
+  width: 300px;
   height: 50px;
   border-radius: 50px;
 }
@@ -83,11 +100,13 @@ nav {
   height: 50px;
   border: none;
   border-radius: 50px;
+  margin-left : 10px;
 }
 
-.sub_btn {
-  margin-top: 10px;
+.ptext {
+   padding-top : 20px;
 }
+
 
 /* 드롭다운 */
 .dropbtn {
@@ -106,7 +125,7 @@ nav {
   display: none;
   position: absolute;
   background-color: white;
-  min-width: 300px;
+  min-width: 500px;
   margin-top: 10px;
   border-radius: 10px;
   z-index: 1;
@@ -127,6 +146,14 @@ nav {
 .dropdown:hover .dropdown-content {
   display: block;
 }
+
+@media screen and (min-width: 768px) and (max-width: 1075px) {
+ .profile {
+    display: none;
+ }
+}
+  
+
 
 @media screen and (max-width: 768px) {
   .navbar {
@@ -162,9 +189,21 @@ nav {
     display: flex;
   }
 
+
   .dropdown-content {
     min-width: 200px;
   }
+  
+  .profile {
+  
+  display : none;
+  
+  }
+  
+  .dropdown {
+  display :none;
+  }
+  
  /*색 수정시 이부분 수정*/
 .dropdown .dropbtn:hover {
   background-color: #ff527f;
