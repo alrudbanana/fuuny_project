@@ -1,10 +1,6 @@
-
-<!DOCTYPE html>
-
-
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/layout}"
+	layout:decorate="~{layouts/socialLayout}"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <th:block layout:fragment="script">
@@ -183,7 +179,7 @@ footer {
 				</div>
 
 				<h3>인기 프로젝트</h3>
-
+		<!-- 
 				<div class="container text-center">
 					<div class="row">
 
@@ -198,7 +194,7 @@ footer {
 							</a>
 							<div class="main_detail" th:text="${mainItem.itemDetail}"></div>
 						</div>
-
+		 -->
 
 
 					</div>
@@ -222,14 +218,7 @@ footer {
 
 			</div>
 			
-	<script>
-	  (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.")}var ch=function(){ch.c(arguments)};ch.q=[];ch.c=function(args){ch.q.push(args)};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x)}}if(document.readyState==="complete"){l()}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l)}})();
-	
-	  ChannelIO('boot', {
-	    "pluginKey": "9a24e9e6-7c26-4e9e-bdb0-06674e5b9e0c"
-	  });
-	</script>
-	
+			
 		</section>
 		<!--메인 끝-->
 

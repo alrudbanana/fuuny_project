@@ -153,30 +153,34 @@ public class MemberService implements UserDetailsService {
                 .build();
     }  
     
-
+    public void removeToken(String email) {
+        memberRepository.removeTokenByEmail(email);
+    }
 
     
-    
+    /*
     public Member getMember1(String email) {
     	Optional<Member> member = this.memberRepository.findByEmail(email);
     	return member.get();
     }
-
+*/
 
 
   //사용자 조회 
-    public Member getMember(String memName) {
+    public Member getMember1(String email) {
     	
-    	  	
-    	 Optional<Member> member = this.memberRepository.findByEmail(memName);
-    	 if (member.isPresent()) {
-    		
-    		 return member.get();
-    	 } else {
-    		
-    		 throw new DataNotFoundException("siteuser not found ");
-    	 }
-    }
+	  	
+   	 Optional<Member> member = this.memberRepository.findByEmail(email);
+   	 if (member.isPresent()) {
+   		
+   		 return member.get();
+   	 } else {
+   		
+   		 throw new DataNotFoundException("siteuser not found ");
+   	 }
+   	
+   }
+
 
     
     //비밀번호 수정

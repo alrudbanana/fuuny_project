@@ -3,6 +3,7 @@ package com.project.entity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.project.constant.Role;
+import com.project.constant.Social;
 import com.project.dto.MemberFormDto;
 
 import jakarta.persistence.Column;
@@ -33,9 +34,9 @@ public class Member extends BaseTimeEntity {
      
     private String memPass; //비밀번호
     
-    @NotEmpty 
+    
     private String memName; //이름
-    @NotEmpty 
+    
     private String memPhone; //휴대폰
     
     @Enumerated(EnumType.STRING)
@@ -45,11 +46,20 @@ public class Member extends BaseTimeEntity {
     private String imgurl;
     
     //주소
-    @NotEmpty
+   
     private String zipcode;
-    @NotEmpty
+    
     private String streetAdr;
 
     private String detailAdr;
+    
+    @Enumerated(EnumType.STRING)
+   	public Social social;
+
+   	public String token;
+   	
+   	public String getRoleKey() {
+   		return this.role.getKey();
+   	}
     
 }

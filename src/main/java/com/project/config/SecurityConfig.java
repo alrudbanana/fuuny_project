@@ -1,5 +1,6 @@
 package com.project.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +15,7 @@ import org.springframework.security.web.header.writers.frameoptions.XFrameOption
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.project.model.KakaoProfile;
+import com.project.service.CustomOAuth2MemberService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +27,9 @@ import lombok.RequiredArgsConstructor;
 @EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
-	
+	 @Autowired
+	 private CustomOAuth2MemberService customOAuth2MemberService;
+	 
 	
 	
 	 @Bean
@@ -54,14 +58,20 @@ public class SecurityConfig {
 			.logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
 			.logoutSuccessUrl("/")
 			.invalidateHttpSession(true)
-			
+	        
 	        //oauth2로그인
-	        .and()
+			.and()
 			.oauth2Login()
-			.loginPage("/oauth/kakao")
-			.defaultSuccessUrl("/");
+				.loginPage("/login")
+				.defaultSuccessUrl("/social/login")
+				.userInfoEndpoint()
+				.userService(customOAuth2MemberService)
+				;
+	        
 	        return http.build();
 	        
+	        
+	    
 	        
 	    }
 

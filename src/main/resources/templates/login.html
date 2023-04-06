@@ -100,7 +100,7 @@
                      <a href="/members/logout" class="btn btn-primary">로그아웃</a>
                   </div>
                   
-                  <!-- 
+                  
 
                   <div class="button-login-box" sec:authorize="isAnonymous()">
                      <a href="https://kauth.kakao.com/oauth/authorize?client_id=6b36f27350db8f1bdd0436a0710b7bae&redirect_uri=http://localhost:9404/oauth/kakao&response_type=code" onclick="function1()"><img src="/img/kakao_login_medium_wide2.png"></a>
@@ -108,7 +108,9 @@
                         <a href="https://kauth.kakao.com/oauth/logout?client_id=6b36f27350db8f1bdd0436a0710b7bae&logout_redirect_uri=http://localhost:9404/"><img src="/img/kakao_logout_medium_wide.png"></a>
                      </div>
                   </div>
-					 -->
+					 <a th:href="@{/login/google}"><img src="/img/btn_login_google_long.png" style="width:400px; padding-right:40px;"/></a><br>
+					 <a th:href="@{/login/naver}"><img src="/img/네이버로그인.png"style="width:400px; padding-right:40px;"/></a><br>
+						
                   <p class="mt-4 text-sm text-center">
                      <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#findPw">비밀번호를 잊으셨나요?</button>
                   </p>

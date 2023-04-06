@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+   
+
+<div th:fragment="header">
+<link rel="stylesheet" type="text/css" th:href="@{/header.css}">
+  <nav class="navbar">
+    <div class="navbar_logo">
+         <a href="/"><img src="/img/header_logo.png" alt="header logo"></a>
+    </div>
+    <ul class="navbar_menu">
+      <div class="dropdown">
+        <li><a href="" class="dropbtn">카테고리</a>
+          <ul class="sub_menu dropdown-content">
+            <li><a th:href="@{/category/itemList(itemCategory='문구')}">문구</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='푸드')}">푸드</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='영화')}">영화</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='굿즈')}">굿즈</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='뷰티')}">뷰티</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='공연')}">공연</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='게임')}">게임</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='리빙')}">리빙</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='의류')}">의류</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='예술')}">예술</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='웹툰')}">웹툰</a></li>  
+            <li><a th:href="@{/category/itemList(itemCategory='가전')}">가전</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='잡화')}">잡화</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='사진')}">사진</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='펫')}">펫</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='보석')}">보석</a></li>
+            <li><a th:href="@{/category/itemList(itemCategory='음악')}">음악</a></li>        
+
+         </ul>
+        </li>
+     </div>
+  
+      <li><a href="">공지사항</a></li>
+      <li><a href="/question/list">문의사항</a></li>  
+      <li sec:authorize="isAuthenticated()"><a href="/cart">장바구니</a>
+      <li sec:authorize="isAuthenticated()"><a href="/orders">구매내역</a>
+    </ul>
+    
+    <ul class="navbar_login">
+      <li sec:authorize="isAnonymous()"><a href="/members/login">로그인</a></li>
+      <li sec:authorize="isAuthenticated()"><a href = "/members/logout">로그아웃</a></li>
+      <li sec:authorize="isAnonymous()"><a href="/members/new">회원가입</a></li>
+      <li sec:authorize="hasAnyAuthority('SELLER')" class="sub_btn"><a href="/saler/main">프로젝트 페이지</a></li>
+      <li sec:authorize="hasAnyAuthority('ADMIN')"><a href="/admin/main">관리자 페이지</a></li>
+    </ul>
+       
+      <!-- 로그아웃 상태시 디폴트 프로필 이미지 출력
+         <ul>
+      <li sec:authorize="isAnonymous()"><div class="profile"><img th:src="@{/img/profile/default.png}"></div></li>
+       로그인 상태시 멤버의  imgurl 출력 // 23.04.02 member에 자꾸 null이라고 떠서 일단 디폴이미지뜨게 수정
+      <li sec:authorize="isAuthenticated()">
+       <a th:href="@{/members/detail}"> <div class="profile"> <!-- mamver이 널값이 아니면 member.imgurl, 아니면 디폴트이미지 
+       <div class="ptext" th:text="${member.memName}" style=color:palevioletred;></div> 
+       <div class="ptext">님 안녕하세요!</div>
+          <img th:src="${member != null ? member.imgurl : '/img/profile/default.png'}">
+        </div></a>
+     </li>
+      </ul>
+       -->
+
+    <a href="#" class="navbar_toogleBtn">
+      <img src="/img/hamburger.png">
+    </a>
+   </nav>
+
+<script src="/js/header.js"></script>
+</div>
+
+
+</html>
