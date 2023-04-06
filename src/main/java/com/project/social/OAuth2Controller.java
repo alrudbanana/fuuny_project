@@ -1,11 +1,16 @@
 package com.project.social;
 
 import java.security.Principal;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.core.ResolvableType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mysql.cj.Session;
 import com.project.dto.MemberDto;
+import com.project.entity.CustomOAuth2User;
 import com.project.entity.Member;
 import com.project.service.MemberService;
 
@@ -54,40 +60,21 @@ public class OAuth2Controller {
 		return "login";
 	}
 	
+	
 	@GetMapping(value = "/login/{oauth2}")
-	public String login(@PathVariable String oauth2, HttpServletResponse httpServletResponse, HttpServletRequest request) {
+	public String login(@PathVariable String oauth2, @AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
 		
 		System.out.println("로그인 호출");
 		System.out.println("auth2 출력됨 : ==> " + oauth2);
 		
-		 HttpSession httpSession = request.getSession();
-		 MemberDto member = (MemberDto) httpSession.getAttribute("member");
-		 System.out.println(member);
+		System.out.println(customOAuth2User);
 		
 		
 		return "redirect:/oauth2/authorization/" + oauth2;
 	}
-
 	
-	@GetMapping("members/detail")
-	public String detail(Model model, @AuthenticationPrincipal OAuth2User principal) {
-	    Member member = (Member) model.getAttribute("member");
-	    System.out.println(member);
-	    String email = member.getEmail();
-	    String registrationId = principal.getAttribute("sub");
+	
 
-	    if (registrationId.startsWith("naver")) {
-	        Map<String, Object> attributes = principal.getAttribute("response");
-	        email = (String) attributes.get("email");
-	    } else if (registrationId.startsWith("google")) {
-	        email = principal.getAttribute("email");
-	    }
-
-	     member = this.memberService.getMember1(email);
-	    model.addAttribute("member", member);
-
-	    return "mypage"; 
-	}
 	
 	@RequestMapping("/accessDenied")
 	public String accessDenied() {

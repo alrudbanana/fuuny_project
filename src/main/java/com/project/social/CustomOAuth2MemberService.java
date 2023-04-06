@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.project.constant.Role;
 import com.project.constant.Social;
 import com.project.dto.MemberDto;
+import com.project.entity.CustomOAuth2User;
 import com.project.entity.Member;
 import com.project.repository.MemberRepository;
 
@@ -88,9 +89,13 @@ public class CustomOAuth2MemberService implements OAuth2UserService<OAuth2UserRe
 		            }
 		        }
 
-		        return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(member.getRole().toString())), 
-		                attributes, userNameAttributeName);
-		    }
+		        return new CustomOAuth2User(
+		                Collections.singleton(new SimpleGrantedAuthority(member.getRole().toString())),
+		                attributes,
+		                userNameAttributeName,
+		                member
+		            );
+		}
 		
 		private Member check(MemberDto memberDto, Optional<Member> optionalMember) {
 		    Member member = optionalMember.orElseGet(() -> {
