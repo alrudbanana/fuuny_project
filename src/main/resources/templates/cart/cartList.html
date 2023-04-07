@@ -34,8 +34,9 @@
                 orderTotalPrice += huPrice; // huPrice 값을 orderTotalPrice 변수에 더함
             }
          
-          IMP.request_pay({
-           pg: "kakaopay", 
+          	IMP.init('imp81752704');
+          	IMP.request_pay({
+           	pg: "kakaopay", 
             pay_method: "card",
             merchant_uid: new Date(),   // 주문번호
             name: $("#itemNm").text(),
