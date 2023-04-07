@@ -166,6 +166,32 @@ public class AdminController {
       model.addAttribute("notice", notice);
       return "admin/adminNoticeDetail";
    }
+   
+   // 메인공지글로 이동
+   @GetMapping(value = "/notice/user")
+   public String adminNoticeuser(Model model, @RequestParam(value = "page", defaultValue = "0") int page , Principal principal ) {
+
+      String email = principal.getName();
+      Member member = this.memberService.getMember1(email);
+      Page<Notice> paging = this.adminService.getList(page);
+      
+      model.addAttribute("paging", paging);
+      model.addAttribute("member",member);
+      return "notice";
+   }
+   
+   // 메인공지 디테일로 이동
+   @GetMapping(value = "/notice/user/detail/{id}")
+   public String noticeuserDetail(Model model, @PathVariable("id") Integer id , Principal principal) {
+      
+     String email = principal.getName();
+     Member member = this.memberService.getMember1(email);
+      
+     Notice notice = this.adminService.getNotice(id);
+      model.addAttribute("notice", notice);
+      model.addAttribute("member",member);
+      return "noticedetail";
+   }
 
    // 공지 생성으로 이동
    @GetMapping(value = "/notice/write")

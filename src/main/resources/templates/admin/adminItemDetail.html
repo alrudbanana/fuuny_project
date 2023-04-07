@@ -64,28 +64,7 @@
 		<br>
 
 
-		<a class="approve btn btn-success" href="javascript:void(0);"
-			th:if="${item.itemsellstatus.toString().equals('WAIT')}"
-			th:myId="${item.id}" th:num="1"
-			onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">승인으로
-			변경</a> <a class="refuse btn btn-warning" href="javascript:void(0);"
-			th:if="${item.itemsellstatus.toString().equals('WAIT')} 
-				or ${item.itemsellstatus.toString().equals('CONFIRM')}
-	 			or ${item.itemsellstatus.toString().equals('SELL')} 
-	 			or ${item.itemsellstatus.toString().equals('SOLD_OUT')}"
-			th:myId="${item.id}" th:num="2"
-			onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">거절로
-			변경</a> <a class="wait btn btn-secondary" href="javascript:void(0);"
-			th:if="${item.itemsellstatus.toString().equals('REFUSE')} 
-				or ${item.itemsellstatus.toString().equals('CONFIRM')}
-	 			or ${item.itemsellstatus.toString().equals('SELL')} 
-	 			or ${item.itemsellstatus.toString().equals('SOLD_OUT')}"
-			th:myId="${item.id}" th:num="3"
-			onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">대기중으로
-			변경</a> <a class="delete btn btn-danger" href="javascript:void(0);"
-			th:if="${item.itemsellstatus.toString().equals('REFUSE')}"
-			th:myId="${item.id}" th:num="4"
-			onclick="modifyRole(this.getAttribute('myId'),this.getAttribute('num'));">삭제하기</a>
+	
 
 
 	</div>

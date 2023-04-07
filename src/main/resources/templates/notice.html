@@ -1,0 +1,57 @@
+<html xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>관리자 공지</title>
+
+</head>
+<div layout:fragment="content">
+
+   <div class="container text-center">
+      <br>
+
+      <table class="table">
+         <thead>
+            <tr>
+               <th style="width: 200px;">제목</th>
+               <th style="width: 200px;">등록날짜</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr th:each="notice : ${paging}">
+               <td><a th:href="@{|/admin/notice/user/detail/${notice.id}|}"
+                  th:text="${notice.title}"></a></td>
+               <td th:text="${#temporals.format(notice.regTime, 'yyyy-MM-dd HH:mm')}"></td>
+               
+            </tr>
+         </tbody>
+      </table>
+
+
+
+      <!-- 페이징처리 시작 -->
+      <div th:if="${!paging.isEmpty()}">
+         <ul class="pagination justify-content-center">
+            <li class="page-item"
+               th:classappend="${!paging.hasPrevious} ? 'disabled'"><a
+               class="page-link" th:href="@{|?page=${paging.number-1}|}"> <span>이전</span>
+            </a></li>
+            <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+               th:if="${page >= paging.number-3 and page <= paging.number+3}"
+               th:classappend="${page == paging.number} ? 'active'"
+               class="page-item"><a th:text="${page}" class="page-link"
+               th:href="@{|?page=${page}|}"></a></li>
+            <li class="page-item"
+               th:classappend="${!paging.hasNext} ? 'disabled'"><a
+               class="page-link" th:href="@{|?page=${paging.number+1}|}"> <span>다음</span>
+            </a></li>
+         </ul>
+      </div>
+      <!-- 페이징처리 끝 -->
+
+   </div>
+
+
+</div>
+</html>
