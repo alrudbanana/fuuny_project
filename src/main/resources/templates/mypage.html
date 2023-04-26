@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+      
+
+<th:block layout:fragment="css">
+<style>
+   .btn-upload {
+     width: 180px;
+     height: 30px;
+     background: #fff;
+     border: 1px solid rgb(77,77,77);
+     border-radius: 10px;
+     font-weight: 500;
+     cursor: pointer;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     }
+
+   .container {
+     width : 600px;
+   }
+   
+   #file {
+     display: none;
+   }
+   
+   .btn-primary {
+     background-color: #D8ACFA;
+     border-color: #D8ACFA;
+   }
+   
+   .btn-primary:hover {
+   background-color: #8A2BE2;
+   border: none;
+   }
+   
+</style>
+</th:block>
+   
+
+<div layout:fragment="content">
+
+<div class="container text-center">
+        <table class="table table-hover">
+           <thead>
+             <tr>
+                  <th scope="col" colspan='2'> 회원 정보 </a></th>
+             </tr>
+           </thead>
+            <tbody>
+                <tr>
+                  <th scope="row" >프로필사진 
+                     <form method="POST" th:action="@{'/members/profile/img/' + ${member.idx}}" enctype="multipart/form-data">
+                  <input type="hidden" name="id" th:value="${member.idx}">
+                     <label for="file" >
+                       <div class="btn-upload mt-4" >프로필 이미지 선택</div>
+                     </label>
+                   <input type="file" name="file" accept="image/*" id="file">
+                    <label>
+                    <button type="submit" class="btn-upload mt-4"  >Upload</button>
+                    </label>
+                  </form>
+                  </th>
+               <td>
+                     <img th:src="${member.imgurl}" height="150px" width="150px">
+               </td>
+             </tr>
+                <tr class="table-light">
+                  <th scope="row">이메일</th>
+                  <td th:text="${member.Email}"></td>
+               </tr>
+                 <tr class="table-light">
+                  <th scope="row">이름</th>
+                  <td th:text="${member.MemName}"></td>
+             </tr>
+              <tr class="table-light">
+                  <th scope="row">핸드폰번호</th>
+                  <td th:text="${member.MemPhone}"></td>
+             </tr>
+             <tr class="table-light">
+                  <th scope="row" rowspan='3'>주소</th>
+                  <td th:text="${member.Zipcode}" ></td>
+             </tr>
+             <tr class="table-light">      
+                  <td th:text="${member.StreetAdr}" ></td>
+             </tr>
+             <tr class="table-light">
+                  <td th:text="${member.DetailAdr}"></td>
+             </tr>
+           </tbody>
+      </table>
+      <div class="container text-center">
+       <a th:href="@{|/members/question/list/${member.idx}|}"><button type="button" class="btn btn-primary btn-lg my-4 mx-2">나의 문의 내역 확인</button></a>
+       <a href = "/orders"><button type="button" class="btn btn-primary btn-lg my-4 mx-2" >나의 구매 내역 확인</button></a>
+      </div>
+         <div class="container text-center mb-4">
+          <a th:href="@{/members/modify}"><button type="button" class="btn btn-secondary">회원정보 수정하기</button></a>
+         <a th:href="@{/members/modify/pwd}"><button type="button" class="btn btn-secondary">비밀번호 변경하기</button></a>
+         <a href="javascript:void(0);" class="delete" th:data-uri="@{|/members/delete/${member.idx}|}" ><button type="button" class="btn btn-secondary">회원탈퇴하기</button></a>
+      </div>
+   </div>
+
+
+<script >
+   const delete_elements = document.getElementsByClassName("delete");
+   Array.from(delete_elements).forEach(function(element) {
+      element.addEventListener('click', function() {
+         if (confirm("정말로 탈퇴하시겠습니까?")) {
+            location.href = this.dataset.uri;
+         };
+      });
+   });
+</script>
+</div>
+</html>

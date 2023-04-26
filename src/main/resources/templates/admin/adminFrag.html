@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<div th:fragment="adminFragment">
+
+	<center>
+			<div class="p-3 mb-2 bg-dark text-white">관리자 사용자 관리 페이지</div>
+		</center>
+		<br> <br>
+		<div class="container text-center">
+			<table class="table" id="mainTable">
+				<tr>
+					<td rowspan='2'><a class="btn btn-dark" th:href="@{/}">사이트
+							메인</a></td>
+					<td rowspan='2'><a class="btn btn-dark"
+						th:href="@{/admin/main}">관리자 메인</a></td>
+					<td rowspan='2'><a class="btn btn-dark"
+						th:href="@{/admin/funding}">펀딩 관리</a></td>
+					<td rowspan='2'><a class="btn btn-dark"
+						th:href="@{/admin/userManage}">사용자 관리</a></td>
+					<td rowspan='2'><a class="btn btn-dark"
+						th:href="@{/admin/notice}">공지글 관리</a></td>
+				</tr>
+
+			</table>
+		</div>
+
+</div>
+
+</html>

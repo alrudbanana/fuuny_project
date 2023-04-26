@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+      
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>로그인</title>
+    <!-- jOuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- 카카오 자바스크립트 추가  -->
+   <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <!-- 나의 스타일 추가 -->
+    <link rel="stylesheet" href="/css/login.css">
+    
+   <style>
+      #errormessagess{
+      position:absolute;
+      top:50px;
+      }
+
+   </style>
+  
+ <div layout:fragment="content" id="wrap" style="margin-top: 50px;">  
+ <!--임시 비번 모달-->
+<div id="findPw" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-login">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                    <div class="container my-auto">
+                        <div class="row">
+                            <div class="card z-index-0 fadeIn3 fadeInBottom"  style="width: 600px;">
+                                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                                    <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
+                                        <h4 class="text-black font-weight-bolder text-center mt-4 mb-0">비밀번호 찾기</h4>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <form role="form" class="text-start" action="/members/sendEmail" method="post" name="sendEmail">
+                                        <p>입력한 이메일로 임시 비밀번호가 전송됩니다.</p>
+                                        <div class="input-group input-group-outline my-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" id="userEmail" name="memberEmail" class="form-control" required>
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="button" class="btn bg-gradient-primary w-100 my-4 mb-2"
+                                                    id="checkEmail">비밀번호 발송</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+ 
+    <!--  html 전체 영역을 지정하는 container -->
+<div class="container">
+   <div class="row justify-content-center">
+      <div class="col-lg-6">
+         <!--  login 폼 영역을 : loginBox -->
+         <div id="loginBox">
+
+            <!-- 로그인 페이지 타이틀 -->
+            <div id="loginBoxTitle"></div>
+
+            <!-- 아이디, 비번, 버튼 박스 -->
+            <form th:action="@{/members/login}" method="post">
+               <div th:if="${param.error}" id="errormessagess">
+                  <p>
+                     사용자ID 또는 비밀번호를 확인해 주세요.
+                  </p>
+               </div>
+
+               <div id="inputBox">
+                  <div class="mb-3">
+                     <label for="email" class="form-label">이메일</label>
+                     <input type="text" name="username" id="email" class="form-control">
+                  </div>
+
+                  <div class="mb-3">
+                     <label for="password" class="form-label">비밀번호</label>
+                     <input type="password" name="password" id="password" class="form-control">
+                  </div>
+
+                  <div sec:authorize="isAnonymous()">
+                     <button type="submit" class="btn btn-primary w-100 mb-1">로그인</button>
+                  </div>
+
+                  <div sec:authorize="isAuthenticated()">
+                     <a href="/members/logout" class="btn btn-primary">로그아웃</a>
+                  </div>
+                  
+                  
+
+                  <div class="button-login-box" sec:authorize="isAnonymous()">
+                     <a href="https://kauth.kakao.com/oauth/authorize?client_id=6b36f27350db8f1bdd0436a0710b7bae&redirect_uri=http://localhost:9404/oauth/kakao&response_type=code" onclick="function1()"><img src="/img/kakao_login_medium_wide2.png"></a>
+                     <div sec:authorize="isAnonymous()" class="mt-1">
+                        <a href="https://kauth.kakao.com/oauth/logout?client_id=6b36f27350db8f1bdd0436a0710b7bae&logout_redirect_uri=http://localhost:9404/"><img src="/img/카카오로.png"></a>
+                     </div>
+                  </div>
+                  <div class="mt-1">
+					 <a th:href="@{/login/google}"><img src="/img/구글.png"/></a><br>
+				</div>	 
+				<div class="mt-1">
+					 <a th:href="@{/login/naver}"><img src="/img/네이버.png"/></a><br>
+					</div>		
+                  <p class="mt-4 text-sm text-center">
+                     <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#findPw">비밀번호를 잊으셨나요?</button>
+                  </p>
+
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+   <script>
+    $("#checkEmail").click(function () { //클릭이벤트 버튼, 이메일 중복검사 수행
+        const userEmail = $("#userEmail").val(); //id가 userEmail 인 HTML요소를 선택해 사용자가 입력한 주소를 가져옴
+        const sendEmail = document.forms["sendEmail"];
+        $.ajax({
+            type: 'post', //HTTP 방식지정. Post 
+            url: 'emailDuplication', //Ajax요청이 보내질 서버의 Url 
+            data: { //서버로 보낼 데이터 memberEmail이라는 이름으로 사용자가 입력한 이메일 주소를 보냄 
+                'memberEmail': userEmail
+            },
+            dataType: "text", //서버로 보낼 데이터 타입 지정
+            success: function (result) { //ajax요청이 성공적으로 완료되면 실행되는 함수 
+                if(result == "no"){ //no라는 문자열이 반환되면 이미 이메일주소가 있다는 것을 의미함
+                    // 중복되는 것이 있다면 no == 일치하는 이메일이 있다!
+                    alert('임시비밀번호를 전송 했습니다.');
+                    sendEmail.submit();
+                }else {
+                    alert('가입되지 않은 이메일입니다.');
+                }
+
+            },error: function () {
+                console.log('에러 체크!!')
+
+            }
+        })
+    });
+
+
+</script>
+
+</div>
+
+</div>
+</html>

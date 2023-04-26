@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/adminLayout}">
+
+<head>
+<meta charset="UTF-8">
+<title>관리자 유저 관리</title>
+<link href="/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.4.min.js">
+	
+</script>
+
+<meta name="_csrf" content="${_csrf.token}" />
+<meta name="_csrf_header" content="${_csrf.headerName}" />
+
+</head>
+
+<div layout:fragment="content">
+
+
+	<div class="container text-center">
+		<br> <br>
+		<center>
+			<div class="p-3 mb-2 bg-secondary text-white">사용자 보기 창</div>
+		</center>
+		<br> <br>
+
+		<table class="table">
+			<thead>
+				<tr>
+					<td>idx</td>
+					<th>이메일</th>
+					<td>생성날짜</td>
+					<th>이름</th>
+					<th>권한</th>
+					<th>권한변경</th>
+					<th>변경버튼</th>
+					<th>삭제버튼</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="member : ${paging}">
+					<td th:text="${member.idx}" th:value="${member.idx}"></td>
+					<td th:text="${member.email}"></td>
+					<td th:text="${#temporals.format(member.regTime, 'yyyy-MM-dd HH:mm')}"></td>
+					<td th:text="${member.memName}"></td>
+					<td th:text="${member.role}"></td>
+					<td><select th:id="${member.idx}" name="selectbox"
+						class="form-select">
+							<option th:value="${member.role}" th:text="${member.role}"></option>
+							<option value="USER">일반사용자</option>
+							<option value="SELLER">판매자</option>
+							<option value="ADMIN">관리자</option>
+					</select></td>
+					<td><button class="btn btn-dark" type="button"
+							th:myIdx="${member.idx}"
+							onclick="modifyRole(this.getAttribute('myIdx'))">권한 수정</button></td>
+					<td><a class="delete btn btn-danger" href="javascript:void(0);" 
+						th:data-uri="@{|/admin/member/delete/${member.idx}|}" th:text="삭제"></a></td>
+							
+				</tr>
+			</tbody>
+
+		</table>
+
+
+
+		<!-- 페이징처리 시작 -->
+		<div th:if="${!paging.isEmpty()}">
+			<ul class="pagination justify-content-center">
+				<li class="page-item"
+					th:classappend="${!paging.hasPrevious} ? 'disabled'"><a
+					class="page-link" th:href="@{|?page=${paging.number-1}|}"> <span>이전</span>
+				</a></li>
+				<li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+					th:if="${page >= paging.number-3 and page <= paging.number+3}"
+					th:classappend="${page == paging.number} ? 'active'"
+					class="page-item"><a th:text="${page}" class="page-link"
+					th:href="@{|?page=${page}|}"></a></li>
+				<li class="page-item"
+					th:classappend="${!paging.hasNext} ? 'disabled'"><a
+					class="page-link" th:href="@{|?page=${paging.number+1}|}"> <span>다음</span>
+				</a></li>
+			</ul>
+		</div>
+		<!-- 페이징처리 끝 -->
+	</div>
+
+	<script type="text/javascript" th:inline="javascript">
+		//2023.03.27 유저 권한 수정 완료
+		function modifyRole(idx) {
+			const val1 = idx;
+			
+			var num = document.getElementById(idx);
+			var value = (num.options[num.selectedIndex].value.toString());
+			alert(value + "로 수정합니다");
+
+			//alert(document.getElementById(idx).value());
+			const params = {
+				"param1" : val1,
+				"param2" : value
+			}
+
+			//var select = document.getElementById(idx).value();
+
+			//var token = $("meta[name='_csrf']").attr("content");
+			//var header = $("meta[name='_csrf_header']").attr("content");
+
+			$.ajax({
+				type : "post",
+				url : "http://localhost:9404/admin/member/modify",
+				//beforeSend : function(xhr) {
+				//	xhr.setRequestHeader(header, token);
+				//},
+
+				data : params,
+
+				success : function(res) {
+					console.log("성공", res);
+					location.href = "/admin/userManage";
+				},
+
+				error : function() {
+					console.log("실패 ")
+				}
+			})
+		}
+		
+		const delete_elements = document.getElementsByClassName("delete");
+		Array.from(delete_elements).forEach(function(element) {
+		    element.addEventListener('click', function() {
+		        if(confirm("정말로 삭제하시겠습니까?")) {
+		            location.href = this.dataset.uri;
+		        };
+		    });
+		});
+	</script>
+</div>
+
+</html>

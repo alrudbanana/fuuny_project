@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/adminLayout}">
+<head>
+<meta charset="UTF-8">
+<title>관리자 펀딩 마감 관리</title>
+</head>
+<div layout:fragment="content">
+
+	<div class="container text-center">
+		<div>
+			<h2>프로젝트 거절 관리</h2>
+			<br> <a class="btn btn-dark" th:href="@{/admin/funding}">프로젝트
+				대기중 관리</a> <a class="btn btn-dark" th:href="@{/admin/funding/approve}">프로젝트
+				승인 관리</a> <a class="btn btn-dark" th:href="@{/admin/funding/end}">프로젝트
+				마감 관리</a> <a class="btn btn-dark" th:href="@{/admin/funding/refuse}">프로젝트
+				거절 관리</a>
+		</div>
+		<br>
+
+		<div class="row">
+			<th:block th:each="item , status: ${items.getContent()}">
+				<div class="col-md-4 margin">
+					<div class="card">
+						<a style="text-decoration: none;"
+							th:href="@{|/admin/item/detail/${item.id}|}">
+							<div class="card-body">
+							<img th:src="${item.imgUrl}" class="card-img-top" th:alt="${item.itemNm}" height="400">
+								<h3 class=" text-dark" th:text="${item.itemSellStatus}"></h3>
+								<h4 class="card-title text-dark" th:text="${item.itemNm}"></h4>
+								<h5 class="card-text text-dark" th:text="${item.itemCategory}"></h5>
+								<h5 class="card-text text-danger" th:text="${item.price}"></h5>
+								<h6 class="card-title text-dark"
+									th:text="${#temporals.format(item.regTime, 'yyyy-MM-dd HH:mm')}"></h6>
+							</div>
+						</a>
+					</div>
+				</div>
+			</th:block>
+		</div>
+		<br>
+
+		<div
+			th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 : (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})">
+			<ul class="pagination justify-content-center">
+
+				<li class="page-item"
+					th:classappend="${items.number eq 0}?'disabled':''"><a
+					th:href="@{|/admin/funding/end?page=${items.number-1}|}"
+					aria-label='Previous' class="page-link"> <span
+						aria-hidden='true'>이전</span>
+				</a></li>
+
+				<li class="page-item"
+					th:each="page: ${#numbers.sequence(start, end)}"
+					th:classappend="${items.number eq page-1}?'active':''"><a
+					th:href="@{|/admin/funding/end?page=${page-1}|}" th:inline="text"
+					class="page-link">[[${page}]]</a></li>
+
+				<li class="page-item"
+					th:classappend="${items.number+1 ge items.totalPages}?'disabled':''">
+					<a th:href="@{|/admin/funding/end?page=${items.number+1}|}"
+					aria-label='Next' class="page-link"> <span aria-hidden='true'>다음</span>
+				</a>
+				</li>
+
+			</ul>
+		</div>
+
+	</div>
+</div>
+</html>

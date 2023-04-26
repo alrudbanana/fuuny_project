@@ -1,0 +1,213 @@
+@charset "UTF-8";
+/*기본 설정*/
+*{
+  margin: 0px; padding: 0px;
+}
+
+body{
+	margin: 20px; padding: 2px;
+  font-size: 14px;
+  background-color: rgb(255, 255, 255);
+}
+
+a {
+  text-decoration-line: none;
+  color: black;
+}
+li{
+  list-style-type: none;
+}
+
+.wrap{  /*제일 겉에 있는 박스*/
+  width: 100%;
+  margin: 0 auto;
+  /* border: 8px solid palevioletred; */
+}
+
+header{
+  width: 100%;
+  height: 180px;
+  /* position: relative; */
+   
+}
+
+.search_bar{
+position: relative; 
+}
+
+.search{
+  position: absolute; bottom: 20px; right: 50px;
+}
+
+.search_bar input{
+border: 0.5px;
+width: 180px; height: 25px;
+border-radius: 10px;
+background-color: pink;
+}
+
+
+/*기본 설정*/
+.logo{
+  text-align: center;
+  padding-top: 40px;
+  padding-bottom: 20px;
+}
+
+
+/*스크롤바 없앰*/
+body {
+  -ms-overflow-style: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+input:focus {outline: none;} /* outline 테두리 없애기 */
+
+/*top_nav*/
+.t_menu {
+    width: 400px;
+    margin-top: 10px;
+}
+
+.t_menu a{
+font-size: 12px;
+font-weight: 800;
+color:#4a4a4a;
+}
+
+.t_menu li {
+    display: inline;
+    margin: 10px;
+}
+
+.sns_logo {
+    display: inline;
+    position: absolute; top:5px; right: 180px;
+}
+
+.sns_logo img{
+    width: 25px;
+    height: 25px;
+    padding: 10px;
+   
+}
+
+
+.right_menu {
+    margin-top: 10px;
+    float: right;
+}
+.right_menu ul{
+   position: relative; top: -15px; right: 20px;
+   margin-right: 10px;
+}
+
+.right_menu a {
+    font-size: 12px;
+    font-weight: 800;
+    color: #4a4a4a;
+}
+
+
+.right_menu li {
+    display: inline;
+    margin: 10px;
+}
+
+/*dropDown*/
+li{
+    list-style: none;
+}
+
+a{
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.main_menu{
+    width: 100%;
+    overflow: hidden;
+    margin: 0px auto;
+}
+
+.main_menu > li{
+    width: 20%;
+    float: left;
+    text-align: center;
+    line-height: 30px; /*메뉴의 높이*/
+    background-color: white;
+}
+
+.main_menu > a{
+color: black;
+}
+
+.sub_menu >li{
+    line-height: 50px;
+    background-color: pink;
+}
+
+.sub_menu{
+    height: 0;
+    overflow: hidden;
+}
+
+.main_menu > li:hover{
+    background-color: pink;
+    transition-duration: 0.5s ;
+}
+
+.main_menu >li:hover .sub_menu{
+    height: 250px;
+    transition-duration: 1s;
+}
+
+.main_menu>li:hover .sub_menu {
+    height: 250px;
+    transition-duration: 1s;
+}
+
+.main_menu>li:hover .sub_menu >li:hover {
+    line-height: 50px;
+    background-color: palevioletred;
+    transition-duration: 1s;
+}
+
+
+/*footer*/
+footer a {
+    display: inline-block;
+    margin: 0 20px 10px 20px;
+    color: #808080;
+    font-size: 11px;
+}
+
+footer a:visited {
+    color: #808080;
+}
+
+footer #f_p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+footer #f_p span {
+    display: inline-block;
+    margin: 0 20px 10px 20px;
+
+}
+footer img{
+    position: relative; left: 1200px; bottom: 75px;
+}
+
+
+@font-face {
+  font-family: 'NanumSquareNeo-Variable';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+

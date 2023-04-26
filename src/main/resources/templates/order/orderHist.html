@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+
+    <script th:inline="javascript">
+        function cancelOrder(orderId) {
+
+            var url = "/order/" + orderId + "/cancel";
+            var paramData = {
+                orderId : orderId,
+            };
+
+            var param = JSON.stringify(paramData);
+
+            $.ajax({
+                url      : url,
+                type     : "POST",
+                contentType : "application/json",
+                data     : param,
+                dataType : "json",
+                cache   : false,
+                success  : function(result, status){
+                    alert("주문이 취소 되었습니다.");
+                    location.href='/orders/' + [[${page}]];
+                },
+                error : function(jqXHR, status, error){
+                    if(jqXHR.status == '401'){
+                        alert('로그인 후 이용해주세요');
+                        location.href='/members/login';
+                    } else{
+                        alert(jqXHR.responseText);
+                    }
+                }
+            });
+        }
+    </script>
+
+</th:block>
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .content-mg{
+            margin-left:30%;
+            margin-right:30%;
+            margin-top:2%;
+            margin-bottom:100px;
+        }
+        .repImgDiv{
+            margin-right:15px;
+            margin-left:15px;
+            height:auto;
+        }
+        .repImg{
+            height:100px;
+            width:100px;
+        }
+        .card{
+            width:750px;
+            height:100%;
+            padding:30px;
+            margin-bottom:20px;
+        }
+        .fs18{
+            font-size:18px
+        }
+        .fs24{
+            font-size:24px
+        }
+
+      .red {
+         color : red;
+      }
+        
+       
+      /* 상단 원형 박스 */
+        .top_circle_box{width: 100%; display: flex; justify-content: center;}
+        .top_circle_box > div{width: 80px; height: 80px; display: flex; justify-content: center; align-items: center; border-radius: 50%; text-align: center; position: relative;}
+        .top_circle_box > div.top_circle_box_1{background: #fff; border: 1px dotted #6d6d6d; margin-right: 40px;} /*왼쪽박스 색담당*/
+        .top_circle_box > div.top_circle_box_1::after{content: ""; position: absolute; width: 100%; height: 1px; border-top: 1px dotted #6d6d6d; top: 50%; left: 50%; transform: translateY(-50%); z-index: -1;}
+        .top_circle_box > div.top_circle_box_2{background: #00c4c4; color: #fff; } /*오른쪽박스 색담당*/
+   
+    
+   
+
+    </style>
+</th:block>
+
+<div layout:fragment="content" class="content-mg">
+
+
+       <div class="top_circle_box">
+        <div class="top_circle_box_1">
+            리워드<br/>선택
+        </div>
+        <div class="top_circle_box_2">
+            결제<br/>완료
+        </div>
+    </div>
+
+
+    <h2 class="mb-4">
+        결제 예약
+
+    </h2>
+
+    <div th:each="order : ${orders.getContent()}">
+
+        <div class="d-flex mb-3 align-self-center">
+            <h4 th:text="${order.orderDate} + ' 주문'"></h4>
+            <div class="ml-3">
+               <!--  원본 블락
+               <th:block th:if="${order.orderStatus == T(com.shop.constant.OrderStatus).ORDER}">
+                    <button type="button" class="btn btn-outline-secondary" th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문취소</button>
+                </th:block>
+                <th:block th:unless="${order.orderStatus == T(com.shop.constant.OrderStatus).ORDER}">
+                    <h4>(취소 완료)</h4>
+                </th:block>
+                -->
+                
+                <!--  수정 블락  -->
+                <th:block th:if="${order.orderStatus.toString().equals('ORDER')}">
+                    <button type="button" class="btn btn-outline-secondary" th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문취소</button>
+                </th:block>
+                <th:block th:unless="${order.orderStatus.toString().equals('ORDER')}">
+                    <h4>(취소 완료)</h4>
+                </th:block>
+                
+
+            </div>
+        </div>
+        <div class="card d-flex">
+            <div th:each="orderItem : ${order.orderItemDtoList}" class="d-flex mb-3">
+                <div class="repImgDiv">
+                    <img th:src="${orderItem.imgUrl}" class = "rounded repImg" th:alt="${orderItem.itemNm}">
+                </div>
+                <div class="align-self-center w-75">
+                    <span th:text="${orderItem.itemNm}" class="fs24 font-weight-bold"></span>
+                    <div class="fs18 font-weight-light">
+                        <span th:text="${orderItem.orderPrice} +'원'"></span>
+                        <span th:text="${orderItem.count} +'개'"></span>
+                        <span th:text="'후원금' + ${orderItem.donation} +'원'"></span> 
+                     <div class="fs18 font-weight-light red">  
+                  <span th:text="'합계' +${((orderItem.orderPrice * orderItem.count) + orderItem.donation)} +'원입니다.' "></span>
+                </div>   
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div th:with="start=${(orders.number/maxPage)*maxPage + 1}, end=(${(orders.totalPages == 0) ? 1 : (start + (maxPage - 1) < orders.totalPages ? start + (maxPage - 1) : orders.totalPages)})" >
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item" th:classappend="${orders.number eq 0}?'disabled':''">
+                <a th:href="@{'/orders/' + ${orders.number-1}}" aria-label='Previous' class="page-link">
+                    <span aria-hidden='true'>Previous</span>
+                </a>
+            </li>
+
+            <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${orders.number eq page-1}?'active':''">
+                <a th:href="@{'/orders/' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
+            </li>
+
+            <li class="page-item" th:classappend="${orders.number+1 ge orders.totalPages}?'disabled':''">
+                <a th:href="@{'/orders/' + ${orders.number+1}}" aria-label='Next' class="page-link">
+                    <span aria-hidden='true'>Next</span>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+
+</div>
+
+</html>

@@ -1,0 +1,237 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/socialLayout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<th:block layout:fragment="script">
+	<script src="./js/header.js"></script>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+
+	<script>
+		$(document).ready(function() {
+			$('.slider').bxSlider();
+		});
+	</script>
+</th:block>
+
+
+<th:block layout:fragment="css">
+	<link rel="stylesheet"
+		href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+
+	<style>
+* {
+	margin: 0;
+	padding: 0;
+	font-family: 'NanumSquareNeo-Variable';
+}
+
+.main {
+	height: 100%;
+	/* border: 1px solid red; */
+	text-align: center;
+
+}
+
+h1 {
+	margin: 30px 0;
+}
+
+#btn_category {
+	margin: 20px 0;
+}
+
+li {
+	list-style-type: none;
+}
+
+/* 배너 이미지*/
+#banner {
+	width: 100%;
+}
+
+h3 {
+	margin: 35px 0 20px 50px;
+	text-align: left;
+}
+
+.row {
+	/* border: 1px solid blue; */ 
+	height: 100%;
+}
+
+.col-lg-3 {
+	border: 1px solid rgb(223, 221, 221);
+	display: inline-block;
+	width: 270px;
+	height: 350px;
+	margin: 10px 20px;
+	border-radius: 15px;
+	padding: 10px;
+}
+
+.main_img {
+	margin: 0px auto;
+	overflow: hidden;
+}
+
+.main_img img {
+	width: 230px;
+	height: 150px;
+	transition: all 0.2s linear;
+}
+
+.main_img:hover img {
+	transform: scale(1.4);
+}
+
+.main_cate {
+	font-size: 12px;
+	color: gray;
+	/* border: 1px solid red; */
+	margin-top: 20px;
+}
+
+.main_name {
+	font-weight: bold;
+	color: black;
+	margin: 3px 0;
+}
+
+
+.main_name:hover {
+	color: gray;
+}
+
+.main_detail {
+	font-size: 13px;
+
+}
+
+/* 푸터 */
+footer {
+	
+}
+
+#foot {
+	height: 200px;
+	background-color: rgb(246, 225, 247);
+	text-align: center;
+	margin-top: 15px;
+
+}
+
+@font-face {
+	font-family: 'NanumSquareNeo-Variable';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2')
+		format('woff2');
+	font-weight: normal;
+	font-style: normal;
+}
+</style>
+</th:block>
+
+
+
+<div layout:fragment="content">
+
+	<div class="rap">
+
+
+
+		<!--헤더시작-->
+
+
+		<div data-include="header.html"></div>
+
+
+		<!--헤더 끝-->
+
+
+
+
+		<!--메인시작-->
+		<section>
+			<div class="main">
+				<!--2023.03.26 관리자로 로그인시 보이도록 변경 - 로그인 테스트 해봐야함 -->
+
+
+				<div class="slider">
+					<div>
+						<img id="banner" src="./img/banner.png">
+					</div>
+					<div>
+						<img id="banner" src="./img/banner2.png">
+					</div>
+					<div>
+						<img id="banner" src="./img/banner3.png">
+					</div>
+					<div>
+						<img id="banner" src="./img/banner4.png">
+					</div>
+					<div>
+						<img id="banner" src="./img/banner5.png">
+					</div>
+				</div>
+
+				<h3>인기 프로젝트</h3>
+		<!-- 
+				<div class="container text-center">
+					<div class="row">
+
+						<div class="col-lg-3" th:each="mainItem : ${items.getContent()}">
+							<div class="main_img">
+								<img th:src="${mainItem.imgUrl}" th:alt="${mainItem.itemNm}">
+
+							</div>
+							<div class="main_cate" th:text="${mainItem.itemCategory}"></div>
+							<a th:href="@{|/item/${mainItem.id}|}">
+								<div class="main_name" th:text="${mainItem.itemNm}"></div>
+							</a>
+							<div class="main_detail" th:text="${mainItem.itemDetail}"></div>
+						</div>
+		 -->
+
+
+					</div>
+				</div>
+
+
+
+			</div>
+			
+			<!-- 채널 톡 -->
+	<script>
+	  (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.")}var ch=function(){ch.c(arguments)};ch.q=[];ch.c=function(args){ch.q.push(args)};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x)}}if(document.readyState==="complete"){l()}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l)}})();
+	
+	  ChannelIO('boot', {
+	    "pluginKey": "9a24e9e6-7c26-4e9e-bdb0-06674e5b9e0c"
+	  });
+	</script>
+	
+		</section>
+		<!--메인 끝-->
+
+			</div>
+			
+			
+		</section>
+		<!--메인 끝-->
+
+
+	</div>
+
+		<!--푸터시작-->
+		<footer> </footer>
+		<!--푸터 끝-->
+	</div>
+	<script src="./js/header.js"></script>
+	
+</div>
+
+
+</html>

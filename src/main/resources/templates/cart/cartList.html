@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
+   <head>
+    <!-- 폰트어썸 연동 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" ></link>
+   <!-- iamport.payment.js -->
+   <script type="text/javascript"
+      src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+      <!-- jQuery -->
+      <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>      
+   </head>
+    
+    
+   
+   
+    <!-- 사용자 스크립트 추가 -->
+    <th:block layout:fragment="script">
+
+    <script th:inline="javascript">
+        function requestPay() {
+           
+                      
+           var nm = $("#itemNm").text;
+            var orderTotalPrice = 0;
+            $("input[name=cartChkBox]:checked").each(function () {
+                var cartItemId = $(this).val();
+                var price = $("#price_" + cartItemId).attr("data-price");
+                var count = $("#count_" + cartItemId).val();
+                orderTotalPrice += price * count;
+            });
+      
+            var huPrice = parseFloat($("#huPrice").val()); // 뷰 페이지에서 입력한 huPrice 값을 가져옴
+            if (!isNaN(huPrice)) { // huPrice 값이 숫자가 아니면 더하지 않음
+                orderTotalPrice += huPrice; // huPrice 값을 orderTotalPrice 변수에 더함
+            }
+         
+          	IMP.init('imp81752704');
+          	IMP.request_pay({
+           	pg: "kakaopay", 
+            pay_method: "card",
+            merchant_uid: new Date(),   // 주문번호
+            name: $("#itemNm").text(),
+            amount: orderTotalPrice, 
+            
+            
+            
+          }, function (rsp) { // callback
+            if (rsp.success) {
+              // 결제 성공 시 로직
+              orders();
+              alert("결제가 완료되었습니다");
+              location.href = '/orders';
+            } else {
+              // 결제 실패 시 로직
+              alert("실패 : 코드("+rsp.error_code+") / 메시지("+ rsp.error_msg +")");
+            }
+          });
+        }
+        
+        function getOrderTotalPrice() {
+           
+            var orderTotalPrice = 0;
+            $("input[name=cartChkBox]:checked").each(function () {
+                var cartItemId = $(this).val();
+                var price = $("#price_" + cartItemId).attr("data-price");
+                var count = $("#count_" + cartItemId).val();
+                orderTotalPrice += price * count;
+            });
+      
+            var huPrice = parseFloat($("#huPrice").val()); // 뷰 페이지에서 입력한 huPrice 값을 가져옴
+            if (!isNaN(huPrice)) { // huPrice 값이 숫자가 아니면 더하지 않음
+                orderTotalPrice += huPrice; // huPrice 값을 orderTotalPrice 변수에 더함
+            }
+            
+            
+            $("#orderTotalPrice").html(orderTotalPrice + '원');
+        }
+
+        function changeCount(obj) {
+            var count = obj.value;
+            var cartItemId = obj.id.split('_')[1];
+            var price = $("#price_" + cartItemId).data("price");
+            var totalPrice = count * price;
+            $("#totalPrice_" + cartItemId).html(totalPrice + "원");
+            getOrderTotalPrice();
+            updateCartItemCount(cartItemId, count);
+        }
+
+        function checkAll() {
+            if ($("#checkall").prop("checked")) {
+                $("input[name=cartChkBox]").prop("checked", true);
+            } else {
+                $("input[name=cartChkBox]").prop("checked", false);
+            }
+            getOrderTotalPrice();
+        }
+
+        function updateCartItemCount(cartItemId, count) {
+
+            var url = "/cartItem/" + cartItemId + "?count=" + count;
+
+            $.ajax({
+                url: url,
+                type: "PATCH",
+                dataType: "json",
+                cache: false,
+                success: function (result, status) {
+                    console.log("cartItem count update success");
+                },
+                error: function (jqXHR, status, error) {
+
+                    if (jqXHR.status == '401') {
+                        alert('로그인 후 이용해주세요');
+                        location.href = '/members/login';
+                    } else {
+                        alert(jqXHR.responseJSON.message);
+                    }
+
+                }
+            });
+        }
+
+        function deleteCartItem(obj) {
+            var cartItemId = obj.dataset.id;
+            var url = "/cartItem/" + cartItemId;
+
+            $.ajax({
+                url: url,
+                type: "DELETE",
+                dataType: "json",
+                cache: false,
+                success: function (result, status) {
+                    location.href = '/cart';
+                },
+                error: function (jqXHR, status, error) {
+
+                    if (jqXHR.status == '401') {
+                        alert('로그인 후 이용해주세요');
+                        location.href = '/members/login';
+                    } else {
+                        alert(jqXHR.responseJSON.message);
+                    }
+
+                }
+            });
+        }
+
+        function orders() {
+
+           
+                      
+            var url = "/cart/orders";
+
+            var dataList = new Array();
+            var paramData = new Object();
+
+            $("input[name=cartChkBox]:checked").each(function () {
+                var cartItemId = $(this).val();
+                var data = new Object();
+                data["cartItemId"] = cartItemId;
+                dataList.push(data);
+            });
+
+            paramData['cartOrderDtoList'] = dataList;
+            paramData['donation'] = $('input#huPrice').val();    // 후원금 추가 2023-03-29 kk
+
+            var param = JSON.stringify(paramData);
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                contentType: "application/json",
+                data: param,
+                dataType: "json",
+                cache: false,
+                success: function (result, status) {
+                    location.href = '/orders';
+                },
+                error: function (jqXHR, status, error) {
+
+                    if (jqXHR.status == '401') {
+                        alert('로그인 후 이용해주세요');
+                        location.href = '/members/login';
+                    } else {
+                        alert(jqXHR.responseJSON.message);
+                    }
+
+                }
+            });
+        }
+        
+        $(document).ready(function () {
+            $("input[name=cartChkBox]").change(function () {
+                getOrderTotalPrice();
+            });
+            
+            $("#iamportPayment").click(function(){
+            requestPay();
+         });
+         
+         const IMP = window.IMP; // 생략 가능
+           IMP.init("imp81752704"); // 예: imp00000000a
+        });
+           
+
+    </script>
+
+</th:block>
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .content-mg {
+            /*margin-left: 25%;
+            margin-right: 25%;
+            margin-top: 2%;
+            margin-bottom: 100px;*/
+            max-width: 600px; margin: 2% auto 100px;
+        }
+
+        .repImgDiv {margin-right: 15px; margin-left: 15px; height: auto;}
+        .repImg {height: 100px; width: 100px;}
+        .font-weight-bold{font-weight: bold;}
+        .fs14 {font-size: 14px;}
+        .fs15 {font-size: 15px;}
+        .fs16 {font-size: 16px;}
+        .fs18 {font-size: 18px;}
+        .fs24 {font-size: 24px;}
+
+      /* 상단 원형 박스 */
+        .top_circle_box{width: 100%; display: flex; justify-content: center;}
+        .top_circle_box > div{width: 80px; height: 80px; display: flex; justify-content: center; align-items: center; border-radius: 50%; text-align: center; position: relative;}
+        .top_circle_box > div.top_circle_box_1{background: #00c4c4; color: #fff; margin-right: 40px;}
+        .top_circle_box > div.top_circle_box_1::after{content: ""; position: absolute; width: 100%; height: 1px; border-top: 1px dotted #6d6d6d; top: 50%; left: 50%; transform: translateY(-50%); z-index: -1;}
+        .top_circle_box > div.top_circle_box_2{background: #fff; border: 1px dotted #6d6d6d;}
+      
+        /* 체크박스 부분 */
+        *{line-height: 1.3em; box-sizing: border-box;}
+        .full_box_container{width: 100%; }
+        .full_box_container .content_name{width: 100%; display: flex; justify-content: left; align-items: center; margin-bottom: 10px;}
+        .full_box_container .content_name input[type="checkbox"]{display: none;}
+        .full_box_container .content_name input[type="checkbox"] + label{display: inline-block; width: 18px; height: 18px; position: relative; margin: 0; margin-right: 6px; border-radius: 2px; border: 1px solid #969696;}
+        .full_box_container .content_name input[type="checkbox"]:checked + label{border-color: #007bff;}
+        .full_box_container .content_name input[type="checkbox"]:checked + label::after{content:'✔'; font-size: 14px; width: 18px; height: 18px; text-align: center; position: absolute; left: 0; top:0; line-height: 16px; background: #007bff; color: #fff;}
+   
+              
+        /* 제품 타이틀 부분 */
+        .d-flex{display: flex;}
+        .d-flex.content_info_all{flex-direction: column; width: 100%;}
+        .content_info_all > div{width: 100%;}
+        .content_info_all > div div.content_info{width: 100%; display: flex; align-items: baseline; margin-bottom: 7px;}
+        .content_info_all > div div.content_info span.content_title{margin-right: 10px;}
+        .content_info_all > div div.content_info span.content_info_limit{font-weight: normal; margin-right: 7px; color: #6d6d6d;}
+        .content_info_all > div div.content_info span.content_info_remaining{font-weight: normal; margin-right: 7px; color: #007bff;}
+        .content_info_all > div div.content_desc{font-weight: normal; color: #6d6d6d; margin-bottom: 7px;}
+        .content_info_all div.content_delivery{font-weight: normal; margin-bottom: 25px; display: flex; align-items: center;}
+        .content_info_all div.content_delivery i{margin-right: 3px;}
+        .content_info_all div.content_delivery span{color: #2b2b2b; position: relative; padding-right: 15px;}
+        .content_info_all div.content_delivery span::after{content: ""; width: 1px; height: 80%; background: #3f3f3f; position: absolute; top: 50%; right: 7px; transform: translateY(-50%);}
+
+        /*수량 * 금액 부분*/
+        .content_all_number{width: 100%; border-radius: 10px; background: #f2f4f6; border: 1px solid #969696; padding: 20px 10px 25px; display: flex; flex-direction: column; margin-bottom: 15px;}
+        .content_all_number > div{width: 100%; position: relative;}
+        .content_all_number > div div.content_all_number_title{width: 100%; margin-bottom: 15px;}
+        .content_all_number > div .content_all_number_delete{position: absolute; top: 0; right: 0; border: 0; background: inherit; padding: 0;}
+        .content_all_number > div .content_all_number_delete span{cursor: pointer; border-radius: 50%; width: 20px; height: 20px; background: #007bff; color: #fff; display: flex; justify-content: center; align-items: center;}
+        .content_all_number > div.content2{display: flex;}
+        .content_all_number > div.content2 .content_all_number_numcon{display: flex; width: 88px;}
+        .content_all_number > div .content_all_number_num{-webkit-appearance: textfield; -moz-appearance: textfield; appearance: textfield; width: 40px; height: 24px; border-radius: 0; border: 1px solid #acacac; text-align: center;}
+        .content_all_number > div .content_all_number_num:focus{outline: none; border-color: #3f3f3f;}
+        .content_all_number > div .content_all_number_num::-webkit-inner-spin-button,
+        .content_all_number > div .content_all_number_num::-webkit-outer-spin-button { -webkit-appearance: none; }
+        .content_all_number > div .step_btn{ outline:none; -webkit-appearance: none; background-color: transparent; border: none; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; cursor: pointer; margin: 0; position: relative; border-radius: 0; border: 1px solid #acacac; background: #f2f4f6;}
+        .content_all_number > div .step_btn.minus{border-width: 1px 0 1px 1px;}
+        .content_all_number > div .step_btn.plus{border-width: 1px 1px 1px 0;}
+        .content_all_number > div.content2 .content_all_number_total{width: calc(100% - 88px); display: flex; justify-content: end; align-items: end;}
+       
+ 
+        /* 후원금 더하기 */
+        .price_support{width: 100%; border-radius: 10px; background: #f2f4f6; border: 1px solid #969696; padding: 20px 10px 25px; display: flex; flex-direction: column; margin-bottom: 15px;}
+        .price_support .price_support_title{width: 100%; position: relative; margin-bottom: 15px;}
+        .price_support .price_support_con{width: 100%;}
+        .price_support .price_support_con > p{margin-bottom: 7px;}
+        .price_support .price_support_con > p input{height: 40px; text-align: right; width: 150px;}
+    
+
+    
+    
+    
+    </style>
+</th:block>
+
+<div layout:fragment="content" class="content-mg">
+
+       <div class="top_circle_box">
+        <div class="top_circle_box_1">
+            리워드<br/>선택
+        </div>
+        <div class="top_circle_box_2">
+            결제<br/>완료
+        </div>
+    </div>
+
+    <h2 class="mb-4">
+        리워드 선택
+    </h2>
+
+    <div>
+        <div class="full_box_container" th:each="cartItem : ${cartItems}">
+        
+                  
+               <input type="checkbox" name="cartChkBox" th:value="${cartItem.cartItemId}">
+               <div class = "text-center align-middle content_name fs18 font-weight-bold">
+                    <span class="input-group mt-2">
+                       
+                       <span th:id="'price_' + ${cartItem.cartItemId}"
+                             th:data-price="${cartItem.price}"
+                             th:text="${cartItem.price} + '원'" class="align-self-center mr-2">
+                       </span>
+                       </div>
+           
+
+            <div class="d-flex content_info_all">
+
+                <div class="font-weight-light align-self-center">
+ 
+                    <div class="content_info">
+                        <!--  상품명-->
+                        <span id="itemNm" th:text="${cartItem.itemNm}" class="font-weight-bold content_title fs18"></span>
+                    </div>
+                    <!--  상품 타이틀 및 수량-->
+
+                </div>
+                <div class="content_delivery fs15">
+                    <span><i class="fa-solid fa-truck-fast"></i>배송비 전액무료</span> 2023년 05월 말 리워드 제공 예정
+                </div>
+            </div>
+
+            <!-- 수량 * 금액 합계 시작-->
+            <div class="align-middle content_all_number">
+                <div class="content1">
+                    <!-- 총합 가격 -->
+                    <div class="content_all_number_title fs15">
+                        총합 가격
+                    </div>
+                    <!-- 총합 가격 -->
+
+                    <!-- 삭제버튼 시작 -->
+                    <button type="button" class="content_all_number_delete close" aria-label="Close">
+                        <span aria-hidden="true" th:data-id="${cartItem.cartItemId}" onclick="deleteCartItem(this)"><i class="fa-solid fa-xmark"></i></span>
+                    </button>
+                    <!-- 삭제버튼 끝 -->
+                </div>
+
+                <div class="content2">
+                    <!-- 수량체크  -->
+                    <div class="content_all_number_numcon">
+                       
+                         <input type="number" name="count" th:id="'count_' + ${cartItem.cartItemId}"
+                                       th:value="${cartItem.count}" min="1"
+                                       onchange="changeCount(this)" class="form-control mr-2" >
+                       
+                    
+                    </div>
+                    <!-- 수량체크 끝 -->
+
+            <!-- 총금액 -->
+                    <span th:id="'totalPrice_' + ${cartItem.cartItemId}" name="totalPrice"
+                        th:text="${cartItem.price * cartItem.count} + '원'" class="content_all_number_total font-weight-bold fs18">
+                    </span>
+                </div>
+            </div>
+            <!-- 수량 * 금액 합계 끝-->
+        </div>
+
+        <!-- 후원 추가 -->
+        <div class="price_support">
+            <div class="price_support_title font-weight-bold fs18">
+                후원금더하기(선택)
+            </div>
+            <div class="price_support_con">
+                <p class="fs15">후원금을 더하여 참여할 수 있습니다. 추가 후원금을 입력하시겠습니까?</p>
+                <p class="fs15"><input type="text" id="huPrice"> 
+                원을 추가로 후원합니다.</p>
+                <button onclick="getOrderTotalPrice()"> 후원금 적용하기</button>
+            </div>
+        </div>
+        <!-- 후원 추가 -->
+   
+        <h2 class="text-center">
+            총 펀딩 금액 : <span id="orderTotalPrice" class="text-danger">0원</span>
+        </h2>
+
+        <div class="text-center mt-3">
+            <button type="button" class="btn btn-primary btn-lg" id="iamportPayment">결제하기 ></button>
+        </div>
+    </div>
+
+</div>
+
+</html>

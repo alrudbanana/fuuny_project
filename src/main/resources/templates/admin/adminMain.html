@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/adminLayout}">
+<head>
+<meta charset="UTF-8">
+<title>adminMain</title>
+</head>
+<div layout:fragment="content">
+
+
+
+	<div class="container text-center">
+		<h1>전체 보기</h1>
+		<div class="row">
+			<th:block th:each="item , status: ${items.getContent()}">
+				<div class="col-md-4 margin">
+					<div class="card">
+						<a style="text-decoration: none;"
+							th:href="@{|/admin/item/detail/${item.id}|}">
+							<div class="card-body">
+							<img th:src="${item.imgUrl}" class="card-img-top" th:alt="${item.itemNm}" height="400">
+								<h3 class=" text-dark" th:text="${item.itemSellStatus}"></h3>
+								<h4 class="card-title text-dark" th:text="${item.itemNm}"></h4>
+								<h5 class="card-text text-dark" th:text="${item.itemCategory}"></h5>
+								<h5 class="card-text text-danger" th:text="${item.price}"></h5>
+								<h6 class="card-title text-dark"
+									th:text="${#temporals.format(item.regTime, 'yyyy-MM-dd HH:mm')}"></h6>
+							</div>
+						</a>
+					</div>
+				</div>
+			</th:block>
+		</div>
+		<br>
+
+		<div
+			th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 : (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})">
+			<ul class="pagination justify-content-center">
+
+				<li class="page-item"
+					th:classappend="${items.number eq 0}?'disabled':''"><a
+					th:href="@{|/admin/funding?page=${items.number-1}|}"
+					aria-label='Previous' class="page-link"> <span
+						aria-hidden='true'>이전</span>
+				</a></li>
+
+				<li class="page-item"
+					th:each="page: ${#numbers.sequence(start, end)}"
+					th:classappend="${items.number eq page-1}?'active':''"><a
+					th:href="@{|/admin/funding?page=${page-1}|}" th:inline="text"
+					class="page-link">[[${page}]]</a></li>
+
+				<li class="page-item"
+					th:classappend="${items.number+1 ge items.totalPages}?'disabled':''">
+					<a th:href="@{|/admin/funding?page=${items.number+1}|}"
+					aria-label='Next' class="page-link"> <span aria-hidden='true'>다음</span>
+				</a>
+				</li>
+
+			</ul>
+		</div>
+	</div>
+
+
+
+
+</div>
+</html>

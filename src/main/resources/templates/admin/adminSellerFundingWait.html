@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/adminSellerLayout}">
+<head>
+<meta charset="UTF-8">
+<title>관리자 펀딩 관리</title>
+</head>
+<div layout:fragment="content">
+	<div class="container text-center">
+	<br>
+		<h1>판매자 프로젝트 관리</h1>
+		<br>
+
+		<div>
+			<button class="btn-primary projectBtn" th:itemStatus="1"
+				onclick="loadProj(this.getAttribute('itemStatus'))">대기중인
+				프로젝트</button>
+			<button class="btn-primary projectBtn" th:itemStatus="2"
+				onclick="loadProj(this.getAttribute('itemStatus'))">승인된
+				프로젝트</button>
+			<button class="btn-primary projectBtn" th:itemStatus="3"
+				onclick="loadProj(this.getAttribute('itemStatus'))">판매중인
+				프로젝트</button>
+			<button class="btn-primary projectBtn" th:itemStatus="4"
+				onclick="loadProj(this.getAttribute('itemStatus'))">매진된
+				프로젝트</button>
+			<button class="btn-primary projectBtn" th:itemStatus="5"
+				onclick="loadProj(this.getAttribute('itemStatus'))">마감된
+				프로젝트</button>
+			<button class="btn-primary projectBtn" th:itemStatus="6"
+				onclick="loadProj(this.getAttribute('itemStatus'))">거절된
+				프로젝트</button>
+		</div>
+		<br>
+
+
+		<div id="project">
+			<div id="projectList" th:if="${items}">
+				<div class="row">
+			<th:block th:each="item , status: ${items.getContent()}">
+				<div class="col-md-4 margin">
+					<div class="card">
+						<a style="text-decoration: none;"
+							th:href="@{|/admin/item/detail/seller/${item.id}|}">
+							<div class="card-body">
+							<img th:src="${item.imgUrl}" class="card-img-top" th:alt="${item.itemNm}" height="400">
+								<h3 class=" text-dark" th:text="${item.itemSellStatus}"></h3>
+								<h4 class="card-title text-dark" th:text="${item.itemNm}"></h4>
+								<h5 class="card-text text-dark" th:text="${item.itemCategory}"></h5>
+								<h5 class="card-text text-danger" th:text="${item.price}"></h5>
+								<h6 class="card-title text-dark"
+									th:text="${#temporals.format(item.regTime, 'yyyy-MM-dd HH:mm')}"></h6>
+							</div>
+						</a>
+					</div>
+				</div>
+			</th:block>
+		</div>
+		<br>
+
+		<div
+			th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 : (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})">
+			<ul class="pagination justify-content-center">
+
+				<li class="page-item"
+					th:classappend="${items.number eq 0}?'disabled':''"><a
+					th:href="@{|/admin/funding?page=${items.number-1}|}"
+					aria-label='Previous' class="page-link"> <span
+						aria-hidden='true'>이전</span>
+				</a></li>
+
+				<li class="page-item"
+					th:each="page: ${#numbers.sequence(start, end)}"
+					th:classappend="${items.number eq page-1}?'active':''"><a
+					th:href="@{|/admin/funding?page=${page-1}|}" th:inline="text"
+					class="page-link">[[${page}]]</a></li>
+
+				<li class="page-item"
+					th:classappend="${items.number+1 ge items.totalPages}?'disabled':''">
+					<a th:href="@{|/admin/funding?page=${items.number+1}|}"
+					aria-label='Next' class="page-link"> <span aria-hidden='true'>다음</span>
+				</a>
+				</li>
+
+			</ul>
+		</div>
+			</div>
+			<div th:if="${not #lists.isEmpty(items)} == false">프로젝트가
+				존재하지 않습니다.</div>
+		</div>
+
+
+	</div>
+	<!--  
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	-->
+	<script>
+		function loadProj(itemStatus) {
+			$.ajax({
+				  url : "/admin/seller/main",
+				  type : "GET",
+				  data: {
+				    value : itemStatus 
+				  },
+				  success : function(data) {
+				    var $newHtml = $(data).find('#projectList').html(); // 새로운 HTML에서 #projectList 부분 추출
+				    $('#projectList').html($newHtml); // 기존 HTML에 추가
+				  }
+				});
+		}
+	</script>
+</div>
+</html>

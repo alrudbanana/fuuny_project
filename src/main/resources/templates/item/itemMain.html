@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+  
+      * {
+         margin: 0;
+         padding: 0;
+         font-family: 'NanumSquareNeo-Variable';
+      }
+       
+       
+        .card-text{
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        a:hover{
+            text-decoration:none;
+        }
+        .center{
+            text-align:center;
+            display: flex;
+        justify-content: center;
+        align-items: center;
+        }
+       .center > a{
+          margin: 20px;
+       }    
+       
+      
+      .card {
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+      }
+      
+   .btn-primary {
+     background-color: #D8ACFA;
+     border-color: #D8ACFA;
+   }
+   .btn-primary:hover {
+    background-color: #8A2BE2;
+     border: none;
+   }
+
+    </style>
+    
+<!-- Slick Slider CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css"/>
+
+<!-- Slick Slider JS -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
+
+<!-- 동적 슬라이드 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#item-slider').slick({
+      autoplay: true, // 자동 슬라이드 옵션 추가
+      autoplaySpeed: 2000, // 자동 슬라이드 간격 (2초)
+      dots: false, //슬라이드 아래 점 살리고 싶으면 true
+      arrows: false,
+      infinite: true,
+      slidesToShow: 5.3   ,
+      slidesToScroll: 1
+      /* 적용이 안됨
+      centerMode: true,
+      centerPadding: '2px' //중앙에오는 카드크기
+      */
+    });
+  });
+</script>
+</th:block>
+ 
+
+
+<div layout:fragment="content">
+
+    <div class="center">
+ 
+          <div class="mt-5">
+          <h3 class="mt-5">당신의 아이디어를 함께 실현합니다 <br> 지금 바로 Funny와 펀딩을 시작하세요!</h3>
+         </div>
+       </div>
+
+       <div class="center mt-5 mb-5" >
+           <a class="btn btn-primary" href="/saler/item/new" >프로젝트 등록</a>
+           <a class="btn btn-primary" href="/saler/items">프로젝트 목록</a>
+           <a class="btn btn-primary" href="/admin/seller/main">판매자 프로젝트 목록</a>
+           
+        </div>            
+   
+      <!-- 화면 하단 프로젝트 카드 리스트 -->
+      <div id="item-slider" class="row">
+        <th:block th:each="item, status: ${items.getContent()}">
+          <div class="col-md-4 margin">
+            <div class="card" style="width: 280px; height: 450px; border-radius: 20px;">
+              <a th:href="@{|/item/${item.id}|}" class="text-dark">
+                <img th:src="${item.imgUrl}" class="card-img-top" th:alt="${item.itemNm}"  style="border-radius: 20px 20px 0 0; height: 300px;">
+                <div class="card-body">
+                  <h4 class="card-title">[[${item.itemNm}]]</h4>
+                  <p class="card-text">[[${item.itemDetail}]]</p>
+                  <h3 class="card-title text-danger">[[${item.price}]]원</h3>
+                </div>
+              </a>
+            </div>
+          </div>
+        </th:block>
+      </div>
+      <div class="pt-5"></div>
+   
+   </div>
+
+</html>

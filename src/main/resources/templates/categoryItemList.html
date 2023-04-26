@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+
+
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<th:block layout:fragment="script">
+	<script src="./js/header.js"></script>
+</th:block>
+
+<th:block layout:fragment="css">
+	<link rel="stylesheet"
+		href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+
+	<style>
+* {
+	margin: 0;
+	padding: 0;
+	font-family: 'NanumSquareNeo-Variable';
+}
+
+.main {
+	height: 100%;
+	/* border: 1px solid red; */
+	text-align: center;
+}
+
+h1 {
+	margin: 30px 0;
+}
+
+#btn_category {
+	margin: 20px 0;
+}
+
+li {
+	list-style-type: none;
+}
+
+h3 {
+	margin: 35px 0 20px 50px;
+	text-align: left;
+}
+
+.row {
+	/* border: 1px solid blue; */
+	height: 100%;
+}
+
+.col-lg-3 {
+	border: 1px solid rgb(223, 221, 221);
+	display: inline-block;
+	width: 270px;
+	height: 350px;
+	margin: 10px 20px 50px 20px;
+	border-radius: 15px;
+	padding: 10px;
+
+}
+.cate_name{
+	margin : 30px 0 50px 0;
+}
+
+
+.main_img {
+	margin: 0px auto;
+	overflow: hidden;
+}
+
+.main_img img {
+	width: 230px;
+	height: 150px;
+	transition: all 0.2s linear;
+}
+
+.main_img:hover img {
+	transform: scale(1.4);
+}
+
+.main_cate {
+	font-size: 12px;
+	color: gray;
+	/* border: 1px solid red; */
+	margin-top: 20px;
+}
+
+.main_name {
+	font-weight: bold;
+	color: black;
+	margin: 3px 0;
+}
+
+.main_name:hover {
+	color: gray;
+}
+
+.main_detail {
+	font-size: 13px;
+	margin-top: 15px;
+}
+
+@font-face {
+	font-family: 'NanumSquareNeo-Variable';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2')
+		format('woff2');
+	font-weight: normal;
+	font-style: normal;
+}
+</style>
+</th:block>
+
+
+
+
+<div layout:fragment="content">
+	<div class="rap">
+
+		<!--헤더시작-->
+		<div data-include="header.html"></div>
+		<!--헤더 끝-->
+
+		<!--메인시작-->
+		<section>
+			<div class="main">
+			<!--  -->
+
+				<div class="container text-center">
+					<div class="row">
+
+						<h2 th:text="${itemCategory}" class="cate_name"></h2>
+						<div class="col-lg-3" th:each="item : ${itemList}">
+							<div class="main_img">
+								<img th:src="${item.mainItemImgUrl}" th:alt="${item.itemNm}">
+							</div>
+							<div >
+
+								<div class="main_cate" th:text="${item.itemCategory}"></div>
+								<a th:href="@{|/item/${item.id}|}">
+									<div class="main_name" th:text="${item.itemNm}"></div>
+								</a>	
+								<div class="main_detail" th:text="${item.itemDetail}"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
+
+			</div>
+		</section>
+		<!--메인 끝-->
+
+	</div>
+</div>
+</html>

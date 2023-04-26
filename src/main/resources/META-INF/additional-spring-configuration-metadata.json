@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "spring.http.encoding.force-request-encoding",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.http.encoding.force-request-encoding'"
+  },
+  {
+    "name": "spring.http.encoding.force-response-encoding",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.http.encoding.force-response-encoding'"
+  }
+]}

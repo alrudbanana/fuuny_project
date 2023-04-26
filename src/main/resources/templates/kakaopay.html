@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>kakao pay</title>
+<style>
+li {
+
+	list-style: none;
+}
+
+</style>
+
+</head>
+<body>
+	<!-- jQuery -->
+	<script type="text/javascript"
+		src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+	<!-- iamport.payment.js -->
+	<script type="text/javascript"
+		src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+
+<div>
+	<h2>결제 테스트</h2>
+	<li>
+		<button id="iamportPayment" type="button">
+			<img src="/img/Kakaopay.png">
+		</button>
+		</li>
+	</div>
+	
+
+
+
+
+
+</body>
+<script type="text/javascript">
+
+$(document).ready(function(){
+	$("#iamportPayment").click(function(){
+	payment();
+	 
+	});
+})
+
+function payment(data){
+	IMP.init('imp81752704');
+	IMP.request_pay({
+	pg: "KaKaopay.TC0ONETIME",
+	pay_method: "card",
+	merchant_uid: "iamport_test_id3",
+	name: "사람",
+	amount: 13700,
+	buyer_email : "testiamport@naver.com",
+	buyer_name : "홍길동",
+	buyer_tel : "010123456"
+	}, function (rsp) {
+		if(rsp.sucess){
+			alert("완료 -> imp_uid : "+rsp.imp_uid+" / merchant_uid(orderKey) : "+rsp.merchant_uid);
+		}else{
+		alert("실패 : 코드("+rsp.error_code+") / 메시지("+ rsp.error_msg +")");
+		
+		}
+	});
+}
+</script>
+
+</html>
+
+	
+	
+	

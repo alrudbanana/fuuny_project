@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+layout:decorate="~{layouts/layout}"  
+      >
+<!--       layout:decorate="~{layouts/layout1}" -->
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>회원가입</title>
+	<link rel="stylesheet" href="/css/memberFrom.css">
+</head>
+
+
+
+<th:block layout:fragment="css">
+    <style>
+        .fieldError {
+            color: #bd2130;
+        }
+    </style>
+</th:block>
+
+
+<div layout:fragment="content">
+	<div id="wrap">
+		
+		<div id="login"></div>
+		<div id="container" class="login">
+			<p id="p1">회원가입</p>
+			<!-- 회원가입 폼-->
+			<form role="form" th:action="@{/members/new}" th:object="${memberFormDto}"  method="post">
+				<p id="p2">이메일</p>
+				<table id="id">
+					<tr>
+						<td><input type="text" th:field="*{email}" placeholder="이메일을 입력해주세요"></td>
+						  <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError">Incorrect data</p>
+					</tr>
+
+				</table>
+				
+				<p id="p2">비밀번호</p>
+				
+				<table id="pw">
+					<tr>
+						<td><input type="password" th:field="*{memPass}" placeholder="비밀번호를 입력해주세요"></td>
+						 <p th:if="${#fields.hasErrors('memPass')}" th:errors="*{memPass}" class="fieldError">Incorrect data</p>
+					</tr>
+				</table>
+				<p id="p2">비밀번호 확인</p>
+				<table id="pw">
+					<tr>
+						<td><input type="password" th:field="*{memPass2}" placeholder="비밀번호를 입력해주세요"></td>
+						 <p th:if="${#fields.hasErrors('memPass2')}" th:errors="*{memPass2}" class="fieldError">Incorrect data</p>
+					</tr>
+				</table>
+				<p id="p2">이름</p>
+				<table id="name">
+					<tr>
+						<td><input type="text" th:field="*{memName}" placeholder="이름을 입력해주세요"></td>
+						<p th:if="${#fields.hasErrors('memName')}" th:errors="*{memName}" class="fieldError">Incorrect data</p>
+					</tr>
+				</table>
+				<p id="p2">핸드폰번호</p>
+				<table id="memPhone">
+					<tr>
+						<td><input type="text" th:field="*{memPhone}" placeholder="핸드폰 번호를 입력해주세요"></td>
+						<p th:if="${#fields.hasErrors('memPhone')}" th:errors="*{memPhone}" class="fieldError">Incorrect data</p>
+					</tr>
+				</table>
+				<p id="p2">일반 사용자 / 판매자</p>
+				<select th:field="*{role}">
+					<option th:value="USER">일반사용자</option>
+					<option th:value="SELLER">판매자</option>
+				</select>
+				
+				
+				<div class="mb-3">
+            <!-- 주소 -->
+            <p id="p2">우편번호</p>
+            <input id="zipcode" type="text" th:field="*{zipcode}" placeholder="우편번호" class="form-control" readonly>
+            <p th:if="${#fields.hasErrors('zipcode')}" th:errors="*{zipcode}" class="fieldError">Incorrect data</p>
+            <input type="button" onclick="findAddr()" class="form-control" value="우편번호 찾기"><br>
+          </div>
+          
+          <div class="mb-3">
+			<p id="p2">도로명 주소</p>
+           <input type="text" id="streetAdr" th:field="*{streetAdr}"  class="form-control" placeholder="도로명 주소" readonly>
+            <p th:if="${#fields.hasErrors('streetAdr')}" th:errors="*{streetAdr}" class="fieldError">Incorrect data</p>
+          </div>
+
+          <div class="mb-3">
+            <p id="p2">상세주소</p>
+            <input type="text" id="detailAdr" th:field="*{detailAdr}" class="form-control" placeholder="상세 주소">
+  		  </div>
+				<table id="original">
+					<tr>
+						<td><input type="submit" value="가입완료"></td>
+					</tr>
+				</table>
+	</form>
+		</div>
+	</div>
+
+	<script>
+		/** 우편번호 찾기 */
+		function findAddr() {
+						new daum.Postcode({
+								oncomplete: function(data) {
+									// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+									var roadAddr = data.roadAddress; // 도로명 주소 변수
+									 var extraRoadAddr = '';
+									
+									 if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+											 addr = data.roadAddress;
+									 } else { // 사용자가 지번 주소를 선택했을 경우(J)
+											 addr = data.jibunAddress;
+									 }
+		
+								// 우편번호와 주소 정보를 해당 필드에 넣는다.
+								document.getElementById('zipcode').value = data.zonecode;
+								document.getElementById("streetAdr").value = addr;
+								// 커서를 상세주소 필드로 이동한다.
+								document.getElementById("detailAdr").focus();
+							}
+						}).open();
+		}
+		
+		</script>
+		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</div>
+
+
+
+
+
+
+</html>
